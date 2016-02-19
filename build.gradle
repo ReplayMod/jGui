@@ -1,0 +1,63 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
+    }
+}
+
+apply plugin: 'forge'
+apply plugin: 'license'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+
+group 'de.johni0702.minecraft'
+version '1.0.0'
+
+ext.projectName = 'jGui API'
+ext.packaging = 'jar'
+ext.author = 'johni0702'
+ext.authorUrl = 'https://github.com/johni0702'
+ext.inceptionYear = '2016'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+minecraft {
+    version = "1.8-11.14.3.1450"
+    runDir = "eclipse"
+    mappings = "snapshot_nodoc_20141130"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.projectlombok:lombok:1.16.6"
+}
+
+license {
+    ext.name = rootProject.projectName
+    ext.author = rootProject.author
+    ext.url = rootProject.authorUrl
+    ext.year = rootProject.inceptionYear
+    header new File(rootProject.getProjectDir(), 'HEADER.txt')
+    sourceSets = project.sourceSets
+    ignoreFailures false
+    strictCheck true
+    mapping {
+        java = 'SLASHSTAR_STYLE'
+    }
+}
