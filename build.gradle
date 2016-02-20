@@ -49,11 +49,11 @@ dependencies {
 }
 
 license {
-    ext.name = rootProject.projectName
-    ext.author = rootProject.author
-    ext.url = rootProject.authorUrl
-    ext.year = rootProject.inceptionYear
-    header new File(rootProject.getProjectDir(), 'HEADER.txt')
+    ext.name = project.projectName
+    ext.author = project.author
+    ext.url = project.authorUrl
+    ext.year = project.inceptionYear
+    header new File(project.getProjectDir(), 'HEADER.txt')
     sourceSets = project.sourceSets
     ignoreFailures false
     strictCheck true
