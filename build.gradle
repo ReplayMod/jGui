@@ -12,12 +12,12 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-SNAPSHOT'
         classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
     }
 }
 
-apply plugin: 'forge'
+apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'license'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
@@ -35,7 +35,7 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 minecraft {
-    version = "1.8-11.14.3.1450"
+    version = '1.8-11.14.4.1563'
     runDir = "eclipse"
     mappings = "snapshot_nodoc_20141130"
 }
