@@ -198,6 +198,11 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
     }
 
     @Override
+    public ReadableDimension getMinSize() {
+        return size == null ? super.getMinSize() : size;
+    }
+
+    @Override
     public T setLength(int length) {
         this.length = length;
         return getThis();
