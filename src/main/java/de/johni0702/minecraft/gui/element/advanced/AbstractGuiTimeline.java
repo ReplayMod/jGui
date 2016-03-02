@@ -226,7 +226,8 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
 
     @Override
     public T setZoom(double zoom) {
-        this.zoom = zoom;
+        this.zoom = Math.min(zoom, 1);
+        checkOffset();
         return getThis();
     }
 
@@ -238,6 +239,7 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
     @Override
     public T setOffset(int offset) {
         this.offset = offset;
+        checkOffset();
         return getThis();
     }
 
@@ -260,5 +262,15 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
             return true;
         }
         return false;
+    }
+
+    /**
+     * Make sure the offset is far enough to the left so we don't look over the edge on the right.
+     */
+    private void checkOffset() {
+        int visibleLength = (int) (length * zoom);
+        if (visibleLength + offset > length) {
+            offset = length - visibleLength;
+        }
     }
 }
