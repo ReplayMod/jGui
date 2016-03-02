@@ -82,6 +82,35 @@ public interface IGuiTimeline<T extends IGuiTimeline<T>> extends GuiElement<T> {
      */
     int getOffset();
 
+    /**
+     * Enables makers for this timeline.
+     * Markers are drawn in regular intervals and between each big marker there are three small ones.
+     * @return {@code this}, for chaining
+     */
+    T setMarkers();
+
+    /**
+     * Set whether markers should be drawn on this timeline.
+     * Markers are drawn in regular intervals and between each big marker there are three small ones.
+     * @param active {@code true} to enable drawing of markers, {@code false} to disable it
+     * @return {@code this}, for chaining
+     */
+    T setMarkers(boolean active);
+
+    /**
+     * Returns whether markers are drawn on this timeline.
+     * Markers are drawn in regular intervals and between each big marker there are three small ones.
+     * @return {@code true} if markers are drawn, {@code false} otherwise
+     */
+    boolean getMarkers();
+
+    /**
+     * Returns the interval at which big markers are draw on the timeline.
+     * There are three small markers between each pair of big markers.
+     * @return Interval in milliseconds
+     */
+    int getMarkerInterval();
+
     T onClick(OnClick onClick);
 
     interface OnClick {

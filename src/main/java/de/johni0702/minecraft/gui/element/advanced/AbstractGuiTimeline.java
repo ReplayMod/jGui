@@ -30,11 +30,9 @@ import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.element.AbstractGuiElement;
 import de.johni0702.minecraft.gui.element.GuiTooltip;
 import de.johni0702.minecraft.gui.function.Clickable;
+import de.johni0702.minecraft.gui.utils.Colors;
 import net.minecraft.util.MathHelper;
-import org.lwjgl.util.Dimension;
-import org.lwjgl.util.Point;
-import org.lwjgl.util.ReadableDimension;
-import org.lwjgl.util.ReadablePoint;
+import org.lwjgl.util.*;
 
 public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> extends AbstractGuiElement<T> implements IGuiTimeline<T>, Clickable {
     protected static final int TEXTURE_WIDTH = 64;
@@ -50,12 +48,15 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
     protected static final int BODY_WIDTH = TEXTURE_WIDTH - BORDER_LEFT - BORDER_RIGHT;
     protected static final int BODY_HEIGHT = TEXTURE_HEIGHT - BORDER_TOP - BORDER_BOTTOM;
 
+    protected static final int MARKER_MIN_DISTANCE = 40;
+
     private OnClick onClick;
 
     private int length;
     private int cursorPosition;
     private double zoom = 1;
     private int offset;
+    private boolean drawMarkers;
 
     private ReadableDimension size;
 
@@ -130,6 +131,10 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
                     segmentWidth, BORDER_BOTTOM);
         }
 
+        if (drawMarkers) {
+            drawMarkers(renderer, size);
+        }
+
         drawTimelineCursor(renderer, size);
     }
 
@@ -157,6 +162,29 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
             int segmentHeight = Math.min(11, height - BORDER_BOTTOM - y);
             renderer.drawTexturedRect(cursorX - 2, y, 64, 4, 5, segmentHeight);
         }
+    }
+
+    protected void drawMarkers(GuiRenderer renderer, ReadableDimension size) {
+        int visibleLength = (int) (length * zoom);
+        int markerInterval = getMarkerInterval();
+        int smallInterval = Math.max(markerInterval / 5, 1);
+        int time = offset / markerInterval * markerInterval;
+        while (time <= offset + visibleLength) {
+            if (time >= offset) {
+                drawMarker(renderer, size, time, time % markerInterval == 0);
+            }
+            time += smallInterval;
+        }
+    }
+
+    protected void drawMarker(GuiRenderer renderer, ReadableDimension size, int time, boolean big) {
+        int visibleLength = (int) (length * zoom);
+        double positionInVisible = time - offset;
+        double fractionOfVisible = positionInVisible / visibleLength;
+        int positionX = (int) (BORDER_LEFT + fractionOfVisible * (size.getWidth() - BORDER_LEFT - BORDER_RIGHT));
+        int height = size.getHeight() / (big ? 3 : 6);
+        ReadableColor color = big ? Colors.LIGHT_GRAY : Colors.WHITE;
+        renderer.drawRect(positionX, size.getHeight() - BORDER_BOTTOM - height, 1, height, color);
     }
 
     /**
@@ -262,6 +290,43 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean getMarkers() {
+        return drawMarkers;
+    }
+
+    @Override
+    public T setMarkers(boolean active) {
+        this.drawMarkers = active;
+        return getThis();
+    }
+
+    @Override
+    public T setMarkers() {
+        return setMarkers(true);
+    }
+
+    @Override
+    public int getMarkerInterval() {
+        if (size == null) {
+            return length;
+        }
+        int width = size.getWidth() - BORDER_LEFT - BORDER_RIGHT; // Width of the drawn timeline
+        double segmentLength = length * zoom; // Length of the drawn timeline
+        int maxMarkers = width / MARKER_MIN_DISTANCE; // Max. amount of markers that can fit in the timeline
+        int minInterval = (int) (segmentLength / maxMarkers); // Min. interval between those markers
+        final int S = 1000;
+        final int M = 60*S;
+        final int[] snapTo = {S, 2*S, 5*S, 10*S, 15*S, 20*S, 30*S, M, 2*M, 5*M, 10*M, 15*M, 30*M};
+        // Find next greater snap
+        for (int snap : snapTo) {
+            if (snap > minInterval) {
+                return snap;
+            }
+        }
+        return snapTo[snapTo.length - 1];
     }
 
     /**
