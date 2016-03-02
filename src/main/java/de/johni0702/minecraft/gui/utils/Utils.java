@@ -24,6 +24,7 @@
  */
 package de.johni0702.minecraft.gui.utils;
 
+import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.function.Focusable;
 
 import java.util.Arrays;
@@ -44,6 +45,44 @@ public class Utils {
             Focusable next = focusables[(i + 1) % focusables.length];
             focusables[i].setNext(next);
             next.setPrevious(focusables[i]);
+        }
+    }
+
+    public static void drawDynamicRect(GuiRenderer renderer, int width, int height, int u, int v, int uWidth, int vHeight,
+                                int topBorder, int bottomBorder, int leftBorder, int rightBorder) {
+        int textureBodyHeight = vHeight - topBorder - bottomBorder;
+        int textureBodyWidth = uWidth - leftBorder - rightBorder;
+        // Left and right borders
+        for (int pass = 0; pass < 2; pass++) {
+            int x = pass == 0 ? 0 : width - rightBorder;
+            int textureX = pass == 0 ? u : u + uWidth - rightBorder;
+            // Border
+            for (int y = topBorder; y < height - bottomBorder; y += textureBodyHeight) {
+                int segmentHeight = Math.min(textureBodyHeight, height - bottomBorder - y);
+                renderer.drawTexturedRect(x, y, textureX, v + topBorder, leftBorder, segmentHeight);
+            }
+            // Top corner
+            renderer.drawTexturedRect(x, 0, textureX, v, leftBorder, topBorder);
+            // Bottom corner
+            renderer.drawTexturedRect(x, height - bottomBorder, textureX, v + vHeight - bottomBorder,
+                    leftBorder, bottomBorder);
+        }
+
+        for (int x = leftBorder; x < width - rightBorder; x += textureBodyWidth) {
+            int segmentWidth = Math.min(textureBodyWidth, width - rightBorder - x);
+            int textureX = u + leftBorder;
+
+            // Content
+            for (int y = topBorder; y < height - bottomBorder; y += textureBodyHeight) {
+                int segmentHeight = Math.min(textureBodyHeight, height - bottomBorder - y);
+                renderer.drawTexturedRect(x, y, textureX, v + topBorder, segmentWidth, segmentHeight);
+            }
+
+            // Top border
+            renderer.drawTexturedRect(x, 0, textureX, v, segmentWidth, topBorder);
+            // Bottom border
+            renderer.drawTexturedRect(x, height - bottomBorder, textureX, v + vHeight - bottomBorder,
+                    segmentWidth, bottomBorder);
         }
     }
 }

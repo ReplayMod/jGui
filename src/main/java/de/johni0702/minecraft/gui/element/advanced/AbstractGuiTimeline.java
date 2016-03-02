@@ -31,6 +31,7 @@ import de.johni0702.minecraft.gui.element.AbstractGuiElement;
 import de.johni0702.minecraft.gui.element.GuiTooltip;
 import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.utils.Colors;
+import de.johni0702.minecraft.gui.utils.Utils;
 import net.minecraft.util.MathHelper;
 import org.lwjgl.util.*;
 
@@ -45,8 +46,6 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
     protected static final int BORDER_RIGHT = 4;
     protected static final int BORDER_TOP = 4;
     protected static final int BORDER_BOTTOM = 3;
-    protected static final int BODY_WIDTH = TEXTURE_WIDTH - BORDER_LEFT - BORDER_RIGHT;
-    protected static final int BODY_HEIGHT = TEXTURE_HEIGHT - BORDER_TOP - BORDER_BOTTOM;
 
     protected static final int MARKER_MIN_DISTANCE = 40;
 
@@ -91,45 +90,12 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
         int width = size.getWidth();
         int height = size.getHeight();
 
-        // We have to increase the border size as there is one pixel row which is part of the border while drawing
-        // but isn't during position calculations due to shadows
-        int BORDER_LEFT = GuiTimeline.BORDER_LEFT + 1;
-        int BODY_WIDTH = GuiTimeline.BODY_WIDTH - 1;
-
         renderer.bindTexture(TEXTURE);
 
-        // Left and right borders
-        for (int pass = 0; pass < 2; pass++) {
-            int x = pass == 0 ? 0 : width - BORDER_RIGHT;
-            int textureX = pass == 0 ? TEXTURE_X : TEXTURE_X + TEXTURE_WIDTH - BORDER_RIGHT;
-            // Border
-            for (int y = BORDER_TOP; y < height - BORDER_BOTTOM; y += BODY_HEIGHT) {
-                int segmentHeight = Math.min(BODY_HEIGHT, height - BORDER_BOTTOM - y);
-                renderer.drawTexturedRect(x, y, textureX, TEXTURE_Y + BORDER_TOP, BORDER_LEFT, segmentHeight);
-            }
-            // Top corner
-            renderer.drawTexturedRect(x, 0, textureX, TEXTURE_Y, BORDER_LEFT, BORDER_TOP);
-            // Bottom corner
-            renderer.drawTexturedRect(x, height - BORDER_BOTTOM, textureX, TEXTURE_Y + TEXTURE_HEIGHT - BORDER_BOTTOM,
-                    BORDER_LEFT, BORDER_BOTTOM);
-        }
-
-        for (int x = BORDER_LEFT; x < width - BORDER_RIGHT; x += BODY_WIDTH) {
-            int segmentWidth = Math.min(BODY_WIDTH, width - BORDER_RIGHT - x);
-            int textureX = TEXTURE_X + BORDER_LEFT;
-
-            // Content
-            for (int y = BORDER_TOP; y < height - BORDER_BOTTOM; y += BODY_HEIGHT) {
-                int segmentHeight = Math.min(BODY_HEIGHT, height - BORDER_BOTTOM - y);
-                renderer.drawTexturedRect(x, y, textureX, TEXTURE_Y + BORDER_TOP, segmentWidth, segmentHeight);
-            }
-
-            // Top border
-            renderer.drawTexturedRect(x, 0, textureX, TEXTURE_Y, segmentWidth, BORDER_TOP);
-            // Bottom border
-            renderer.drawTexturedRect(x, height - BORDER_BOTTOM, textureX, TEXTURE_Y + TEXTURE_HEIGHT - BORDER_BOTTOM,
-                    segmentWidth, BORDER_BOTTOM);
-        }
+        // We have to increase the border size as there is one pixel row which is part of the border while drawing
+        // but isn't during position calculations due to shadows
+        Utils.drawDynamicRect(renderer, width, height, TEXTURE_X, TEXTURE_Y, TEXTURE_WIDTH, TEXTURE_HEIGHT,
+                BORDER_TOP + 1, BORDER_BOTTOM, BORDER_LEFT + 1, BORDER_RIGHT);
 
         if (drawMarkers) {
             drawMarkers(renderer, size);
