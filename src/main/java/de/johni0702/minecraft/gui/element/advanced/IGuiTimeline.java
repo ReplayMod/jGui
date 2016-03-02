@@ -111,6 +111,19 @@ public interface IGuiTimeline<T extends IGuiTimeline<T>> extends GuiElement<T> {
      */
     int getMarkerInterval();
 
+    /**
+     * Set whether the cursor should be drawn on this timeline.
+     * @param active {@code true} to enable drawing of the cursor, {@code false} otherwise
+     * @return {@code this}, for chaining
+     */
+    T setCursor(boolean active);
+
+    /**
+     * Returns whether the cursor is drawn on this timeline.
+     * @return {@code true} if the cursor is drawn, {@code false} otherwise
+     */
+    boolean getCursor();
+
     T onClick(OnClick onClick);
 
     interface OnClick {

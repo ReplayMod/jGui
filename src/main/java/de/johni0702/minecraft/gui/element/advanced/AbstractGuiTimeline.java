@@ -55,6 +55,7 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
     private int cursorPosition;
     private double zoom = 1;
     private int offset;
+    private boolean drawCursor = true;
     private boolean drawMarkers;
 
     private ReadableDimension size;
@@ -112,6 +113,7 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
      * @param size Size of the drawable area
      */
     protected void drawTimelineCursor(GuiRenderer renderer, ReadableDimension size) {
+        if (!drawCursor) return;
         int height = size.getHeight();
         renderer.bindTexture(TEXTURE);
 
@@ -293,6 +295,17 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
             }
         }
         return snapTo[snapTo.length - 1];
+    }
+
+    @Override
+    public T setCursor(boolean active) {
+        this.drawCursor = active;
+        return getThis();
+    }
+
+    @Override
+    public boolean getCursor() {
+        return drawCursor;
     }
 
     /**
