@@ -110,6 +110,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     public void drawRect(int x, int y, int width, int height, int color) {
         Gui.drawRect(x, y, x + width, y + height, color);
         GlStateManager.color(1, 1, 1);
+        enableBlend();
     }
 
     @Override
@@ -142,7 +143,6 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         renderer.addVertex(x, y, 0);
         tessellator.draw();
         shadeModel(GL_FLAT);
-        disableBlend();
         enableAlpha();
         enableTexture2D();
     }
