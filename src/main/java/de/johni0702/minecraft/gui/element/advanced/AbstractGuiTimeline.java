@@ -58,7 +58,7 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
     private boolean drawCursor = true;
     private boolean drawMarkers;
 
-    private ReadableDimension size;
+    ReadableDimension size;
 
     public AbstractGuiTimeline() {
     }
