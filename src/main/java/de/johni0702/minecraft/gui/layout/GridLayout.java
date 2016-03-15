@@ -55,6 +55,11 @@ public class GridLayout implements Layout {
     @Setter
     private int spacingX, spacingY;
 
+    @Accessors(chain = true)
+    @Getter
+    @Setter
+    private boolean cellsEqualSize = true;
+
     @Override
     public Map<GuiElement, Pair<ReadablePoint, ReadableDimension>> layOut(GuiContainer<?> container, ReadableDimension size) {
         Preconditions.checkState(columns != 0, "Columns may not be 0.");
@@ -65,6 +70,13 @@ public class GridLayout implements Layout {
         }
         int cellWidth = (size.getWidth() + spacingX) / columns - spacingX;
         int cellHeight = (size.getHeight() + spacingY) / rows - spacingY;
+
+        int[][] maxCellSize = new int[][]{};
+
+        if(!cellsEqualSize) {
+            maxCellSize = calcNeededCellSize(container);
+        }
+
         Map<GuiElement, Pair<ReadablePoint, ReadableDimension>> map = new LinkedHashMap<>();
         Iterator<Map.Entry<GuiElement, LayoutData>> iter = container.getElements().entrySet().iterator();
         for (int i = 0; i < rows; i++) {
@@ -74,6 +86,23 @@ public class GridLayout implements Layout {
                 }
                 int x = j * (cellWidth + spacingX);
                 int y = i * (cellHeight + spacingY);
+
+                if (!cellsEqualSize) {
+                    cellWidth = maxCellSize[0][j];
+                    cellHeight = maxCellSize[1][i];
+
+                    x = 0;
+                    for (int x1 = 0; x1 < j; x1++) {
+                        x += maxCellSize[0][x1];
+                        x += spacingX;
+                    }
+
+                    y = 0;
+                    for (int y1 = 0; y1 < i; y1++) {
+                        y += maxCellSize[1][y1];
+                        y += spacingY;
+                    }
+                }
 
                 Map.Entry<GuiElement, LayoutData> entry = iter.next();
                 GuiElement element  = entry.getKey();
@@ -97,14 +126,17 @@ public class GridLayout implements Layout {
     public ReadableDimension calcMinSize(GuiContainer<?> container) {
         Preconditions.checkState(columns != 0, "Columns may not be 0.");
         int maxWidth = 0, maxHeight = 0;
+
         int elements = 0;
         for (Map.Entry<GuiElement, LayoutData> entry : container.getElements().entrySet()) {
             GuiElement element = entry.getKey();
             ReadableDimension minSize = element.getMinSize();
+
             int width = minSize.getWidth();
             if (width > maxWidth) {
                 maxWidth = width;
             }
+
             int height = minSize.getHeight();
             if (height > maxHeight) {
                 maxHeight = height;
@@ -112,8 +144,24 @@ public class GridLayout implements Layout {
             elements++;
         }
         int rows = (elements - 1 + columns) / columns;
+
         int totalWidth = maxWidth * columns;
         int totalHeight = maxHeight * rows;
+
+        if (!cellsEqualSize) {
+            int[][] maxCellSize = calcNeededCellSize(container);
+
+            totalWidth = 0;
+            for (int w : maxCellSize[0]) {
+                totalWidth += w;
+            }
+
+            totalHeight = 0;
+            for (int h : maxCellSize[1]) {
+                totalHeight += h;
+            }
+        }
+
         if (elements > 0) {
             totalWidth+=spacingX * (columns - 1);
         }
@@ -121,6 +169,34 @@ public class GridLayout implements Layout {
             totalHeight+=spacingY * (rows - 1);
         }
         return new Dimension(totalWidth, totalHeight);
+    }
+
+    private int[][] calcNeededCellSize(GuiContainer<?> container) {
+        int[] columnMaxWidth = new int[columns];
+        int[] rowMaxHeight = new int[(container.getElements().size() - 1 + columns) / columns];
+
+        int elements = 0;
+        for (Map.Entry<GuiElement, LayoutData> entry : container.getElements().entrySet()) {
+            int column = elements % columns;
+            int row = elements / columns;
+
+            GuiElement element = entry.getKey();
+            ReadableDimension minSize = element.getMinSize();
+
+            int width = minSize.getWidth();
+            if (width > columnMaxWidth[column]) {
+                columnMaxWidth[column] = width;
+            }
+
+            int height = minSize.getHeight();
+            if (height > rowMaxHeight[row]) {
+                rowMaxHeight[row] = height;
+            }
+
+            elements++;
+        }
+
+        return new int[][]{columnMaxWidth, rowMaxHeight};
     }
 
     @lombok.Data
