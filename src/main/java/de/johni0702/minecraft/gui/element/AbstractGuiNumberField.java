@@ -26,6 +26,7 @@ package de.johni0702.minecraft.gui.element;
 
 import com.google.common.base.Preconditions;
 import de.johni0702.minecraft.gui.container.GuiContainer;
+import lombok.Getter;
 
 import java.util.regex.Pattern;
 
@@ -35,6 +36,12 @@ public abstract class AbstractGuiNumberField<T extends AbstractGuiNumberField<T>
 
     private int precision;
     private volatile Pattern precisionPattern;
+
+    @Getter
+    private Double minValue;
+
+    @Getter
+    private Double maxValue;
 
     public AbstractGuiNumberField() {
     }
@@ -55,19 +62,20 @@ public abstract class AbstractGuiNumberField<T extends AbstractGuiNumberField<T>
         return super.setText(text);
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     private boolean isTextValid(String text) {
         try {
             if (precision == 0) {
-                Integer.parseInt(text);
-                return true;
+                return valueInRange(Integer.parseInt(text));
             } else {
-                Double.parseDouble(text);
-                return precisionPattern.matcher(text).matches();
+                return valueInRange(Double.parseDouble(text)) && precisionPattern.matcher(text).matches();
             }
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    private boolean valueInRange(double value) {
+        return (minValue == null || value >= minValue) && (maxValue == null || value <= maxValue);
     }
 
     @Override
@@ -127,5 +135,27 @@ public abstract class AbstractGuiNumberField<T extends AbstractGuiNumberField<T>
         precisionPattern = Pattern.compile(String.format("-?[0-9]*+((\\.[0-9]{0,%d})?)||(\\.)?", precision));
         this.precision = precision;
         return getThis();
+    }
+
+    @Override
+    public T setMinValue(Double minValue) {
+        this.minValue = minValue;
+        return getThis();
+    }
+
+    @Override
+    public T setMaxValue(Double maxValue) {
+        this.maxValue = maxValue;
+        return getThis();
+    }
+
+    @Override
+    public T setMinValue(int minValue) {
+        return setMinValue((double) minValue);
+    }
+
+    @Override
+    public T setMaxValue(int maxValue) {
+        return setMaxValue((double) maxValue);
     }
 }

@@ -35,6 +35,12 @@ public interface IGuiNumberField<T extends IGuiNumberField<T>> extends IGuiTextF
     T setValue(int value);
     T setValue(double value);
 
+    T setMinValue(Double minValue);
+    T setMaxValue(Double maxValue);
+
+    T setMinValue(int minValue);
+    T setMaxValue(int maxValue);
+
     /**
      * Sets the amount of digits allowed after the decimal point.
      * A value of {@code 0} is equal to integer precision.
