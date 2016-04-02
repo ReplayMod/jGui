@@ -44,6 +44,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatAllowedCharacters;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.Color;
 import org.lwjgl.util.*;
 
 import static net.minecraft.client.renderer.GlStateManager.*;
@@ -324,6 +325,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
 
         disableColorLogic();
         enableTexture2D();
+        color(255, 255, 255, 255);
     }
 
     @Override
