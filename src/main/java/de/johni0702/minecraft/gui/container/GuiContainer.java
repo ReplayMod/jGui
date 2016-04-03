@@ -41,6 +41,15 @@ public interface GuiContainer<T extends GuiContainer<T>> extends ComposedGuiElem
 
     void convertFor(GuiElement element, Point point);
 
+    /**
+     * Converts the global coordinates of the point to ones relative to the element.
+     * @param element The element, must be part of this container
+     * @param point The point
+     * @param relativeLayer Layer at which the point is relative to this element,
+     *                      positive values are above this element
+     */
+    void convertFor(GuiElement element, Point point, int relativeLayer);
+
     Map<GuiElement, LayoutData> getElements();
     T addElements(LayoutData layoutData, GuiElement... elements);
     T removeElement(GuiElement element);

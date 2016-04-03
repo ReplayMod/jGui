@@ -63,10 +63,10 @@ public abstract class AbstractGuiScrollable<T extends AbstractGuiScrollable<T>> 
     }
 
     @Override
-    public void convertFor(GuiElement element, Point point) {
-        super.convertFor(element, point);
-        if (point.getX() > 0 && point.getX() < lastRenderSize.getWidth()
-                 && point.getY() > 0 && point.getY() < lastRenderSize.getHeight()) {
+    public void convertFor(GuiElement element, Point point, int relativeLayer) {
+        super.convertFor(element, point, relativeLayer);
+        if (relativeLayer > 0 || (point.getX() > 0 && point.getX() < lastRenderSize.getWidth()
+                 && point.getY() > 0 && point.getY() < lastRenderSize.getHeight())) {
             point.translate(offsetX, offsetY);
         } else {
             point.setLocation(Integer.MIN_VALUE, Integer.MIN_VALUE);

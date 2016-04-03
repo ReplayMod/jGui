@@ -82,12 +82,17 @@ public abstract class AbstractGuiContainer<T extends AbstractGuiContainer<T>>
 
     @Override
     public void convertFor(GuiElement element, Point point) {
+        convertFor(element, point, element.getLayer());
+    }
+
+    @Override
+    public void convertFor(GuiElement element, Point point, int relativeLayer) {
         checkState(layedOutElements != null, "Cannot convert position unless rendered at least once.");
         Pair<ReadablePoint, ReadableDimension> pair = layedOutElements.get(element);
         checkState(pair != null, "Element " + element + " not part of " + this);
         ReadablePoint pos = pair.getKey();
         if (getContainer() != null) {
-            getContainer().convertFor(this, point);
+            getContainer().convertFor(this, point, relativeLayer + getLayer());
         }
         point.translate(-pos.getX(), -pos.getY());
     }

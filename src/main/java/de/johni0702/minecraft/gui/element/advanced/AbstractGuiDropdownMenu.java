@@ -128,13 +128,13 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
         this.values = values;
         dropdown = new GuiPanel(){
             @Override
-            public void convertFor(GuiElement element, Point point) {
-                super.convertFor(element, point);
-                point.translate(0, -size.getHeight());
+            public void convertFor(GuiElement element, Point point, int relativeLayer) {
                 AbstractGuiDropdownMenu parent = AbstractGuiDropdownMenu.this;
                 if (parent.getContainer() != null) {
-                    parent.getContainer().convertFor(parent, point);
+                    parent.getContainer().convertFor(parent, point, relativeLayer + 1);
                 }
+                point.translate(0, -size.getHeight());
+                super.convertFor(element, point, relativeLayer);
             }
         }.setLayout(new VerticalLayout());
         for (V value : values) {
