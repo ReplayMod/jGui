@@ -78,9 +78,10 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
 
         int textureY = 46 + texture * 20;
         int halfWidth = size.getWidth() / 2;
+        int secondHalfWidth = size.getWidth() - halfWidth;
 
         renderer.drawTexturedRect(0, 0, 0, textureY, halfWidth, size.getHeight());
-        renderer.drawTexturedRect(halfWidth, 0, 200 - halfWidth, textureY, halfWidth, size.getHeight());
+        renderer.drawTexturedRect(halfWidth, 0, 200 - secondHalfWidth, textureY, secondHalfWidth, size.getHeight());
         renderer.drawCenteredString(halfWidth, (size.getHeight() - 8) / 2, color, label, true);
     }
 
