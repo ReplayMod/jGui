@@ -82,7 +82,7 @@ public abstract class AbstractGuiScrollable<T extends AbstractGuiScrollable<T>> 
         size = new Dimension(Math.max(width, size.getWidth()), Math.max(height, size.getHeight()));
         renderInfo = renderInfo.offsetMouse(-offsetX, -offsetY);
 
-        OffsetGuiRenderer offsetRenderer = new OffsetGuiRenderer(renderer, negativeOffset, size);
+        OffsetGuiRenderer offsetRenderer = new OffsetGuiRenderer(renderer, negativeOffset, size, renderInfo.layer == 0);
         offsetRenderer.startUsing();
         super.draw(offsetRenderer, size, renderInfo);
         offsetRenderer.stopUsing();
