@@ -96,10 +96,9 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
     @Override
     public T setText(String text) {
         if (text.length() > maxLength) {
-            this.text = text.substring(0, maxLength);
-        } else {
-            this.text = text;
+            text = text.substring(0, maxLength);
         }
+        this.text = text;
         selectionPos = cursorPos = text.length();
         return getThis();
     }
