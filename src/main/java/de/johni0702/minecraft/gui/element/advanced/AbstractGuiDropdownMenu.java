@@ -32,6 +32,7 @@ import de.johni0702.minecraft.gui.container.GuiPanel;
 import de.johni0702.minecraft.gui.element.AbstractComposedGuiElement;
 import de.johni0702.minecraft.gui.element.AbstractGuiClickable;
 import de.johni0702.minecraft.gui.element.GuiElement;
+import de.johni0702.minecraft.gui.element.IGuiClickable;
 import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.layout.VerticalLayout;
 import de.johni0702.minecraft.gui.utils.Consumer;
@@ -42,6 +43,8 @@ import org.lwjgl.util.*;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMenu<V, T>>
         extends AbstractComposedGuiElement<T> implements IGuiDropdownMenu<V,T>, Clickable {
@@ -59,6 +62,8 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
     private Consumer<Integer> onSelection;
 
     private GuiPanel dropdown;
+
+    private Map<V, IGuiClickable> unmodifiableDropdownEntries;
 
     private ReadableDimension size;
 
@@ -137,9 +142,13 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
                 super.convertFor(element, point, relativeLayer);
             }
         }.setLayout(new VerticalLayout());
+        Map<V, IGuiClickable> dropdownEntries = new LinkedHashMap<>();
         for (V value : values) {
-            dropdown.addElements(null, new DropdownEntry(value));
+            DropdownEntry entry = new DropdownEntry(value);
+            dropdownEntries.put(value, entry);
+            dropdown.addElements(null, entry);
         }
+        unmodifiableDropdownEntries = Collections.unmodifiableMap(dropdownEntries);
         return getThis();
     }
 
@@ -207,6 +216,11 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
     protected boolean isMouseHovering(ReadablePoint pos) {
         return pos.getX() > 0 && pos.getY() > 0
                 && pos.getX() < size.getWidth() && pos.getY() < size.getHeight();
+    }
+
+    @Override
+    public Map<V, IGuiClickable> getDropdownEntries() {
+        return unmodifiableDropdownEntries;
     }
 
     @RequiredArgsConstructor

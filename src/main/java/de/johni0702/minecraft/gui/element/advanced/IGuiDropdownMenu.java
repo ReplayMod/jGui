@@ -25,7 +25,10 @@
 package de.johni0702.minecraft.gui.element.advanced;
 
 import de.johni0702.minecraft.gui.element.GuiElement;
+import de.johni0702.minecraft.gui.element.IGuiClickable;
 import de.johni0702.minecraft.gui.utils.Consumer;
+
+import java.util.Map;
 
 public interface IGuiDropdownMenu<V, T extends IGuiDropdownMenu<V, T>> extends GuiElement<T> {
     T setValues(V... values);
@@ -45,4 +48,14 @@ public interface IGuiDropdownMenu<V, T extends IGuiDropdownMenu<V, T>> extends G
     boolean isOpened();
 
     T onSelection(Consumer<Integer> consumer);
+
+    /**
+     * Returns an unmodifiable map of values with their GUI elements.
+     * The GUI elements may be modified.<br>
+     * The returned map is only valid until {@link #setValues(Object[])} is
+     * called, at which point new GUI elements are created.<br>
+     * This may return null if {@link #setValues(Object[])} has not yet been called.
+     * @return Unmodifiable, ordered map of entries
+     */
+    Map<V, IGuiClickable> getDropdownEntries();
 }
