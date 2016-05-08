@@ -56,7 +56,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
 
     @Getter
     @Setter
-    private boolean drawBackground = true;
+    private Background background = Background.DEFAULT;
 
     @Getter
     private boolean enabledRepeatedKeyEvents = true;
@@ -72,8 +72,19 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
     @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         if (renderInfo.layer == 0) {
-            if (drawBackground) {
-                wrapped.drawDefaultBackground();
+            switch (background) {
+                case NONE:
+                    break;
+                case DEFAULT:
+                    wrapped.drawDefaultBackground();
+                    break;
+                case TRANSPARENT:
+                    int top = 0xc0_10_10_10, bottom = 0xd0_10_10_10;
+                    renderer.drawRect(0, 0, size.getWidth(), size.getHeight(), top, top, bottom, bottom);
+                    break;
+                case DIRT:
+                    wrapped.drawBackground(0);
+                    break;
             }
             if (title != null) {
                 ReadableDimension titleSize = title.getMinSize();
@@ -229,5 +240,9 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         public T getWrapper() {
             return AbstractGuiScreen.this.getThis();
         }
+    }
+
+    public enum Background {
+        NONE, DEFAULT, TRANSPARENT, DIRT;
     }
 }
