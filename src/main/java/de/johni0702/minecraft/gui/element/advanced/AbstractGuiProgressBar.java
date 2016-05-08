@@ -64,8 +64,8 @@ public abstract class AbstractGuiProgressBar<T extends AbstractGuiProgressBar<T>
     }
 
     @Override
-    public T setI18nLabel(String label) {
-        return setLabel(I18n.format(label));
+    public T setI18nLabel(String label, Object... args) {
+        return setLabel(I18n.format(label, args));
     }
 
     @Override

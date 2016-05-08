@@ -31,7 +31,7 @@ public interface IGuiProgressBar<T extends IGuiProgressBar<T>> extends GuiElemen
 
     T setLabel(String label);
 
-    T setI18nLabel(String label);
+    T setI18nLabel(String label, Object... args);
 
     float getProgress();
 
