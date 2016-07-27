@@ -83,6 +83,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
     private ReadableDimension size = new Dimension(0, 0); // Size of last render
 
     private Consumer<String> textChanged;
+    private Consumer<Boolean> focusChanged;
     private Runnable onEnter;
 
     public AbstractGuiTextField() {
@@ -100,6 +101,8 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
             this.text = text;
         }
         selectionPos = cursorPos = text.length();
+        //omitting this may cause the client to crash when replacing a long with a short text value
+        currentOffset = 0;
         return getThis();
     }
 
@@ -360,7 +363,10 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         if (isFocused && !this.focused) {
             this.blinkCursorTick = 0; // Restart blinking to indicate successful focus
         }
-        this.focused = isFocused;
+        if (this.focused != isFocused) {
+            this.focused = isFocused;
+            onFocusChanged(this.focused);
+        }
         return getThis();
     }
 
@@ -560,6 +566,15 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         }
     }
 
+    /**
+     * Called when the element has been focused or unfocused
+     */
+    protected void onFocusChanged(boolean focused) {
+        if (focusChanged != null) {
+            focusChanged.consume(focused);
+        }
+    }
+
     @Override
     public T onEnter(Runnable onEnter) {
         this.onEnter = onEnter;
@@ -569,6 +584,12 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
     @Override
     public T onTextChanged(Consumer<String> textChanged) {
         this.textChanged = textChanged;
+        return getThis();
+    }
+
+    @Override
+    public T onFocusChange(Consumer<Boolean> focusChanged) {
+        this.focusChanged = focusChanged;
         return getThis();
     }
 
