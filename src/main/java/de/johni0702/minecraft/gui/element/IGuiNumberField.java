@@ -41,6 +41,8 @@ public interface IGuiNumberField<T extends IGuiNumberField<T>> extends IGuiTextF
     T setMinValue(int minValue);
     T setMaxValue(int maxValue);
 
+    T setValidateOnFocusChange(boolean validateOnFocusChange);
+
     /**
      * Sets the amount of digits allowed after the decimal point.
      * A value of {@code 0} is equal to integer precision.

@@ -32,6 +32,7 @@ import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.function.Focusable;
 import de.johni0702.minecraft.gui.function.Tickable;
 import de.johni0702.minecraft.gui.function.Typeable;
+import de.johni0702.minecraft.gui.utils.Consumer;
 import lombok.Getter;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -58,6 +59,8 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
     private boolean focused;
     @Getter
     private Focusable next, previous;
+
+    private Consumer<Boolean> focusChanged;
 
     // Content
     @Getter
@@ -428,7 +431,10 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
         if (isFocused && !this.focused) {
             this.blinkCursorTick = 0; // Restart blinking to indicate successful focus
         }
-        this.focused = isFocused;
+        if (this.focused != isFocused) {
+            this.focused = isFocused;
+            onFocusChanged(this.focused);
+        }
         return getThis();
     }
 
@@ -676,5 +682,20 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
     public T setTextColorDisabled(ReadableColor textColorDisabled) {
         this.textColorDisabled = textColorDisabled;
         return getThis();
+    }
+
+    @Override
+    public T onFocusChange(Consumer<Boolean> focusChanged) {
+        this.focusChanged = focusChanged;
+        return getThis();
+    }
+
+    /**
+     * Called when the element has been focused or unfocused
+     */
+    protected void onFocusChanged(boolean focused) {
+        if (focusChanged != null) {
+            focusChanged.consume(focused);
+        }
     }
 }

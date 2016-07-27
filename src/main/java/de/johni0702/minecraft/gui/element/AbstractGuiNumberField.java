@@ -43,6 +43,8 @@ public abstract class AbstractGuiNumberField<T extends AbstractGuiNumberField<T>
     @Getter
     private Double maxValue;
 
+    private boolean validateOnFocusChange = false;
+
     public AbstractGuiNumberField() {
     }
 
@@ -56,18 +58,26 @@ public abstract class AbstractGuiNumberField<T extends AbstractGuiNumberField<T>
 
     @Override
     public T setText(String text) {
-        if (!isTextValid(text)) {
+        if (!isTextValid(text, !validateOnFocusChange)) {
             throw new IllegalArgumentException(text + " is not a valid number!");
         }
         return super.setText(text);
     }
 
-    private boolean isTextValid(String text) {
+    @Override
+    public T setValidateOnFocusChange(boolean validateOnFocusChange) {
+        this.validateOnFocusChange = validateOnFocusChange;
+        return getThis();
+    }
+
+    private boolean isTextValid(String text, boolean validateRange) {
         try {
             if (precision == 0) {
-                return valueInRange(Integer.parseInt(text));
+                int val = Integer.parseInt(text);
+                return !validateRange || valueInRange(val);
             } else {
-                return valueInRange(Double.parseDouble(text)) && precisionPattern.matcher(text).matches();
+                double val = Double.parseDouble(text);
+                return !validateRange || (valueInRange(val) && precisionPattern.matcher(text).matches());
             }
         } catch (NumberFormatException e) {
             return false;
@@ -80,7 +90,7 @@ public abstract class AbstractGuiNumberField<T extends AbstractGuiNumberField<T>
 
     @Override
     protected void onTextChanged(String from) {
-        if (isTextValid(getText())) {
+        if (isTextValid(getText(), !validateOnFocusChange)) {
             super.onTextChanged(from);
         } else {
             setText(from);
@@ -157,5 +167,22 @@ public abstract class AbstractGuiNumberField<T extends AbstractGuiNumberField<T>
     @Override
     public T setMaxValue(int maxValue) {
         return setMaxValue((double) maxValue);
+    }
+
+    private double clampToBounds() {
+        double d = getDouble();
+        if (getMinValue() != null && d < getMinValue()) {
+            return getMinValue();
+        }
+        if (getMaxValue() != null && d > getMaxValue()) {
+            return getMaxValue();
+        }
+        return d;
+    }
+
+    @Override
+    protected void onFocusChanged(boolean focused) {
+        setValue(clampToBounds());
+        super.onFocusChanged(focused);
     }
 }

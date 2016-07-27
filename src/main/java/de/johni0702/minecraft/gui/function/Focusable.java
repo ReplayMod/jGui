@@ -24,10 +24,14 @@
  */
 package de.johni0702.minecraft.gui.function;
 
+import de.johni0702.minecraft.gui.utils.Consumer;
+
 public interface Focusable<T extends Focusable<T>> {
 
     boolean isFocused();
     T setFocused(boolean focused);
+
+    T onFocusChange(Consumer<Boolean> consumer);
 
     Focusable getNext();
     T setNext(Focusable next);
