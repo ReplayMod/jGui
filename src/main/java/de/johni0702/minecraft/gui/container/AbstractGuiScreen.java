@@ -35,6 +35,7 @@ import de.johni0702.minecraft.gui.utils.MouseUtils;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.util.ReportedException;
@@ -177,6 +178,11 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
 
         @Override
         public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+            // The Forge loading screen apparently leaves one of the textures of the GlStateManager in an
+            // incorrect state which can cause the whole screen to just remain white. This is a workaround.
+            GlStateManager.disableTexture2D();
+            GlStateManager.enableTexture2D();
+
             int layers = getMaxLayer();
             for (int layer = 0; layer <= layers; layer++) {
                 draw(renderer, screenSize, new RenderInfo(partialTicks, mouseX, mouseY, layer));
