@@ -164,5 +164,6 @@ public interface IGuiTextField<T extends IGuiTextField<T>> extends GuiElement<T>
 
     ReadableColor getTextColor();
     T setTextColor(ReadableColor textColor);
+    ReadableColor getTextColorDisabled();
     T setTextColorDisabled(ReadableColor textColorDisabled);
 }

@@ -79,8 +79,8 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
     // Rendering
     private int currentOffset;
     private int blinkCursorTick;
-    public ReadableColor textColorEnabled = new Color(224, 224, 224);
-    public ReadableColor textColorDisabled = new Color(112, 112, 112);
+    private ReadableColor textColorEnabled = new Color(224, 224, 224);
+    private ReadableColor textColorDisabled = new Color(112, 112, 112);
     private ReadableDimension size = new Dimension(0, 0); // Size of last render
 
     private Consumer<String> textChanged;
@@ -614,6 +614,11 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
     public T setTextColor(ReadableColor textColor) {
         this.textColorEnabled = textColor;
         return getThis();
+    }
+
+    @Override
+    public ReadableColor getTextColorDisabled() {
+        return textColorDisabled;
     }
 
     @Override
