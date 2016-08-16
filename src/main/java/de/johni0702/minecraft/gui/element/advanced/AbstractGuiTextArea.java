@@ -94,7 +94,7 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
     }
 
     @Override
-    public void setText(String[] lines) {
+    public T setText(String[] lines) {
         if (lines.length > maxTextHeight) {
             lines = Arrays.copyOf(lines, maxTextHeight);
         }
@@ -104,6 +104,7 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
                 lines[i] = lines[i].substring(0, maxTextWidth);
             }
         }
+        return getThis();
     }
 
     @Override
@@ -361,11 +362,12 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
     }
 
     @Override
-    public void setCursorPosition(int x, int y) {
+    public T setCursorPosition(int x, int y) {
         selectionY = cursorY = clamp_int(y, 0, text.length - 1);
         selectionX = cursorX = clamp_int(x, 0, text[cursorY].length());
         updateCurrentXOffset();
         updateCurrentYOffset();
+        return getThis();
     }
 
     private void invertColors(GuiRenderer guiRenderer, int right, int bottom, int left, int top) {

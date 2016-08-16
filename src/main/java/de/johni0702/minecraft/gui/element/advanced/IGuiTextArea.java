@@ -29,7 +29,7 @@ import de.johni0702.minecraft.gui.function.Focusable;
 import org.lwjgl.util.ReadableColor;
 
 public interface IGuiTextArea<T extends IGuiTextArea<T>> extends GuiElement<T>, Focusable<T> {
-    void setText(String[] lines);
+    T setText(String[] lines);
 
     String[] getText();
 
@@ -53,7 +53,7 @@ public interface IGuiTextArea<T extends IGuiTextArea<T>> extends GuiElement<T>, 
 
     void writeChar(char c);
 
-    void setCursorPosition(int x, int y);
+    T setCursorPosition(int x, int y);
 
     T setMaxTextWidth(int maxTextWidth);
 
