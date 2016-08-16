@@ -56,6 +56,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
     private boolean visible;
     private Dimension screenSize;
     private boolean mouseVisible;
+    private boolean closeable = true;
 
     public boolean isVisible() {
         return visible;
@@ -82,6 +83,14 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
     public void setMouseVisible(boolean mouseVisible) {
         this.mouseVisible = mouseVisible;
         updateUserInputGui();
+    }
+
+    public boolean isCloseable() {
+        return closeable;
+    }
+
+    public void setCloseable(boolean closeable) {
+        this.closeable = closeable;
     }
 
     private void updateUserInputGui() {
@@ -216,7 +225,9 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         @Override
         protected void keyTyped(char typedChar, int keyCode) throws IOException {
             forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), keyCode, typedChar, isCtrlKeyDown(), isShiftKeyDown());
-            super.keyTyped(typedChar, keyCode);
+            if (closeable) {
+                super.keyTyped(typedChar, keyCode);
+            }
         }
 
         @Override
