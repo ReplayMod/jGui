@@ -29,6 +29,7 @@ import de.johni0702.minecraft.gui.element.IGuiClickable;
 import de.johni0702.minecraft.gui.utils.Consumer;
 
 import java.util.Map;
+import java.util.function.Function;
 
 public interface IGuiDropdownMenu<V, T extends IGuiDropdownMenu<V, T>> extends GuiElement<T> {
     T setValues(V... values);
@@ -58,4 +59,12 @@ public interface IGuiDropdownMenu<V, T extends IGuiDropdownMenu<V, T>> extends G
      * @return Unmodifiable, ordered map of entries
      */
     Map<V, IGuiClickable> getDropdownEntries();
+
+    /**
+     * Set the function used to convert the values to display strings.
+     * If not set, {@code Object::toString} is used.
+     * @param toString Function used to convert
+     * @return {@code this}, for chaining
+     */
+    T setToString(Function<V, String> toString);
 }

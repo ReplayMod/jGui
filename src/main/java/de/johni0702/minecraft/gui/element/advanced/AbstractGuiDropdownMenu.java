@@ -45,6 +45,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMenu<V, T>>
         extends AbstractComposedGuiElement<T> implements IGuiDropdownMenu<V,T>, Clickable {
@@ -67,6 +68,8 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
 
     private ReadableDimension size;
 
+    private Function<V, String> toString = Object::toString;
+
     public AbstractGuiDropdownMenu() {
     }
 
@@ -84,7 +87,7 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
         FontRenderer fontRenderer = getMinecraft().fontRendererObj;
         int maxWidth = 0;
         for (V value : values) {
-            int width = fontRenderer.getStringWidth(value.toString());
+            int width = fontRenderer.getStringWidth(toString.apply(value));
             if (width > maxWidth) {
                 maxWidth = width;
             }
@@ -114,7 +117,7 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
                 renderer.drawRect(x - layer, y + (tHeight - layer), layer * 2 - 1, 1, OUTLINE_COLOR);
             }
 
-            renderer.drawString(3, height / 2 - fontRenderer.FONT_HEIGHT / 2, ReadableColor.WHITE, getSelectedValue().toString());
+            renderer.drawString(3, height / 2 - fontRenderer.FONT_HEIGHT / 2, ReadableColor.WHITE, toString.apply(getSelectedValue()));
         } else if (renderInfo.layer == 1) {
             ReadablePoint offsetPoint = new Point(0, size.getHeight());
             ReadableDimension offsetSize = new Dimension(size.getWidth(), (fontRenderer.FONT_HEIGHT + 5) *  values.length);
@@ -223,6 +226,12 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
         return unmodifiableDropdownEntries;
     }
 
+    @Override
+    public T setToString(Function<V, String> toString) {
+        this.toString = toString;
+        return getThis();
+    }
+
     @RequiredArgsConstructor
     private class DropdownEntry extends AbstractGuiClickable<DropdownEntry> {
         private final V value;
@@ -245,7 +254,7 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
 
             renderer.drawRect(0, 0, width, height, OUTLINE_COLOR);
             renderer.drawRect(1, 0, width - 2, height - 1, ReadableColor.BLACK);
-            renderer.drawString(3, 2, ReadableColor.WHITE, value.toString());
+            renderer.drawString(3, 2, ReadableColor.WHITE, toString.apply(value));
         }
 
         @Override
