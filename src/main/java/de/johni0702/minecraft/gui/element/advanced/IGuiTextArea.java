@@ -70,4 +70,8 @@ public interface IGuiTextArea<T extends IGuiTextArea<T>> extends GuiElement<T>, 
     int getMaxTextHeight();
 
     int getMaxCharCount();
+
+    String[] getHint();
+    T setHint(String... hint);
+    T setI18nHint(String hint, Object... args);
 }

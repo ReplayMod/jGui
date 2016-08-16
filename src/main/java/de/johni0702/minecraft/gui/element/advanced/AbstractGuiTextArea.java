@@ -38,6 +38,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatAllowedCharacters;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -71,6 +72,7 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
     private int maxCharCount = -1;
 
     private String[] text = {""};
+    private String[] hint;
     private int cursorX;
     private int cursorY;
     private int selectionX;
@@ -468,6 +470,17 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
         int maxLines = contentHeight / lineHeight;
         int contentWidth = width - BORDER * 2;
 
+        // Draw hint if applicable
+        if (hint != null && !isFocused() && Arrays.stream(text).allMatch(String::isEmpty)) {
+            for (int i = 0; i < maxLines && i < hint.length; i++) {
+                String line = fontRenderer.trimStringToWidth(hint[i], contentWidth);
+
+                int posY = BORDER + i * lineHeight;
+                renderer.drawString(BORDER, posY, textColorDisabled, line, true);
+            }
+            return;
+        }
+
         // Draw lines
         for (int i = 0; i < maxLines && i + currentYOffset < text.length; i++) {
             int lineY = i + currentYOffset;
@@ -697,5 +710,22 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
         if (focusChanged != null) {
             focusChanged.consume(focused);
         }
+    }
+
+    @Override
+    public String[] getHint() {
+        return hint;
+    }
+
+    @Override
+    public T setHint(String... hint) {
+        this.hint = hint;
+        return getThis();
+    }
+
+    @Override
+    public T setI18nHint(String hint, Object... args) {
+        setHint(I18n.format(hint, args).split("/n"));
+        return getThis();
     }
 }
