@@ -70,7 +70,16 @@ public abstract class AbstractGuiNumberField<T extends AbstractGuiNumberField<T>
         return getThis();
     }
 
+    private boolean isSemiZero(String text) {
+        return text.isEmpty() || "-".equals(text);
+    }
+
     private boolean isTextValid(String text, boolean validateRange) {
+        // Allow empty text to be equal to 0
+        if (validateOnFocusChange && isSemiZero(text)) {
+            // but only if 0 is in range
+            return !validateRange || valueInRange(0);
+        }
         try {
             if (precision == 0) {
                 int val = Integer.parseInt(text);
@@ -99,31 +108,49 @@ public abstract class AbstractGuiNumberField<T extends AbstractGuiNumberField<T>
 
     @Override
     public byte getByte() {
+        if (validateOnFocusChange && isSemiZero(getText())) {
+            return 0;
+        }
         return Byte.parseByte(getText());
     }
 
     @Override
     public short getShort() {
+        if (validateOnFocusChange && isSemiZero(getText())) {
+            return 0;
+        }
         return Short.parseShort(getText());
     }
 
     @Override
     public int getInteger() {
+        if (validateOnFocusChange && isSemiZero(getText())) {
+            return 0;
+        }
         return Integer.parseInt(getText());
     }
 
     @Override
     public long getLong() {
+        if (validateOnFocusChange && isSemiZero(getText())) {
+            return 0;
+        }
         return Long.parseLong(getText());
     }
 
     @Override
     public float getFloat() {
+        if (validateOnFocusChange && isSemiZero(getText())) {
+            return 0;
+        }
         return Float.parseFloat(getText());
     }
 
     @Override
     public double getDouble() {
+        if (validateOnFocusChange && isSemiZero(getText())) {
+            return 0;
+        }
         return Double.parseDouble(getText());
     }
 
