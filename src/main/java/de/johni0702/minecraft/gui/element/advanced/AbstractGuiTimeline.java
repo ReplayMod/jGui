@@ -32,7 +32,7 @@ import de.johni0702.minecraft.gui.element.GuiTooltip;
 import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.utils.Colors;
 import de.johni0702.minecraft.gui.utils.Utils;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.util.*;
 
 public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> extends AbstractGuiElement<T> implements IGuiTimeline<T>, Clickable {

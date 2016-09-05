@@ -39,7 +39,6 @@ import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 public abstract class AbstractComposedGuiElement<T extends AbstractComposedGuiElement<T>>
         extends AbstractGuiElement<T> implements ComposedGuiElement<T> {
@@ -110,18 +109,8 @@ public abstract class AbstractComposedGuiElement<T extends AbstractComposedGuiEl
                         CrashReport crash = CrashReport.makeCrashReport(e, "Calling Gui method");
                         CrashReportCategory category = crash.makeCategory("Gui");
                         category.addCrashSection("Method", method);
-                        category.addCrashSectionCallable("ComposedElement", new Callable() {
-                            @Override
-                            public Object call() throws Exception {
-                                return self;
-                            }
-                        });
-                        category.addCrashSectionCallable("Element", new Callable() {
-                            @Override
-                            public Object call() throws Exception {
-                                return self;
-                            }
-                        });
+                        category.setDetail("ComposedElement", self::toString);
+                        category.setDetail("Element", self::toString);
                         throw new ReportedException(crash);
                     }
                     if (handled != null) {
@@ -158,18 +147,8 @@ public abstract class AbstractComposedGuiElement<T extends AbstractComposedGuiEl
                         CrashReport crash = CrashReport.makeCrashReport(e, "Calling Gui method");
                         CrashReportCategory category = crash.makeCategory("Gui");
                         category.addCrashSection("Method", method);
-                        category.addCrashSectionCallable("ComposedElement", new Callable() {
-                            @Override
-                            public Object call() throws Exception {
-                                return element;
-                            }
-                        });
-                        category.addCrashSectionCallable("Element", new Callable() {
-                            @Override
-                            public Object call() throws Exception {
-                                return element;
-                            }
-                        });
+                        category.setDetail("ComposedElement", element::toString);
+                        category.setDetail("Element", element::toString);
                         throw new ReportedException(crash);
                     }
                 }

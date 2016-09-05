@@ -47,7 +47,6 @@ import org.lwjgl.util.ReadableDimension;
 import org.lwjgl.util.ReadablePoint;
 
 import java.io.IOException;
-import java.util.concurrent.Callable;
 
 public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends AbstractGuiContainer<T> {
 
@@ -118,33 +117,13 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                     CrashReport crashReport = CrashReport.makeCrashReport(ex, "Rendering Gui Tooltip");
                     renderInfo.addTo(crashReport);
                     CrashReportCategory category = crashReport.makeCategory("Gui container details");
-                    category.addCrashSectionCallable("Container", new Callable() {
-                        @Override
-                        public Object call() throws Exception {
-                            return this;
-                        }
-                    });
+                    category.setDetail("Container", this::toString);
                     category.addCrashSection("Width", size.getWidth());
                     category.addCrashSection("Height", size.getHeight());
                     category = crashReport.makeCategory("Tooltip details");
-                    category.addCrashSectionCallable("Element", new Callable() {
-                        @Override
-                        public Object call() throws Exception {
-                            return tooltip;
-                        }
-                    });
-                    category.addCrashSectionCallable("Position", new Callable() {
-                        @Override
-                        public Object call() throws Exception {
-                            return position;
-                        }
-                    });
-                    category.addCrashSectionCallable("Size", new Callable() {
-                        @Override
-                        public Object call() throws Exception {
-                            return tooltipSize;
-                        }
-                    });
+                    category.setDetail("Element", tooltip::toString);
+                    category.setDetail("Position", position::toString);
+                    category.setDetail("Size", tooltipSize::toString);
                     throw new ReportedException(crashReport);
                 }
             }
@@ -239,7 +218,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                 Keyboard.enableRepeatEvents(true);
             }
             screenSize = new Dimension(width, height);
-            renderer = new MinecraftGuiRenderer(new ScaledResolution(mc, mc.displayWidth, mc.displayHeight));
+            renderer = new MinecraftGuiRenderer(new ScaledResolution(mc));
             forEach(Loadable.class).load();
         }
 

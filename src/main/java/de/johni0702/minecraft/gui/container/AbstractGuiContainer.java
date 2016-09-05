@@ -45,7 +45,6 @@ import org.lwjgl.util.ReadableDimension;
 import org.lwjgl.util.ReadablePoint;
 
 import java.util.*;
-import java.util.concurrent.Callable;
 
 import static com.google.common.base.Preconditions.checkState;
 
@@ -138,18 +137,8 @@ public abstract class AbstractGuiContainer<T extends AbstractGuiContainer<T>>
             CrashReport crashReport = CrashReport.makeCrashReport(ex, "Gui Layout");
             renderInfo.addTo(crashReport);
             CrashReportCategory category = crashReport.makeCategory("Gui container details");
-            category.addCrashSectionCallable("Container", new Callable() {
-                @Override
-                public Object call() throws Exception {
-                    return this;
-                }
-            });
-            category.addCrashSectionCallable("Layout", new Callable() {
-                @Override
-                public Object call() throws Exception {
-                    return layout;
-                }
-            });
+            category.setDetail("Container", this::toString);
+            category.setDetail("Layout", layout::toString);
             throw new ReportedException(crashReport);
         }
         if (backgroundColor != null && renderInfo.getLayer() == 0) {
@@ -181,46 +170,16 @@ public abstract class AbstractGuiContainer<T extends AbstractGuiContainer<T>>
                 CrashReport crashReport = CrashReport.makeCrashReport(ex, "Rendering Gui");
                 renderInfo.addTo(crashReport);
                 CrashReportCategory category = crashReport.makeCategory("Gui container details");
-                category.addCrashSectionCallable("Container", new Callable() {
-                    @Override
-                    public Object call() throws Exception {
-                        return this;
-                    }
-                });
+                category.setDetail("Container", this::toString);
                 category.addCrashSection("Width", size.getWidth());
                 category.addCrashSection("Height", size.getHeight());
-                category.addCrashSectionCallable("Layout", new Callable() {
-                    @Override
-                    public Object call() throws Exception {
-                        return layout;
-                    }
-                });
+                category.setDetail("Layout", layout::toString);
                 category = crashReport.makeCategory("Gui element details");
-                category.addCrashSectionCallable("Element", new Callable() {
-                    @Override
-                    public Object call() throws Exception {
-                        return e.getKey();
-                    }
-                });
-                category.addCrashSectionCallable("Position", new Callable() {
-                    @Override
-                    public Object call() throws Exception {
-                        return ePosition;
-                    }
-                });
-                category.addCrashSectionCallable("Size", new Callable() {
-                    @Override
-                    public Object call() throws Exception {
-                        return eSize;
-                    }
-                });
+                category.setDetail("Element", () -> e.getKey().toString());
+                category.setDetail("Position", ePosition::toString);
+                category.setDetail("Size", eSize::toString);
                 if (e.getKey() instanceof GuiContainer) {
-                    category.addCrashSectionCallable("Layout", new Callable() {
-                        @Override
-                        public Object call() throws Exception {
-                            return ((GuiContainer) e.getKey()).getLayout();
-                        }
-                    });
+                    category.setDetail("Layout", () -> ((GuiContainer) e.getKey()).getLayout().toString());
                 }
                 throw new ReportedException(crashReport);
             }

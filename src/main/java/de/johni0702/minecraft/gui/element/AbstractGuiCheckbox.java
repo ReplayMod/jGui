@@ -31,6 +31,7 @@ import lombok.Getter;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.util.Color;
 import org.lwjgl.util.Dimension;
@@ -90,7 +91,7 @@ public abstract class AbstractGuiCheckbox<T extends AbstractGuiCheckbox<T>>
 
     @Override
     public void onClick() {
-        getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(BUTTON_SOUND, 1.0F));
+        getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
         setChecked(!isChecked());
         super.onClick();
     }

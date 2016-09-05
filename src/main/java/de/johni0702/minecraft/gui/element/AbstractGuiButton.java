@@ -33,6 +33,7 @@ import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.util.Dimension;
 import org.lwjgl.util.Point;
@@ -93,7 +94,7 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
 
     @Override
     public void onClick() {
-        getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(BUTTON_SOUND, 1.0F));
+        getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
         super.onClick();
     }
 

@@ -47,7 +47,6 @@ import org.lwjgl.util.ReadableDimension;
 import org.lwjgl.util.ReadablePoint;
 
 import java.io.IOException;
-import java.util.concurrent.Callable;
 
 public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extends AbstractGuiContainer<T> {
 
@@ -134,33 +133,13 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
                     CrashReport crashReport = CrashReport.makeCrashReport(ex, "Rendering Gui Tooltip");
                     renderInfo.addTo(crashReport);
                     CrashReportCategory category = crashReport.makeCategory("Gui container details");
-                    category.addCrashSectionCallable("Container", new Callable() {
-                        @Override
-                        public Object call() throws Exception {
-                            return this;
-                        }
-                    });
+                    category.setDetail("Container", this::toString);
                     category.addCrashSection("Width", size.getWidth());
                     category.addCrashSection("Height", size.getHeight());
                     category = crashReport.makeCategory("Tooltip details");
-                    category.addCrashSectionCallable("Element", new Callable() {
-                        @Override
-                        public Object call() throws Exception {
-                            return tooltip;
-                        }
-                    });
-                    category.addCrashSectionCallable("Position", new Callable() {
-                        @Override
-                        public Object call() throws Exception {
-                            return position;
-                        }
-                    });
-                    category.addCrashSectionCallable("Size", new Callable() {
-                        @Override
-                        public Object call() throws Exception {
-                            return tooltipSize;
-                        }
-                    });
+                    category.setDetail("Element", tooltip::toString);
+                    category.setDetail("Position", position::toString);
+                    category.setDetail("Size", tooltipSize::toString);
                     throw new ReportedException(crashReport);
                 }
             }
@@ -182,7 +161,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
 
         @SubscribeEvent
         public void renderOverlay(RenderGameOverlayEvent.Post event) {
-            if (event.type == RenderGameOverlayEvent.ElementType.ALL) {
+            if (event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
                 updateRenderer();
                 int layers = getMaxLayer();
                 int mouseX = -1, mouseY = -1;
@@ -192,7 +171,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
                     mouseY = mouse.getY();
                 }
                 for (int layer = 0; layer <= layers; layer++) {
-                    draw(renderer, screenSize, new RenderInfo(event.partialTicks, mouseX, mouseY, layer));
+                    draw(renderer, screenSize, new RenderInfo(event.getPartialTicks(), mouseX, mouseY, layer));
                 }
             }
         }
@@ -206,7 +185,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
 
         private void updateRenderer() {
             Minecraft mc = getMinecraft();
-            ScaledResolution res = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+            ScaledResolution res = new ScaledResolution(mc);
             if (screenSize == null
                     || screenSize.getWidth() != res.getScaledWidth()
                     || screenSize.getHeight() != res.getScaledHeight()) {

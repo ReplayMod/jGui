@@ -39,7 +39,8 @@ import lombok.NonNull;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatAllowedCharacters;
 import org.lwjgl.input.Keyboard;
@@ -48,7 +49,7 @@ import org.lwjgl.util.Color;
 import org.lwjgl.util.*;
 
 import static net.minecraft.client.renderer.GlStateManager.*;
-import static net.minecraft.util.MathHelper.clamp_int;
+import static net.minecraft.util.math.MathHelper.clamp_int;
 
 public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         extends AbstractGuiElement<T> implements Clickable, Tickable, Typeable, IGuiTextField<T> {
@@ -317,12 +318,12 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         colorLogicOp(GL11.GL_OR_REVERSE);
 
         Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer renderer = tessellator.getWorldRenderer();
-        renderer.startDrawingQuads();
-        renderer.addVertex(right, top, 0);
-        renderer.addVertex(left, top, 0);
-        renderer.addVertex(left, bottom, 0);
-        renderer.addVertex(right, bottom, 0);
+        VertexBuffer vertexBuffer = tessellator.getBuffer();
+        vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+        vertexBuffer.pos(right, top, 0).endVertex();
+        vertexBuffer.pos(left, top, 0).endVertex();
+        vertexBuffer.pos(left, bottom, 0).endVertex();
+        vertexBuffer.pos(right, bottom, 0).endVertex();
         tessellator.draw();
 
         disableColorLogic();

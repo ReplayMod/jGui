@@ -31,6 +31,7 @@ import de.johni0702.minecraft.gui.function.Clickable;
 import lombok.Getter;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.util.*;
 
@@ -38,8 +39,6 @@ import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 
 public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedButton<T>> extends AbstractGuiClickable<T> implements Clickable, IGuiTexturedButton<T> {
-    protected static final ResourceLocation BUTTON_SOUND = new ResourceLocation("gui.button.press");
-
     @Getter
     private ResourceLocation texture;
 
@@ -114,7 +113,7 @@ public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedBut
 
     @Override
     public void onClick() {
-        getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(BUTTON_SOUND, 1.0F));
+        getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
         super.onClick();
     }
 
