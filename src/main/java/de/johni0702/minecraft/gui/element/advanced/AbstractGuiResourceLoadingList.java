@@ -49,6 +49,8 @@ import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import static de.johni0702.minecraft.gui.utils.Utils.DOUBLE_CLICK_INTERVAL;
+
 public abstract class AbstractGuiResourceLoadingList
         <T extends AbstractGuiResourceLoadingList<T, U>, U extends GuiElement<U> & Comparable<U>>
         extends AbstractGuiVerticalList<T> implements Tickable, Loadable, Closeable {
@@ -60,10 +62,12 @@ public abstract class AbstractGuiResourceLoadingList
 
     private Consumer<Consumer<Supplier<U>>> onLoad;
     private Runnable onSelectionChanged;
+    private Runnable onSelectionDoubleClicked;
     private Thread loaderThread;
     private int tick;
 
     private Element selected;
+    private long selectedLastClickTime;
 
     public AbstractGuiResourceLoadingList() {
     }
@@ -150,8 +154,19 @@ public abstract class AbstractGuiResourceLoadingList
         }
     }
 
+    public void onSelectionDoubleClicked() {
+        if (onSelectionDoubleClicked != null) {
+            onSelectionDoubleClicked.run();
+        }
+    }
+
     public T onSelectionChanged(Runnable onSelectionChanged) {
         this.onSelectionChanged = onSelectionChanged;
+        return getThis();
+    }
+
+    public T onSelectionDoubleClicked(Runnable onSelectionDoubleClicked) {
+        this.onSelectionDoubleClicked = onSelectionDoubleClicked;
         return getThis();
     }
 
@@ -207,7 +222,10 @@ public abstract class AbstractGuiResourceLoadingList
                 if (selected != this) {
                     selected = this;
                     onSelectionChanged();
+                } else if (System.currentTimeMillis() - selectedLastClickTime < DOUBLE_CLICK_INTERVAL) {
+                    onSelectionDoubleClicked();
                 }
+                selectedLastClickTime = System.currentTimeMillis();
                 return true;
             }
             return false;
