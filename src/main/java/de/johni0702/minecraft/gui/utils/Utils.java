@@ -34,6 +34,11 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 public class Utils {
     /**
+     * Interval (in ms) within which two clicks have to be made on the same element to be counted as a double click.
+     */
+    public static final int DOUBLE_CLICK_INTERVAL = 250;
+
+    /**
      * Link the specified focusable compontents in the order they're supplied.
      * @param focusables Focusables to link
      * @see Focusable#setNext(Focusable)
