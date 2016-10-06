@@ -28,6 +28,7 @@ import com.google.common.base.Preconditions;
 import de.johni0702.minecraft.gui.container.GuiContainer;
 import lombok.Getter;
 
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 // TODO: This is suboptimal e.g. if there are trailing zeros, they stay (should be fixed after TextField is done w/o MC)
@@ -162,7 +163,7 @@ public abstract class AbstractGuiNumberField<T extends AbstractGuiNumberField<T>
 
     @Override
     public T setValue(double value) {
-        setText(String.format("%." + precision + "f", value));
+        setText(String.format(Locale.ROOT, "%." + precision + "f", value));
         return getThis();
     }
 
