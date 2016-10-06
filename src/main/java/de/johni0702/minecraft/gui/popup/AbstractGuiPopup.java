@@ -27,6 +27,7 @@ package de.johni0702.minecraft.gui.popup;
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.AbstractGuiContainer;
+import de.johni0702.minecraft.gui.container.AbstractGuiOverlay;
 import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.container.GuiPanel;
 import de.johni0702.minecraft.gui.layout.CustomLayout;
@@ -110,6 +111,8 @@ public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends Ab
     }
 
     private Layout originalLayout;
+    private boolean wasAllowUserInput;
+    private boolean wasMouseVisible;
 
     private final GuiContainer container;
 
@@ -130,11 +133,26 @@ public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends Ab
                 size(AbstractGuiPopup.this, width, height);
             }
         });
+        if (container instanceof AbstractGuiOverlay) {
+            // Popup opened on a overlay gui. These normally allow interaction with the game world which
+            // is undesirable when e.g. typing text into a input field. Therefore we disable user input.
+            AbstractGuiOverlay overlay = (AbstractGuiOverlay) container;
+            wasAllowUserInput = overlay.isAllowUserInput();
+            overlay.setAllowUserInput(false);
+            // We also force the mouse to be visible
+            wasMouseVisible = overlay.isMouseVisible();
+            overlay.setMouseVisible(true);
+        }
     }
 
     protected void close() {
         getContainer().setLayout(originalLayout);
         getContainer().removeElement(this);
+        if (container instanceof AbstractGuiOverlay) {
+            AbstractGuiOverlay overlay = (AbstractGuiOverlay) container;
+            overlay.setAllowUserInput(wasAllowUserInput);
+            overlay.setMouseVisible(wasMouseVisible);
+        }
     }
 
     public T setLayer(int layer) {
