@@ -348,10 +348,12 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
             String text = this.text.substring(currentOffset);
             int textX = fontRenderer.trimStringToWidth(text, mouseX).length() + currentOffset;
             setCursorPosition(textX);
+            return true;
         }
 
         setFocused(hovering);
-        return hovering;
+        // Do not yet return true to allow focusables later in the event chain to be notified of the focus change
+        return false;
     }
 
     protected boolean isMouseHovering(ReadablePoint pos) {
