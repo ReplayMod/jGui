@@ -236,7 +236,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
     public String deleteNextWord() {
         int worldLength = getNextWordLength();
         if (worldLength > 0) {
-            return deleteText(cursorPos, cursorPos + worldLength);
+            return deleteText(cursorPos, cursorPos + worldLength - 1);
         }
         return "";
     }
@@ -280,7 +280,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         int worldLength = getPreviousWordLength();
         String deleted = "";
         if (worldLength > 0) {
-            deleted = deleteText(cursorPos - worldLength, cursorPos);
+            deleted = deleteText(cursorPos - worldLength, cursorPos - 1);
             selectionPos = cursorPos -= worldLength;
             updateCurrentOffset();
         }
