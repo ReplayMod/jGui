@@ -27,6 +27,7 @@ package de.johni0702.minecraft.gui.popup;
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.AbstractGuiContainer;
+import de.johni0702.minecraft.gui.container.AbstractGuiOverlay;
 import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.container.GuiPanel;
 import de.johni0702.minecraft.gui.layout.CustomLayout;
@@ -66,7 +67,7 @@ public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends Ab
                 }
 
                 // Left and right edge
-                for (int y = 5; y < w - 5; y += 5) {
+                for (int y = 5; y < h - 5; y += 5) {
                     int ry = Math.min(5, h - 5 - y);
                     renderer.drawTexturedRect(0, y, u0, v0 + 6, 5, ry); // Left
                     renderer.drawTexturedRect(w - 5, y, u0 + 12, v0 + 6, 5, ry); // Right
@@ -74,7 +75,7 @@ public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends Ab
 
                 // Center
                 for (int x = 5; x < w - 5; x += 5) {
-                    for (int y = 5; y < w - 5; y += 5) {
+                    for (int y = 5; y < h - 5; y += 5) {
                         int rx = Math.min(5, w - 5 - x);
                         int ry = Math.min(5, h - 5 - y);
                         renderer.drawTexturedRect(x, y, u0 + 6, v0 + 6, rx, ry);
@@ -110,6 +111,8 @@ public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends Ab
     }
 
     private Layout originalLayout;
+    private boolean wasAllowUserInput;
+    private boolean wasMouseVisible;
 
     private final GuiContainer container;
 
@@ -130,11 +133,26 @@ public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends Ab
                 size(AbstractGuiPopup.this, width, height);
             }
         });
+        if (container instanceof AbstractGuiOverlay) {
+            // Popup opened on a overlay gui. These normally allow interaction with the game world which
+            // is undesirable when e.g. typing text into a input field. Therefore we disable user input.
+            AbstractGuiOverlay overlay = (AbstractGuiOverlay) container;
+            wasAllowUserInput = overlay.isAllowUserInput();
+            overlay.setAllowUserInput(false);
+            // We also force the mouse to be visible
+            wasMouseVisible = overlay.isMouseVisible();
+            overlay.setMouseVisible(true);
+        }
     }
 
     protected void close() {
         getContainer().setLayout(originalLayout);
         getContainer().removeElement(this);
+        if (container instanceof AbstractGuiOverlay) {
+            AbstractGuiOverlay overlay = (AbstractGuiOverlay) container;
+            overlay.setAllowUserInput(wasAllowUserInput);
+            overlay.setMouseVisible(wasMouseVisible);
+        }
     }
 
     public T setLayer(int layer) {
