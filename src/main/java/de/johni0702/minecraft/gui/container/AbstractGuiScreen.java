@@ -91,7 +91,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                 ReadableDimension titleSize = title.getMinSize();
                 int x = screenSize.getWidth() / 2 - titleSize.getWidth() / 2;
                 OffsetGuiRenderer eRenderer = new OffsetGuiRenderer(renderer, new Point(x, 10), new Dimension(0, 0));
-                title.draw(eRenderer, titleSize, null);
+                title.draw(eRenderer, titleSize, renderInfo);
             }
         }
         super.draw(renderer, size, renderInfo);
