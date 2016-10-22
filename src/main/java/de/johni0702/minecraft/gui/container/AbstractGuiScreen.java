@@ -191,8 +191,10 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
 
         @Override
         protected void keyTyped(char typedChar, int keyCode) throws IOException {
-            forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), keyCode, typedChar, isCtrlKeyDown(), isShiftKeyDown());
-            super.keyTyped(typedChar, keyCode);
+            if (!forEach(Typeable.class).typeKey(
+                    MouseUtils.getMousePos(), keyCode, typedChar, isCtrlKeyDown(), isShiftKeyDown())) {
+                super.keyTyped(typedChar, keyCode);
+            }
         }
 
         @Override

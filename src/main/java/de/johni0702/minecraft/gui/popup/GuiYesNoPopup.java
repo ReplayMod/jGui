@@ -30,15 +30,18 @@ import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.container.GuiPanel;
 import de.johni0702.minecraft.gui.element.GuiButton;
 import de.johni0702.minecraft.gui.element.GuiElement;
+import de.johni0702.minecraft.gui.function.Typeable;
 import de.johni0702.minecraft.gui.layout.HorizontalLayout;
 import de.johni0702.minecraft.gui.layout.VerticalLayout;
 import de.johni0702.minecraft.gui.utils.Colors;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.Dimension;
+import org.lwjgl.util.ReadablePoint;
 
-public class GuiYesNoPopup extends AbstractGuiPopup<GuiYesNoPopup> {
+public class GuiYesNoPopup extends AbstractGuiPopup<GuiYesNoPopup> implements Typeable {
     public static GuiYesNoPopup open(GuiContainer container, GuiElement... info) {
         GuiYesNoPopup popup = new GuiYesNoPopup(container).setBackgroundColor(Colors.DARK_TRANSPARENT);
         popup.getInfo().addElements(new VerticalLayout.Data(0.5), info);
@@ -116,5 +119,14 @@ public class GuiYesNoPopup extends AbstractGuiPopup<GuiYesNoPopup> {
     @Override
     protected GuiYesNoPopup getThis() {
         return this;
+    }
+
+    @Override
+    public boolean typeKey(ReadablePoint mousePosition, int keyCode, char keyChar, boolean ctrlDown, boolean shiftDown) {
+        if (keyCode == Keyboard.KEY_ESCAPE) {
+            noButton.onClick();
+            return true;
+        }
+        return false;
     }
 }

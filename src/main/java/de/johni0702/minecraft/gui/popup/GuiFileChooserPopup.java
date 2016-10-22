@@ -36,20 +36,23 @@ import de.johni0702.minecraft.gui.element.GuiButton;
 import de.johni0702.minecraft.gui.element.GuiElement;
 import de.johni0702.minecraft.gui.element.GuiTextField;
 import de.johni0702.minecraft.gui.element.advanced.GuiDropdownMenu;
+import de.johni0702.minecraft.gui.function.Typeable;
 import de.johni0702.minecraft.gui.layout.CustomLayout;
 import de.johni0702.minecraft.gui.layout.HorizontalLayout;
 import de.johni0702.minecraft.gui.layout.VerticalLayout;
 import de.johni0702.minecraft.gui.utils.Colors;
 import de.johni0702.minecraft.gui.utils.Consumer;
 import lombok.Getter;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.Dimension;
 import org.lwjgl.util.ReadableDimension;
+import org.lwjgl.util.ReadablePoint;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> {
+public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> implements Typeable {
     public static GuiFileChooserPopup openSaveGui(GuiContainer container, String buttonLabel, String...fileExtensions) {
         GuiFileChooserPopup popup = new GuiFileChooserPopup(container, fileExtensions, false).setBackgroundColor(Colors.DARK_TRANSPARENT);
         popup.acceptButton.setI18nLabel(buttonLabel);
@@ -294,5 +297,14 @@ public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> {
 
     public ListenableFuture<File> getFuture() {
         return future;
+    }
+
+    @Override
+    public boolean typeKey(ReadablePoint mousePosition, int keyCode, char keyChar, boolean ctrlDown, boolean shiftDown) {
+        if (keyCode == Keyboard.KEY_ESCAPE) {
+            cancelButton.onClick();
+            return true;
+        }
+        return false;
     }
 }
