@@ -24,8 +24,10 @@
  */
 package de.johni0702.minecraft.gui.element;
 
+import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
+import lombok.AccessLevel;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -49,6 +51,13 @@ public abstract class AbstractGuiElement<T extends AbstractGuiElement<T>> implem
 
     protected Dimension minSize, maxSize;
 
+    /**
+     * The last size this element was render at layer 0.
+     * May be {@code null} when this element has not yet been rendered.
+     */
+    @Getter(AccessLevel.PROTECTED)
+    private ReadableDimension lastSize;
+
     public AbstractGuiElement() {
     }
 
@@ -57,6 +66,13 @@ public abstract class AbstractGuiElement<T extends AbstractGuiElement<T>> implem
     }
 
     protected abstract T getThis();
+
+    @Override
+    public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
+        if (renderInfo.layer == 0) {
+            lastSize = size;
+        }
+    }
 
     @Override
     public T setEnabled(boolean enabled) {
@@ -76,16 +92,15 @@ public abstract class AbstractGuiElement<T extends AbstractGuiElement<T>> implem
 
     @Override
     public GuiElement getTooltip(RenderInfo renderInfo) {
-        if (tooltip != null) {
+        if (tooltip != null && lastSize != null) {
             Point mouse = new Point(renderInfo.mouseX, renderInfo.mouseY);
             if (container != null) {
                 container.convertFor(this, mouse);
             }
-            ReadableDimension size = getMinSize();
             if (mouse.getX() > 0
                     && mouse.getY() > 0
-                    && mouse.getX() < size.getWidth()
-                    && mouse.getY() < size.getHeight()) {
+                    && mouse.getX() < lastSize.getWidth()
+                    && mouse.getY() < lastSize.getHeight()) {
                 return tooltip;
             }
         }

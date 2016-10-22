@@ -66,8 +66,6 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
 
     private Map<V, IGuiClickable> unmodifiableDropdownEntries;
 
-    private ReadableDimension size;
-
     private Function<V, String> toString = Object::toString;
 
     public AbstractGuiDropdownMenu() {
@@ -97,9 +95,9 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
 
     @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
+        super.draw(renderer, size, renderInfo);
         FontRenderer fontRenderer = getMinecraft().fontRendererObj;
         if (renderInfo.layer == 0) {
-            this.size = size;
             int width = size.getWidth();
             int height = size.getHeight();
 
@@ -141,7 +139,7 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
                 if (parent.getContainer() != null) {
                     parent.getContainer().convertFor(parent, point, relativeLayer + 1);
                 }
-                point.translate(0, -size.getHeight());
+                point.translate(0, -AbstractGuiDropdownMenu.this.getLastSize().getHeight());
                 super.convertFor(element, point, relativeLayer);
             }
         }.setLayout(new VerticalLayout());
@@ -218,7 +216,7 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
 
     protected boolean isMouseHovering(ReadablePoint pos) {
         return pos.getX() > 0 && pos.getY() > 0
-                && pos.getX() < size.getWidth() && pos.getY() < size.getHeight();
+                && pos.getX() < getLastSize().getWidth() && pos.getY() < getLastSize().getHeight();
     }
 
     @Override

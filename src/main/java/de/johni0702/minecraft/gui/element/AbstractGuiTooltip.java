@@ -49,6 +49,8 @@ public abstract class AbstractGuiTooltip<T extends AbstractGuiTooltip<T>> extend
 
     @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
+        super.draw(renderer, size, renderInfo);
+
         int width = size.getWidth();
         int height = size.getHeight();
 

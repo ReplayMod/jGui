@@ -58,6 +58,10 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
     private boolean drawCursor = true;
     private boolean drawMarkers;
 
+    /**
+     * Use {@link #getLastSize()} instead.
+     */
+    @Deprecated
     protected ReadableDimension size;
 
     public AbstractGuiTimeline() {
@@ -87,6 +91,7 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
     @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         this.size = size;
+        super.draw(renderer, size, renderInfo);
 
         int width = size.getWidth();
         int height = size.getHeight();
@@ -162,7 +167,7 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
      * @return The time or -1 if the mouse isn't on the timeline
      */
     protected int getTimeAt(int mouseX, int mouseY) {
-        if (size == null) {
+        if (getLastSize() == null) {
             return -1;
         }
         Point mouse = new Point(mouseX, mouseY);
@@ -311,5 +316,10 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
         if (visibleLength + offset > length) {
             offset = length - visibleLength;
         }
+    }
+
+    @Override
+    protected ReadableDimension getLastSize() {
+        return super.getLastSize();
     }
 }

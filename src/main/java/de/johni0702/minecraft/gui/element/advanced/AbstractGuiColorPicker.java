@@ -54,7 +54,6 @@ public abstract class AbstractGuiColorPicker<T extends AbstractGuiColorPicker<T>
     private Consumer<ReadableColor> onSelection;
 
     private GuiPicker picker = new GuiPicker();
-    private ReadableDimension size;
 
     public AbstractGuiColorPicker() {
     }
@@ -75,8 +74,8 @@ public abstract class AbstractGuiColorPicker<T extends AbstractGuiColorPicker<T>
 
     @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
+        super.draw(renderer, size, renderInfo);
         if (renderInfo.layer == 0) {
-            this.size = size;
             int width = size.getWidth();
             int height = size.getHeight();
 
@@ -160,7 +159,7 @@ public abstract class AbstractGuiColorPicker<T extends AbstractGuiColorPicker<T>
 
     protected boolean isMouseHovering(ReadablePoint pos) {
         return pos.getX() > 0 && pos.getY() > 0
-                && pos.getX() < size.getWidth() && pos.getY() < size.getHeight();
+                && pos.getX() < getLastSize().getWidth() && pos.getY() < getLastSize().getHeight();
     }
 
     protected class GuiPicker extends AbstractGuiElement<GuiPicker> implements Clickable, Draggable {
@@ -183,6 +182,7 @@ public abstract class AbstractGuiColorPicker<T extends AbstractGuiColorPicker<T>
 
         @Override
         public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
+            super.draw(renderer, size, renderInfo);
             Color color = new Color();
             for (int x = 0; x < PICKER_SIZE; x++) {
                 for (int y = 0; y < PICKER_SIZE; y++) {
@@ -200,7 +200,7 @@ public abstract class AbstractGuiColorPicker<T extends AbstractGuiColorPicker<T>
                 if (parent.getContainer() != null) {
                     parent.getContainer().convertFor(parent, pos, 1);
                 }
-                pos.translate(0, -size.getHeight());
+                pos.translate(0, -AbstractGuiColorPicker.this.getLastSize().getHeight());
 
                 if (isMouseHovering(pos)) {
                     Color oldColor = new Color(color);

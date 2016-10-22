@@ -38,7 +38,6 @@ import org.lwjgl.util.ReadablePoint;
 // TODO: Currently assumes a height of 20
 public abstract class AbstractGuiSlider<T extends AbstractGuiSlider<T>> extends AbstractGuiElement<T> implements Clickable, Draggable, IGuiSlider<T> {
     private Runnable onValueChanged;
-    private ReadableDimension size;
 
     private int value;
     private int steps;
@@ -103,12 +102,12 @@ public abstract class AbstractGuiSlider<T extends AbstractGuiSlider<T>> extends 
 
     protected boolean isMouseHovering(ReadablePoint pos) {
         return pos.getX() > 0 && pos.getY() > 0
-                && pos.getX() < size.getWidth() && pos.getY() < size.getHeight();
+                && pos.getX() < getLastSize().getWidth() && pos.getY() < getLastSize().getHeight();
     }
 
     @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
-        this.size = size;
+        super.draw(renderer, size, renderInfo);
 
         int width = size.getWidth();
         int height = size.getHeight();
@@ -135,10 +134,10 @@ public abstract class AbstractGuiSlider<T extends AbstractGuiSlider<T>> extends 
     }
 
     protected void updateValue(ReadablePoint position) {
-        if (size == null) {
+        if (getLastSize() == null) {
             return;
         }
-        int width = size.getWidth() - 8;
+        int width = getLastSize().getWidth() - 8;
         int pos = Math.max(0, Math.min(width, position.getX() - 4));
         setValue(steps * pos / width);
     }

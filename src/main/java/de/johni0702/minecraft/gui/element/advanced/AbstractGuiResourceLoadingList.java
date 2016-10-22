@@ -176,7 +176,6 @@ public abstract class AbstractGuiResourceLoadingList
 
     private class Element extends GuiPanel implements Clickable, Comparable<Element> {
         private final U resource;
-        private ReadableDimension size;
 
         public Element(final U resource) {
             this.resource = resource;
@@ -197,7 +196,6 @@ public abstract class AbstractGuiResourceLoadingList
 
         @Override
         public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
-            this.size = size;
             if (selected == this) {
                 // Draw selection
                 int w = size.getWidth();
@@ -217,8 +215,8 @@ public abstract class AbstractGuiResourceLoadingList
         public boolean mouseClick(ReadablePoint position, int button) {
             Point point = new Point(position);
             getContainer().convertFor(this, point);
-            if (point.getX() > 0 && point.getX() < size.getWidth()
-                    && point.getY() > 0 && point.getY() < size.getHeight()) {
+            if (point.getX() > 0 && point.getX() < getLastSize().getWidth()
+                    && point.getY() > 0 && point.getY() < getLastSize().getHeight()) {
                 if (selected != this) {
                     selected = this;
                     onSelectionChanged();
