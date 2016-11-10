@@ -389,6 +389,8 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
     @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         this.size = size;
+        super.draw(renderer, size, renderInfo);
+
         int width = size.getWidth(), height = size.getHeight();
         FontRenderer fontRenderer = getMinecraft().fontRendererObj;
         int posY = height / 2 - fontRenderer.FONT_HEIGHT / 2;

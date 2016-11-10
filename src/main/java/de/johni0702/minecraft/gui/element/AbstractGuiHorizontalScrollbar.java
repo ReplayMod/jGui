@@ -52,7 +52,6 @@ public abstract class AbstractGuiHorizontalScrollbar<T extends AbstractGuiHorizo
     protected static final int BORDER_RIGHT = 1;
 
     private Runnable onValueChanged;
-    private ReadableDimension size;
 
     private double zoom = 1;
     private double offset;
@@ -116,20 +115,20 @@ public abstract class AbstractGuiHorizontalScrollbar<T extends AbstractGuiHorizo
     }
 
     protected boolean isMouseHoveringBar(ReadablePoint pos) {
-        int bodyWidth = size.getWidth() - BORDER_LEFT - BORDER_RIGHT;
+        int bodyWidth = getLastSize().getWidth() - BORDER_LEFT - BORDER_RIGHT;
         int barOffset = (int) (bodyWidth * offset) + BORDER_LEFT;
         int barWidth = (int) (bodyWidth * zoom);
         return pos.getX() >= barOffset && pos.getY() > BORDER_TOP
-                && pos.getX() <= barOffset + barWidth && pos.getY() < size.getHeight() - BORDER_BOTTOM;
+                && pos.getX() <= barOffset + barWidth && pos.getY() < getLastSize().getHeight() - BORDER_BOTTOM;
     }
 
     protected void updateValue(ReadablePoint position) {
-        if (size == null) {
+        if (getLastSize() == null) {
             return;
         }
         if (startDragging != null) {
             double d = position.getX() - startDragging.getX();
-            offset += d / (size.getWidth() - BORDER_LEFT - BORDER_RIGHT);
+            offset += d / (getLastSize().getWidth() - BORDER_LEFT - BORDER_RIGHT);
             checkOffset();
             onValueChanged();
         }
@@ -138,8 +137,7 @@ public abstract class AbstractGuiHorizontalScrollbar<T extends AbstractGuiHorizo
 
     @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
-        this.size = size;
-
+        super.draw(renderer, size, renderInfo);
         int width = size.getWidth();
         int height = size.getHeight();
 

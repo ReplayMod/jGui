@@ -35,7 +35,6 @@ import org.lwjgl.util.ReadablePoint;
 public abstract class AbstractGuiClickableContainer<T extends AbstractGuiClickableContainer<T>>
         extends AbstractGuiContainer<T> implements Clickable, IGuiClickable<T> {
     private Runnable onClick;
-    private ReadableDimension size;
 
     public AbstractGuiClickableContainer() {
     }
@@ -60,12 +59,11 @@ public abstract class AbstractGuiClickableContainer<T extends AbstractGuiClickab
 
     protected boolean isMouseHovering(ReadablePoint pos) {
         return pos.getX() > 0 && pos.getY() > 0
-                && pos.getX() < size.getWidth() && pos.getY() < size.getHeight();
+                && pos.getX() < getLastSize().getWidth() && pos.getY() < getLastSize().getHeight();
     }
 
     @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
-        this.size = size;
         super.draw(renderer, size, renderInfo);
     }
 

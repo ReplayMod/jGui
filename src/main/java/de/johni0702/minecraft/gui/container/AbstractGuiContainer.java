@@ -131,6 +131,7 @@ public abstract class AbstractGuiContainer<T extends AbstractGuiContainer<T>>
 
     @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
+        super.draw(renderer, size, renderInfo);
         try {
             layedOutElements = layout.layOut(this, size);
         } catch (Exception ex) {

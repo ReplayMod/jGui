@@ -52,6 +52,7 @@ public abstract class AbstractGuiLabel<T extends AbstractGuiLabel<T>> extends Ab
 
     @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
+        super.draw(renderer, size, renderInfo);
         FontRenderer fontRenderer = getMinecraft().fontRendererObj;
         @SuppressWarnings("unchecked")
         List<String> lines = fontRenderer.listFormattedStringToWidth(text, size.getWidth());

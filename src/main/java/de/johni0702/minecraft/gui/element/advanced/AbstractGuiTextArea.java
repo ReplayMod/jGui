@@ -458,6 +458,8 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
     @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         this.size = size;
+        super.draw(renderer, size, renderInfo);
+
         FontRenderer fontRenderer = getMinecraft().fontRendererObj;
         int width = size.getWidth();
         int height = size.getHeight();

@@ -48,9 +48,11 @@ public abstract class AbstractGuiTimelineTime<T extends AbstractGuiTimelineTime<
 
     @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
-        if (timeline == null || timeline.size == null) return;
+        super.draw(renderer, size, renderInfo);
 
-        int offset = (size.getWidth() - timeline.size.getWidth()) / 2;
+        if (timeline == null || timeline.getLastSize() == null) return;
+
+        int offset = (size.getWidth() - timeline.getLastSize().getWidth()) / 2;
         int visibleLength = (int) (timeline.getLength() * timeline.getZoom());
         int markerInterval = timeline.getMarkerInterval();
         int time = timeline.getOffset() / markerInterval * markerInterval;
