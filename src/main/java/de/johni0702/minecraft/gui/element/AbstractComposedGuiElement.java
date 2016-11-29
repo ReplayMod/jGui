@@ -34,6 +34,7 @@ import net.minecraft.util.ReportedException;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
@@ -76,7 +77,19 @@ public abstract class AbstractComposedGuiElement<T extends AbstractComposedGuiEl
                 boolean isGetter = method.getName().startsWith("get");
                 Object handled = method.getReturnType().equals(boolean.class) ? false : null;
                 for (final C layer : layers) {
-                    handled = method.invoke(layer, args);
+                    try {
+                        handled = method.invoke(layer, args);
+                    } catch (Throwable e) {
+                        if (e instanceof InvocationTargetException) {
+                            e = e.getCause();
+                        }
+                        CrashReport crash = CrashReport.makeCrashReport(e, "Calling Gui method");
+                        CrashReportCategory category = crash.makeCategory("Gui");
+                        category.addCrashSection("Method", method);
+                        category.setDetail("ComposedElement", AbstractComposedGuiElement.this::toString);
+                        category.setDetail("Element", AbstractComposedGuiElement.this::toString);
+                        throw new ReportedException(crash);
+                    }
                     if (handled != null) {
                         if (handled instanceof Boolean) {
                             if (Boolean.TRUE.equals(handled)) {
@@ -105,7 +118,10 @@ public abstract class AbstractComposedGuiElement<T extends AbstractComposedGuiEl
                 if (ofType.isInstance(self) && self.getLayer() == layer) {
                     try {
                         handled = method.invoke(self, args);
-                    } catch (Exception e) {
+                    } catch (Throwable e) {
+                        if (e instanceof InvocationTargetException) {
+                            e = e.getCause();
+                        }
                         CrashReport crash = CrashReport.makeCrashReport(e, "Calling Gui method");
                         CrashReportCategory category = crash.makeCategory("Gui");
                         category.addCrashSection("Method", method);
@@ -143,7 +159,10 @@ public abstract class AbstractComposedGuiElement<T extends AbstractComposedGuiEl
                                 return handled;
                             }
                         }
-                    } catch (Exception e) {
+                    } catch (Throwable e) {
+                        if (e instanceof InvocationTargetException) {
+                            e = e.getCause();
+                        }
                         CrashReport crash = CrashReport.makeCrashReport(e, "Calling Gui method");
                         CrashReportCategory category = crash.makeCategory("Gui");
                         category.addCrashSection("Method", method);
