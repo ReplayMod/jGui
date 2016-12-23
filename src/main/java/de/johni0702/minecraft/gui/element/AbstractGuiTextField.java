@@ -412,15 +412,15 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
             // Draw selection
             int from = getSelectionFrom();
             int to = getSelectionTo();
-            String leftStr = text.substring(0, clamp_int(from - currentOffset, 0, text.length()));
-            String rightStr = text.substring(clamp_int(to - currentOffset, 0, text.length()));
+            String leftStr = renderText.substring(0, clamp_int(from - currentOffset, 0, renderText.length()));
+            String rightStr = renderText.substring(clamp_int(to - currentOffset, 0, renderText.length()));
             int left = BORDER + fontRenderer.getStringWidth(leftStr);
             int right = lineEnd - fontRenderer.getStringWidth(rightStr) - 1;
             invertColors(renderer, right, height - 2, left, 2);
 
             // Draw cursor
             if (blinkCursorTick / 6 % 2 == 0 && focused) {
-                String beforeCursor = text.substring(0, cursorPos - currentOffset);
+                String beforeCursor = renderText.substring(0, cursorPos - currentOffset);
                 int posX = BORDER + fontRenderer.getStringWidth(beforeCursor);
                 if (cursorPos == text.length()) {
                     renderer.drawString(posX, posY, CURSOR_COLOR, "_", true);
