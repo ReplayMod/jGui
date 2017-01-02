@@ -71,7 +71,7 @@ public class VerticalLayout implements Layout {
             Dimension elementSize = new Dimension(element.getMinSize());
             ReadableDimension elementMaxSize = element.getMaxSize();
             elementSize.setHeight(Math.min(size.getHeight() - y, Math.min(elementSize.getHeight(), elementMaxSize.getHeight())));
-            elementSize.setWidth(Math.min(size.getWidth(), element.getMaxSize().getWidth()));
+            elementSize.setWidth(Math.min(size.getWidth(), (data.maximizeWidth ? elementMaxSize : elementSize).getWidth()));
             int remainingWidth = size.getWidth() - elementSize.getWidth();
             int x = (int) (data.alignment * remainingWidth);
             map.put(element, Pair.<ReadablePoint, ReadableDimension>of(new Point(x, y), elementSize));
@@ -113,9 +113,14 @@ public class VerticalLayout implements Layout {
     @AllArgsConstructor
     public static class Data implements LayoutData {
         private double alignment;
+        private boolean maximizeWidth;
 
         public Data() {
             this(0);
+        }
+
+        public Data(double alignment) {
+            this(alignment, true);
         }
     }
 
