@@ -101,8 +101,6 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         }
         this.text = text;
         selectionPos = cursorPos = text.length();
-        //omitting this may cause the client to crash when replacing a long with a short text value
-        currentOffset = 0;
         return getThis();
     }
 
@@ -155,7 +153,6 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         int from = getSelectionFrom();
         String deleted = deleteText(from, getSelectionTo() - 1);
         cursorPos = selectionPos = from;
-        updateCurrentOffset();
         return deleted;
     }
 
@@ -195,7 +192,6 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         text = text.substring(0, cursorPos) + c + text.substring(cursorPos);
         selectionPos = ++cursorPos;
 
-        updateCurrentOffset();
         return getThis();
     }
 
@@ -246,7 +242,6 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         if (cursorPos > 0) {
             text = text.substring(0, cursorPos - 1) + text.substring(cursorPos);
             selectionPos = --cursorPos;
-            updateCurrentOffset();
         }
         return getThis();
     }
@@ -282,7 +277,6 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         if (worldLength > 0) {
             deleted = deleteText(cursorPos - worldLength, cursorPos - 1);
             selectionPos = cursorPos -= worldLength;
-            updateCurrentOffset();
         }
         return deleted;
     }
@@ -291,7 +285,6 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
     public T setCursorPosition(int pos) {
         Preconditions.checkArgument(pos >= 0 && pos <= text.length());
         selectionPos = cursorPos = pos;
-        updateCurrentOffset();
         return getThis();
     }
 
@@ -343,6 +336,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         boolean hovering = isMouseHovering(position);
 
         if (hovering && isFocused() && button == 0) {
+            updateCurrentOffset();
             int mouseX = position.getX() - BORDER;
             FontRenderer fontRenderer = getMinecraft().fontRendererObj;
             String text = this.text.substring(currentOffset);
@@ -388,6 +382,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
     @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         this.size = size;
+        updateCurrentOffset();
         super.draw(renderer, size, renderInfo);
 
         int width = size.getWidth(), height = size.getHeight();
@@ -458,7 +453,6 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
                     case Keyboard.KEY_A: // Select all
                         cursorPos = 0;
                         selectionPos = text.length();
-                        updateCurrentOffset();
                         return true;
                     case Keyboard.KEY_C: // Copy
                         GuiScreen.setClipboardString(getSelectedText());
@@ -534,8 +528,6 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
                     }
                     return true;
             }
-
-            updateCurrentOffset();
 
             if (!select) {
                 selectionPos = cursorPos;
