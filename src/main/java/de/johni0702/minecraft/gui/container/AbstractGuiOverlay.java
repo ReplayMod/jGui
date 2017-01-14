@@ -225,7 +225,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
 
         private void updateRenderer() {
             Minecraft mc = getMinecraft();
-            ScaledResolution res = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+            ScaledResolution res = new ScaledResolution(mc);
             if (screenSize == null
                     || screenSize.getWidth() != res.getScaledWidth()
                     || screenSize.getHeight() != res.getScaledHeight()) {

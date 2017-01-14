@@ -40,6 +40,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatAllowedCharacters;
 import org.lwjgl.input.Keyboard;
@@ -310,12 +311,12 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         colorLogicOp(GL11.GL_OR_REVERSE);
 
         Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer renderer = tessellator.getWorldRenderer();
-        renderer.startDrawingQuads();
-        renderer.addVertex(right, top, 0);
-        renderer.addVertex(left, top, 0);
-        renderer.addVertex(left, bottom, 0);
-        renderer.addVertex(right, bottom, 0);
+        WorldRenderer vertexBuffer = tessellator.getWorldRenderer();
+        vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+        vertexBuffer.pos(right, top, 0).endVertex();
+        vertexBuffer.pos(left, top, 0).endVertex();
+        vertexBuffer.pos(left, bottom, 0).endVertex();
+        vertexBuffer.pos(right, bottom, 0).endVertex();
         tessellator.draw();
 
         disableColorLogic();

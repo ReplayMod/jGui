@@ -44,7 +44,7 @@ public class MouseUtils {
     }
 
     public static Point getScaledDimensions() {
-        ScaledResolution res = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+        ScaledResolution res = new ScaledResolution(mc);
         return new Point(res.getScaledWidth(), res.getScaledHeight());
     }
 }
