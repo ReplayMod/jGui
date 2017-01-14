@@ -110,7 +110,6 @@ public abstract class AbstractGuiResourceLoadingList
         loaderThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                getListPanel().addElements(new VerticalLayout.Data(0.5), loadingElement);
                 try {
                     onLoad.consume(new Consumer<Supplier<U>>() {
                         @Override

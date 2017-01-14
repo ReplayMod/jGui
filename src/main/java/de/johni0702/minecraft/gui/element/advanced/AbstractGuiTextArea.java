@@ -192,11 +192,9 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
         deleteText(fromX, fromY, toX, toY);
         cursorX = selectionX = fromX;
         cursorY = selectionY = fromY;
-        updateCurrentXOffset();
-        updateCurrentYOffset();
     }
 
-    private void updateCurrentXOffset() {
+    private void updateCurrentOffset() {
         currentXOffset = Math.min(currentXOffset, cursorX);
         String line = text[cursorY].substring(currentXOffset, cursorX);
         FontRenderer fontRenderer = getMinecraft().fontRendererObj;
@@ -204,9 +202,7 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
         if (currentWidth > size.getWidth() - BORDER * 2) {
             currentXOffset = cursorX - fontRenderer.trimStringToWidth(line, size.getWidth() - BORDER * 2, true).length();
         }
-    }
 
-    private void updateCurrentYOffset() {
         currentYOffset = Math.min(currentYOffset, cursorY);
         int lineHeight = getMinecraft().fontRendererObj.FONT_HEIGHT + LINE_SPACING;
         int contentHeight = size.getHeight() - BORDER * 2;
@@ -265,7 +261,6 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
             text = newText;
             selectionX = cursorX = 0;
             selectionY = ++cursorY;
-            updateCurrentYOffset();
         } else {
             String line = text[cursorY];
             if (line.length() >= maxTextWidth) {
@@ -276,7 +271,6 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
             text[cursorY] = line;
             selectionX = ++cursorX;
         }
-        updateCurrentXOffset();
     }
 
     private void deleteNextChar() {
@@ -329,7 +323,6 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
             selectionX = cursorX = fromX;
             selectionY = --cursorY;
         }
-        updateCurrentXOffset();
     }
 
     private int getPreviousWordLength() {
@@ -358,7 +351,6 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
         } else {
             deleteText(cursorX, cursorY, cursorX - worldLength, cursorY);
             selectionX = cursorX -= worldLength;
-            updateCurrentXOffset();
         }
     }
 
@@ -366,8 +358,6 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
     public T setCursorPosition(int x, int y) {
         selectionY = cursorY = clamp_int(y, 0, text.length - 1);
         selectionX = cursorX = clamp_int(x, 0, text[cursorY].length());
-        updateCurrentXOffset();
-        updateCurrentYOffset();
         return getThis();
     }
 
@@ -410,6 +400,7 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
         boolean hovering = isMouseHovering(position);
 
         if (hovering && isFocused() && button == 0) {
+            updateCurrentOffset();
             int mouseX = position.getX() - BORDER;
             int mouseY = position.getY() - BORDER;
             FontRenderer fontRenderer = getMinecraft().fontRendererObj;
@@ -458,6 +449,7 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
     @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         this.size = size;
+        updateCurrentOffset();
         super.draw(renderer, size, renderInfo);
 
         FontRenderer fontRenderer = getMinecraft().fontRendererObj;
@@ -557,8 +549,6 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
                     cursorX = cursorY = 0;
                     selectionY = text.length - 1;
                     selectionX = text[selectionY].length();
-                    updateCurrentXOffset();
-                    updateCurrentYOffset();
                     return true;
                 case Keyboard.KEY_C: // Copy
                     GuiScreen.setClipboardString(getSelectedText());
@@ -656,9 +646,6 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
                 }
                 return true;
         }
-
-        updateCurrentXOffset();
-        updateCurrentYOffset();
 
         if (!select) {
             selectionX = cursorX;
