@@ -48,7 +48,7 @@ import org.lwjgl.util.*;
 import java.util.Arrays;
 
 import static net.minecraft.client.renderer.GlStateManager.*;
-import static net.minecraft.util.math.MathHelper.clamp_int;
+import static net.minecraft.util.math.MathHelper.clamp;
 
 public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
         extends AbstractGuiElement<T> implements Clickable, Typeable, Tickable, IGuiTextArea<T> {
@@ -356,8 +356,8 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
 
     @Override
     public T setCursorPosition(int x, int y) {
-        selectionY = cursorY = clamp_int(y, 0, text.length - 1);
-        selectionX = cursorX = clamp_int(x, 0, text[cursorY].length());
+        selectionY = cursorY = clamp(y, 0, text.length - 1);
+        selectionX = cursorX = clamp(x, 0, text[cursorY].length());
         return getThis();
     }
 
@@ -404,7 +404,7 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
             int mouseX = position.getX() - BORDER;
             int mouseY = position.getY() - BORDER;
             FontRenderer fontRenderer = getMinecraft().fontRendererObj;
-            int textY = clamp_int(mouseY / (fontRenderer.FONT_HEIGHT + LINE_SPACING) + currentYOffset, 0, text.length - 1);
+            int textY = clamp(mouseY / (fontRenderer.FONT_HEIGHT + LINE_SPACING) + currentYOffset, 0, text.length - 1);
             if (cursorY != textY) {
                 currentXOffset = 0;
             }
@@ -501,16 +501,16 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
             if (lineY > fromY && lineY < toY) { // Whole line selected
                 invertColors(renderer, lineEnd, posY - 1 + lineHeight, BORDER, posY - 1);
             } else if (lineY == fromY && lineY == toY) { // Part of line selected
-                String leftStr = line.substring(0, clamp_int(fromX - leftTrimmed, 0, line.length()));
-                String rightStr = line.substring(clamp_int(toX - leftTrimmed, 0, line.length()));
+                String leftStr = line.substring(0, clamp(fromX - leftTrimmed, 0, line.length()));
+                String rightStr = line.substring(clamp(toX - leftTrimmed, 0, line.length()));
                 int left = BORDER + fontRenderer.getStringWidth(leftStr);
                 int right = lineEnd - fontRenderer.getStringWidth(rightStr) - 1;
                 invertColors(renderer, right, posY - 1 + lineHeight, left, posY - 1);
             } else if (lineY == fromY) { // End of line selected
-                String rightStr = line.substring(clamp_int(fromX - leftTrimmed, 0, line.length()));
+                String rightStr = line.substring(clamp(fromX - leftTrimmed, 0, line.length()));
                 invertColors(renderer, lineEnd, posY - 1 + lineHeight, lineEnd - fontRenderer.getStringWidth(rightStr), posY - 1);
             } else if (lineY == toY) { // Beginning of line selected
-                String leftStr = line.substring(0, clamp_int(toX - leftTrimmed, 0, line.length()));
+                String leftStr = line.substring(0, clamp(toX - leftTrimmed, 0, line.length()));
                 int right = BORDER + fontRenderer.getStringWidth(leftStr);
                 invertColors(renderer, right, posY - 1 + lineHeight, BORDER, posY - 1);
             }

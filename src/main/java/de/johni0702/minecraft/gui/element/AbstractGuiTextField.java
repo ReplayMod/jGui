@@ -49,7 +49,7 @@ import org.lwjgl.util.Color;
 import org.lwjgl.util.*;
 
 import static net.minecraft.client.renderer.GlStateManager.*;
-import static net.minecraft.util.math.MathHelper.clamp_int;
+import static net.minecraft.util.math.MathHelper.clamp;
 
 public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         extends AbstractGuiElement<T> implements Clickable, Tickable, Typeable, IGuiTextField<T> {
@@ -408,8 +408,8 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
             // Draw selection
             int from = getSelectionFrom();
             int to = getSelectionTo();
-            String leftStr = renderText.substring(0, clamp_int(from - currentOffset, 0, renderText.length()));
-            String rightStr = renderText.substring(clamp_int(to - currentOffset, 0, renderText.length()));
+            String leftStr = renderText.substring(0, clamp(from - currentOffset, 0, renderText.length()));
+            String rightStr = renderText.substring(clamp(to - currentOffset, 0, renderText.length()));
             int left = BORDER + fontRenderer.getStringWidth(leftStr);
             int right = lineEnd - fontRenderer.getStringWidth(rightStr) - 1;
             invertColors(renderer, right, height - 2, left, 2);

@@ -123,7 +123,7 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
         renderer.bindTexture(TEXTURE);
 
         int visibleLength = (int) (length * zoom);
-        int cursor = MathHelper.clamp_int(cursorPosition, offset, offset + visibleLength);
+        int cursor = MathHelper.clamp(cursorPosition, offset, offset + visibleLength);
         double positionInVisible = cursor - offset;
         double fractionOfVisible = positionInVisible / visibleLength;
         int cursorX = (int) (BORDER_LEFT + fractionOfVisible * (size.getWidth() - BORDER_LEFT - BORDER_RIGHT));
