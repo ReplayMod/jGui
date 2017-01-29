@@ -32,10 +32,14 @@ import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.container.GuiPanel;
 import de.johni0702.minecraft.gui.layout.CustomLayout;
 import de.johni0702.minecraft.gui.layout.Layout;
+import net.minecraft.crash.CrashReport;
+import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.util.ReportedException;
 import org.lwjgl.util.Dimension;
 import org.lwjgl.util.ReadableDimension;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
@@ -170,14 +174,23 @@ public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends Ab
     public <C> C forEach(int layer, final Class<C> ofType) {
         final C realProxy = super.forEach(layer, ofType);
         if (layer >= 0) {
-            return (C) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{ofType}, new InvocationHandler() {
-                @Override
-                public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            return (C) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{ofType}, (proxy, method, args) -> {
+                try {
                     if (method.getReturnType().equals(boolean.class)) {
                         method.invoke(forEachChild(ofType), args);
                         return true;
                     }
                     return method.invoke(realProxy, args);
+                } catch (Throwable e) {
+                    if (e instanceof InvocationTargetException) {
+                        e = e.getCause();
+                    }
+                    CrashReport crash = CrashReport.makeCrashReport(e, "Calling Gui method");
+                    CrashReportCategory category = crash.makeCategory("Gui");
+                    category.addCrashSection("Method", method);
+                    category.addCrashSection("Layer", layer);
+                    category.addCrashSectionCallable("ComposedElement", this::toString);
+                    throw new ReportedException(crash);
                 }
             });
         } else {
@@ -198,7 +211,19 @@ public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends Ab
                 boolean isGetter = method.getName().startsWith("get");
                 Object handled = method.getReturnType().equals(boolean.class) ? false : null;
                 for (final C layer : layers) {
-                    handled = method.invoke(layer, args);
+                    try {
+                        handled = method.invoke(layer, args);
+                    } catch (Throwable e) {
+                        if (e instanceof InvocationTargetException) {
+                            e = e.getCause();
+                        }
+                        CrashReport crash = CrashReport.makeCrashReport(e, "Calling Gui method");
+                        CrashReportCategory category = crash.makeCategory("Gui");
+                        category.addCrashSection("Method", method);
+                        category.addCrashSection("Layer", layer);
+                        category.addCrashSectionCallable("ComposedElement", AbstractGuiPopup.this::toString);
+                        throw new ReportedException(crash);
+                    }
                     if (handled != null) {
                         if (handled instanceof Boolean) {
                             if (Boolean.TRUE.equals(handled)) {
