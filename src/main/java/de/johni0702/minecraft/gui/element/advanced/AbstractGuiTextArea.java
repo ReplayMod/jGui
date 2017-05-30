@@ -42,11 +42,21 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatAllowedCharacters;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.*;
+import org.lwjgl.util.Color;
+import org.lwjgl.util.Dimension;
+import org.lwjgl.util.Point;
+import org.lwjgl.util.ReadableColor;
+import org.lwjgl.util.ReadableDimension;
+import org.lwjgl.util.ReadablePoint;
 
 import java.util.Arrays;
 
-import static net.minecraft.client.renderer.GlStateManager.*;
+import static net.minecraft.client.renderer.GlStateManager.color;
+import static net.minecraft.client.renderer.GlStateManager.colorLogicOp;
+import static net.minecraft.client.renderer.GlStateManager.disableColorLogic;
+import static net.minecraft.client.renderer.GlStateManager.disableTexture2D;
+import static net.minecraft.client.renderer.GlStateManager.enableColorLogic;
+import static net.minecraft.client.renderer.GlStateManager.enableTexture2D;
 import static net.minecraft.util.MathHelper.clamp_int;
 
 public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
@@ -361,6 +371,8 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
     }
 
     private void invertColors(GuiRenderer guiRenderer, int right, int bottom, int left, int top) {
+        if (left >= right || top >= bottom) return;
+
         int x = guiRenderer.getOpenGlOffset().getX();
         int y = guiRenderer.getOpenGlOffset().getY();
         right+=x;
