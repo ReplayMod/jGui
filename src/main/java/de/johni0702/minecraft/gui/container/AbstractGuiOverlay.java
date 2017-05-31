@@ -260,5 +260,9 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         public void onGuiClosed() {
             mouseVisible = false;
         }
+
+        public AbstractGuiOverlay<T> getOverlay() {
+            return AbstractGuiOverlay.this;
+        }
     }
 }
