@@ -25,6 +25,14 @@
 package de.johni0702.minecraft.gui.container;
 
 public class GuiOverlay extends AbstractGuiOverlay<GuiOverlay> {
+    @SuppressWarnings("unchecked")
+    public static AbstractGuiOverlay from(net.minecraft.client.gui.GuiScreen minecraft) {
+        if (!(minecraft instanceof AbstractGuiOverlay.UserInputGuiScreen)) {
+            return null;
+        }
+        return ((AbstractGuiOverlay.UserInputGuiScreen) minecraft).getOverlay();
+    }
+
     @Override
     protected GuiOverlay getThis() {
         return this;

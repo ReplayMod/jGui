@@ -362,6 +362,8 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
     }
 
     private void invertColors(GuiRenderer guiRenderer, int right, int bottom, int left, int top) {
+        if (left >= right || top >= bottom) return;
+
         int x = guiRenderer.getOpenGlOffset().getX();
         int y = guiRenderer.getOpenGlOffset().getY();
         right+=x;
