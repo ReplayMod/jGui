@@ -65,7 +65,7 @@ public abstract class AbstractGuiTooltip<T extends AbstractGuiTooltip<T>> extend
         renderer.drawRect(1, 2, 1, height - 4, BORDER_LIGHT, BORDER_LIGHT, BORDER_DARK, BORDER_DARK); // Left border
         renderer.drawRect(width - 2, 2, 1, height - 4, BORDER_LIGHT, BORDER_LIGHT, BORDER_DARK, BORDER_DARK); // Right border
 
-        FontRenderer fontRenderer = getMinecraft().fontRendererObj;
+        FontRenderer fontRenderer = getMinecraft().fontRenderer;
         int y = LINE_SPACING + 1;
         for (String line : text) {
             renderer.drawString(LINE_SPACING + 1, y, color, line, true);
@@ -75,7 +75,7 @@ public abstract class AbstractGuiTooltip<T extends AbstractGuiTooltip<T>> extend
 
     @Override
     public ReadableDimension calcMinSize() {
-        FontRenderer fontRenderer = getMinecraft().fontRendererObj;
+        FontRenderer fontRenderer = getMinecraft().fontRenderer;
         int height = 1 + LINE_SPACING + text.length * (fontRenderer.FONT_HEIGHT + LINE_SPACING);
         int width = 0;
         for (String line : text) {

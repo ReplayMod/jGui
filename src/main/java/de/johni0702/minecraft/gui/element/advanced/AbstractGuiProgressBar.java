@@ -72,7 +72,7 @@ public abstract class AbstractGuiProgressBar<T extends AbstractGuiProgressBar<T>
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         super.draw(renderer, size, renderInfo);
 
-        FontRenderer fontRenderer = getMinecraft().fontRendererObj;
+        FontRenderer fontRenderer = getMinecraft().fontRenderer;
         int width = size.getWidth();
         int height = size.getHeight();
         int barTotalWidth = width - 2 * BORDER;

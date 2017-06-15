@@ -82,7 +82,7 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
 
     @Override
     protected ReadableDimension calcMinSize() {
-        FontRenderer fontRenderer = getMinecraft().fontRendererObj;
+        FontRenderer fontRenderer = getMinecraft().fontRenderer;
         int maxWidth = 0;
         for (V value : values) {
             int width = fontRenderer.getStringWidth(toString.apply(value));
@@ -96,7 +96,7 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
     @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         super.draw(renderer, size, renderInfo);
-        FontRenderer fontRenderer = getMinecraft().fontRendererObj;
+        FontRenderer fontRenderer = getMinecraft().fontRenderer;
         if (renderInfo.layer == 0) {
             int width = size.getWidth();
             int height = size.getHeight();
@@ -241,7 +241,7 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
 
         @Override
         protected ReadableDimension calcMinSize() {
-            return new Dimension(0, getMinecraft().fontRendererObj.FONT_HEIGHT + 5);
+            return new Dimension(0, getMinecraft().fontRenderer.FONT_HEIGHT + 5);
         }
 
         @Override

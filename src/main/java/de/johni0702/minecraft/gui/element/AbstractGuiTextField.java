@@ -163,7 +163,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
     private void updateCurrentOffset() {
         currentOffset = Math.min(currentOffset, cursorPos);
         String line = text.substring(currentOffset, cursorPos);
-        FontRenderer fontRenderer = getMinecraft().fontRendererObj;
+        FontRenderer fontRenderer = getMinecraft().fontRenderer;
         int currentWidth = fontRenderer.getStringWidth(line);
         if (currentWidth > size.getWidth() - 2*BORDER) {
             currentOffset = cursorPos - fontRenderer.trimStringToWidth(line, size.getWidth() - 2*BORDER, true).length();
@@ -341,7 +341,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         if (hovering && isFocused() && button == 0) {
             updateCurrentOffset();
             int mouseX = position.getX() - BORDER;
-            FontRenderer fontRenderer = getMinecraft().fontRendererObj;
+            FontRenderer fontRenderer = getMinecraft().fontRenderer;
             String text = this.text.substring(currentOffset);
             int textX = fontRenderer.trimStringToWidth(text, mouseX).length() + currentOffset;
             setCursorPosition(textX);
@@ -389,7 +389,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         super.draw(renderer, size, renderInfo);
 
         int width = size.getWidth(), height = size.getHeight();
-        FontRenderer fontRenderer = getMinecraft().fontRendererObj;
+        FontRenderer fontRenderer = getMinecraft().fontRenderer;
         int posY = height / 2 - fontRenderer.FONT_HEIGHT / 2;
 
         // Draw black rect once pixel smaller than gray rect

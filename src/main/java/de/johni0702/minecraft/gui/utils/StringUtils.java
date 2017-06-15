@@ -40,7 +40,7 @@ public class StringUtils {
             String b = "";
             for(String sp : split) {
                 b += sp + " ";
-                if(mc.fontRendererObj.getStringWidth(b.trim()) > maxWidth) {
+                if (mc.fontRenderer.getStringWidth(b.trim()) > maxWidth) {
                     b = b.substring(0, b.trim().length() - (sp.length()));
                     break;
                 }

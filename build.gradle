@@ -37,7 +37,7 @@ targetCompatibility = 1.8
 minecraft {
     version = '1.12-14.21.0.2321'
     runDir = "eclipse"
-    mappings = "snapshot_20161220"
+    mappings = "snapshot_20170615"
 }
 
 repositories {

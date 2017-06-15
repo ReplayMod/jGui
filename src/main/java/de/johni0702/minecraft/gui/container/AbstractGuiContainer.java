@@ -138,8 +138,8 @@ public abstract class AbstractGuiContainer<T extends AbstractGuiContainer<T>>
             CrashReport crashReport = CrashReport.makeCrashReport(ex, "Gui Layout");
             renderInfo.addTo(crashReport);
             CrashReportCategory category = crashReport.makeCategory("Gui container details");
-            category.setDetail("Container", this::toString);
-            category.setDetail("Layout", layout::toString);
+            category.addDetail("Container", this::toString);
+            category.addDetail("Layout", layout::toString);
             throw new ReportedException(crashReport);
         }
         if (backgroundColor != null && renderInfo.getLayer() == 0) {
@@ -171,16 +171,16 @@ public abstract class AbstractGuiContainer<T extends AbstractGuiContainer<T>>
                 CrashReport crashReport = CrashReport.makeCrashReport(ex, "Rendering Gui");
                 renderInfo.addTo(crashReport);
                 CrashReportCategory category = crashReport.makeCategory("Gui container details");
-                category.setDetail("Container", this::toString);
+                category.addDetail("Container", this::toString);
                 category.addCrashSection("Width", size.getWidth());
                 category.addCrashSection("Height", size.getHeight());
-                category.setDetail("Layout", layout::toString);
+                category.addDetail("Layout", layout::toString);
                 category = crashReport.makeCategory("Gui element details");
-                category.setDetail("Element", () -> e.getKey().toString());
-                category.setDetail("Position", ePosition::toString);
-                category.setDetail("Size", eSize::toString);
+                category.addDetail("Element", () -> e.getKey().toString());
+                category.addDetail("Position", ePosition::toString);
+                category.addDetail("Size", eSize::toString);
                 if (e.getKey() instanceof GuiContainer) {
-                    category.setDetail("Layout", () -> ((GuiContainer) e.getKey()).getLayout().toString());
+                    category.addDetail("Layout", () -> ((GuiContainer) e.getKey()).getLayout().toString());
                 }
                 throw new ReportedException(crashReport);
             }

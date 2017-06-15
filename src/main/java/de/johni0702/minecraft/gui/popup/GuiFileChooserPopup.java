@@ -224,7 +224,7 @@ public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> i
                 @Override
                 protected ReadableDimension calcMinSize() {
                     ReadableDimension dim = super.calcMinSize();
-                    return new Dimension(dim.getWidth() - 5 - getMinecraft().fontRendererObj.FONT_HEIGHT,
+                    return new Dimension(dim.getWidth() - 5 - getMinecraft().fontRenderer.FONT_HEIGHT,
                             dim.getHeight());
                 }
 

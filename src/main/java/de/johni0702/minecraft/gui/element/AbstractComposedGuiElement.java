@@ -86,8 +86,8 @@ public abstract class AbstractComposedGuiElement<T extends AbstractComposedGuiEl
                         CrashReport crash = CrashReport.makeCrashReport(e, "Calling Gui method");
                         CrashReportCategory category = crash.makeCategory("Gui");
                         category.addCrashSection("Method", method);
-                        category.setDetail("ComposedElement", AbstractComposedGuiElement.this::toString);
-                        category.setDetail("Element", AbstractComposedGuiElement.this::toString);
+                        category.addDetail("ComposedElement", AbstractComposedGuiElement.this::toString);
+                        category.addDetail("Element", AbstractComposedGuiElement.this::toString);
                         throw new ReportedException(crash);
                     }
                     if (handled != null) {
@@ -125,8 +125,8 @@ public abstract class AbstractComposedGuiElement<T extends AbstractComposedGuiEl
                         CrashReport crash = CrashReport.makeCrashReport(e, "Calling Gui method");
                         CrashReportCategory category = crash.makeCategory("Gui");
                         category.addCrashSection("Method", method);
-                        category.setDetail("ComposedElement", self::toString);
-                        category.setDetail("Element", self::toString);
+                        category.addDetail("ComposedElement", self::toString);
+                        category.addDetail("Element", self::toString);
                         throw new ReportedException(crash);
                     }
                     if (handled != null) {
@@ -166,8 +166,8 @@ public abstract class AbstractComposedGuiElement<T extends AbstractComposedGuiEl
                         CrashReport crash = CrashReport.makeCrashReport(e, "Calling Gui method");
                         CrashReportCategory category = crash.makeCategory("Gui");
                         category.addCrashSection("Method", method);
-                        category.setDetail("ComposedElement", element::toString);
-                        category.setDetail("Element", element::toString);
+                        category.addDetail("ComposedElement", element::toString);
+                        category.addDetail("Element", element::toString);
                         throw new ReportedException(crash);
                     }
                 }

@@ -152,13 +152,13 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
                     CrashReport crashReport = CrashReport.makeCrashReport(ex, "Rendering Gui Tooltip");
                     renderInfo.addTo(crashReport);
                     CrashReportCategory category = crashReport.makeCategory("Gui container details");
-                    category.setDetail("Container", this::toString);
+                    category.addDetail("Container", this::toString);
                     category.addCrashSection("Width", size.getWidth());
                     category.addCrashSection("Height", size.getHeight());
                     category = crashReport.makeCategory("Tooltip details");
-                    category.setDetail("Element", tooltip::toString);
-                    category.setDetail("Position", position::toString);
-                    category.setDetail("Size", tooltipSize::toString);
+                    category.addDetail("Element", tooltip::toString);
+                    category.addDetail("Position", position::toString);
+                    category.addDetail("Size", tooltipSize::toString);
                     throw new ReportedException(crashReport);
                 }
             }

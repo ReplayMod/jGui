@@ -88,7 +88,7 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
 
     @Override
     public ReadableDimension calcMinSize() {
-        FontRenderer fontRenderer = getMinecraft().fontRendererObj;
+        FontRenderer fontRenderer = getMinecraft().fontRenderer;
         return new Dimension(fontRenderer.getStringWidth(label), 20);
     }
 

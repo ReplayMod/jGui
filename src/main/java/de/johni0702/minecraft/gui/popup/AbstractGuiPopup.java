@@ -189,7 +189,7 @@ public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends Ab
                     CrashReportCategory category = crash.makeCategory("Gui");
                     category.addCrashSection("Method", method);
                     category.addCrashSection("Layer", layer);
-                    category.setDetail("ComposedElement", this::toString);
+                    category.addDetail("ComposedElement", this::toString);
                     throw new ReportedException(crash);
                 }
             });
@@ -221,7 +221,7 @@ public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends Ab
                         CrashReportCategory category = crash.makeCategory("Gui");
                         category.addCrashSection("Method", method);
                         category.addCrashSection("Layer", layer);
-                        category.setDetail("ComposedElement", AbstractGuiPopup.this::toString);
+                        category.addDetail("ComposedElement", AbstractGuiPopup.this::toString);
                         throw new ReportedException(crash);
                     }
                     if (handled != null) {

@@ -197,14 +197,14 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
     private void updateCurrentOffset() {
         currentXOffset = Math.min(currentXOffset, cursorX);
         String line = text[cursorY].substring(currentXOffset, cursorX);
-        FontRenderer fontRenderer = getMinecraft().fontRendererObj;
+        FontRenderer fontRenderer = getMinecraft().fontRenderer;
         int currentWidth = fontRenderer.getStringWidth(line);
         if (currentWidth > size.getWidth() - BORDER * 2) {
             currentXOffset = cursorX - fontRenderer.trimStringToWidth(line, size.getWidth() - BORDER * 2, true).length();
         }
 
         currentYOffset = Math.min(currentYOffset, cursorY);
-        int lineHeight = getMinecraft().fontRendererObj.FONT_HEIGHT + LINE_SPACING;
+        int lineHeight = getMinecraft().fontRenderer.FONT_HEIGHT + LINE_SPACING;
         int contentHeight = size.getHeight() - BORDER * 2;
         int maxLines = contentHeight / lineHeight;
         if (cursorY - currentYOffset >= maxLines) {
@@ -405,7 +405,7 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
             updateCurrentOffset();
             int mouseX = position.getX() - BORDER;
             int mouseY = position.getY() - BORDER;
-            FontRenderer fontRenderer = getMinecraft().fontRendererObj;
+            FontRenderer fontRenderer = getMinecraft().fontRenderer;
             int textY = clamp(mouseY / (fontRenderer.FONT_HEIGHT + LINE_SPACING) + currentYOffset, 0, text.length - 1);
             if (cursorY != textY) {
                 currentXOffset = 0;
@@ -454,7 +454,7 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
         updateCurrentOffset();
         super.draw(renderer, size, renderInfo);
 
-        FontRenderer fontRenderer = getMinecraft().fontRendererObj;
+        FontRenderer fontRenderer = getMinecraft().fontRenderer;
         int width = size.getWidth();
         int height = size.getHeight();
 
