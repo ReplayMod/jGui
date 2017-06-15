@@ -36,8 +36,8 @@ import de.johni0702.minecraft.gui.utils.Consumer;
 import lombok.Getter;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatAllowedCharacters;
@@ -377,7 +377,7 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
         colorLogicOp(GL11.GL_OR_REVERSE);
 
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vertexBuffer = tessellator.getBuffer();
+        BufferBuilder vertexBuffer = tessellator.getBuffer();
         vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
         vertexBuffer.pos(right, top, 0).endVertex();
         vertexBuffer.pos(left, top, 0).endVertex();
