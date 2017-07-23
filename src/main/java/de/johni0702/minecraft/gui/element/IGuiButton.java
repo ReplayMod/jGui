@@ -24,10 +24,14 @@
  */
 package de.johni0702.minecraft.gui.element;
 
+import net.minecraft.util.SoundEvent;
+
 public interface IGuiButton<T extends IGuiButton<T>> extends IGuiClickable<T> {
     T setLabel(String label);
 
     T setI18nLabel(String label, Object... args);
+
+    T setSound(SoundEvent sound);
 
     String getLabel();
 }
