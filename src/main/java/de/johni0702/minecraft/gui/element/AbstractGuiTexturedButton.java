@@ -33,6 +33,7 @@ import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import org.lwjgl.util.*;
 
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
@@ -41,6 +42,9 @@ import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedButton<T>> extends AbstractGuiClickable<T> implements Clickable, IGuiTexturedButton<T> {
     @Getter
     private ResourceLocation texture;
+
+    @Getter
+    private SoundEvent sound = SoundEvents.UI_BUTTON_CLICK;
 
     @Getter
     private ReadableDimension textureSize = new ReadableDimension() {
@@ -113,7 +117,7 @@ public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedBut
 
     @Override
     public void onClick() {
-        getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(sound, 1.0F));
         super.onClick();
     }
 
@@ -215,5 +219,11 @@ public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedBut
     public T setTexturePos(ReadablePoint normal, ReadablePoint hover, ReadablePoint disabled) {
         this.textureDisabled = disabled;
         return setTexturePos(normal, hover);
+    }
+
+    @Override
+    public T setSound(SoundEvent sound) {
+        this.sound = sound;
+        return getThis();
     }
 }
