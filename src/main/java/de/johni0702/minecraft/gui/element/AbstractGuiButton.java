@@ -38,6 +38,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.util.Dimension;
 import org.lwjgl.util.Point;
 import org.lwjgl.util.ReadableDimension;
+import net.minecraft.util.SoundEvent;
 
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
@@ -45,6 +46,9 @@ import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends AbstractGuiClickable<T> implements Clickable, IGuiButton<T> {
     protected static final ResourceLocation BUTTON_SOUND = new ResourceLocation("gui.button.press");
     protected static final ResourceLocation WIDGETS_TEXTURE = new ResourceLocation("textures/gui/widgets.png");
+
+    @Getter
+    private SoundEvent sound = SoundEvents.UI_BUTTON_CLICK;
 
     @Getter
     private String label;
@@ -94,13 +98,19 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
 
     @Override
     public void onClick() {
-        getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(sound, 1.0F));
         super.onClick();
     }
 
     @Override
     public T setLabel(String label) {
         this.label = label;
+        return getThis();
+    }
+
+    @Override
+    public T setSound(SoundEvent sound) {
+        this.sound = sound;
         return getThis();
     }
 
