@@ -31,10 +31,15 @@ import de.johni0702.minecraft.gui.function.Clickable;
 import lombok.Getter;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
 import org.lwjgl.util.*;
+
+//#if MC>=10904
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundEvent;
+//#else
+//$$ import static de.johni0702.minecraft.gui.element.AbstractGuiButton.BUTTON_SOUND;
+//#endif
 
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
@@ -43,8 +48,10 @@ public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedBut
     @Getter
     private ResourceLocation texture;
 
+    //#if MC>=10904
     @Getter
     private SoundEvent sound = SoundEvents.UI_BUTTON_CLICK;
+    //#endif
 
     @Getter
     private ReadableDimension textureSize = new ReadableDimension() {
@@ -117,7 +124,11 @@ public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedBut
 
     @Override
     public void onClick() {
+        //#if MC>=10904
         getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(sound, 1.0F));
+        //#else
+        //$$ getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(BUTTON_SOUND, 1.0F));
+        //#endif
         super.onClick();
     }
 
@@ -221,9 +232,11 @@ public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedBut
         return setTexturePos(normal, hover);
     }
 
+    //#if MC>=10904
     @Override
     public T setSound(SoundEvent sound) {
         this.sound = sound;
         return getThis();
     }
+    //#endif
 }

@@ -1,2 +1,10 @@
 rootProject.name = 'jGui'
 
+include([
+        'core',
+        '1.8',
+        '1.8.9',
+        '1.9.4',
+        '1.12'
+].collect {"versions:$it"} as String[])
+

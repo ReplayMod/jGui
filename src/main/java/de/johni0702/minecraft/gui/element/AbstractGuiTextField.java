@@ -34,13 +34,11 @@ import de.johni0702.minecraft.gui.function.Focusable;
 import de.johni0702.minecraft.gui.function.Tickable;
 import de.johni0702.minecraft.gui.function.Typeable;
 import de.johni0702.minecraft.gui.utils.Consumer;
+import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatAllowedCharacters;
 import org.lwjgl.input.Keyboard;
@@ -48,8 +46,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Color;
 import org.lwjgl.util.*;
 
+import static de.johni0702.minecraft.gui.utils.Utils.clamp;
 import static net.minecraft.client.renderer.GlStateManager.*;
-import static net.minecraft.util.math.MathHelper.clamp;
 
 public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         extends AbstractGuiElement<T> implements Clickable, Tickable, Typeable, IGuiTextField<T> {
@@ -163,7 +161,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
     private void updateCurrentOffset() {
         currentOffset = Math.min(currentOffset, cursorPos);
         String line = text.substring(currentOffset, cursorPos);
-        FontRenderer fontRenderer = getMinecraft().fontRenderer;
+        FontRenderer fontRenderer = MCVer.getFontRenderer();
         int currentWidth = fontRenderer.getStringWidth(line);
         if (currentWidth > size.getWidth() - 2*BORDER) {
             currentOffset = cursorPos - fontRenderer.trimStringToWidth(line, size.getWidth() - 2*BORDER, true).length();
@@ -312,14 +310,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         enableColorLogic();
         colorLogicOp(GL11.GL_OR_REVERSE);
 
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder vertexBuffer = tessellator.getBuffer();
-        vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
-        vertexBuffer.pos(right, top, 0).endVertex();
-        vertexBuffer.pos(left, top, 0).endVertex();
-        vertexBuffer.pos(left, bottom, 0).endVertex();
-        vertexBuffer.pos(right, bottom, 0).endVertex();
-        tessellator.draw();
+        MCVer.drawRect(right, bottom, left, top);
 
         disableColorLogic();
         enableTexture2D();
@@ -341,7 +332,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         if (hovering && isFocused() && button == 0) {
             updateCurrentOffset();
             int mouseX = position.getX() - BORDER;
-            FontRenderer fontRenderer = getMinecraft().fontRenderer;
+            FontRenderer fontRenderer = MCVer.getFontRenderer();
             String text = this.text.substring(currentOffset);
             int textX = fontRenderer.trimStringToWidth(text, mouseX).length() + currentOffset;
             setCursorPosition(textX);
@@ -389,7 +380,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         super.draw(renderer, size, renderInfo);
 
         int width = size.getWidth(), height = size.getHeight();
-        FontRenderer fontRenderer = getMinecraft().fontRenderer;
+        FontRenderer fontRenderer = MCVer.getFontRenderer();
         int posY = height / 2 - fontRenderer.FONT_HEIGHT / 2;
 
         // Draw black rect once pixel smaller than gray rect

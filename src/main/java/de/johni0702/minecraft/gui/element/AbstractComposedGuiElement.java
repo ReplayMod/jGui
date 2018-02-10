@@ -28,6 +28,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 import de.johni0702.minecraft.gui.container.GuiContainer;
+import de.johni0702.minecraft.gui.versions.MCVer;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.util.ReportedException;
@@ -86,8 +87,8 @@ public abstract class AbstractComposedGuiElement<T extends AbstractComposedGuiEl
                         CrashReport crash = CrashReport.makeCrashReport(e, "Calling Gui method");
                         CrashReportCategory category = crash.makeCategory("Gui");
                         category.addCrashSection("Method", method);
-                        category.addDetail("ComposedElement", AbstractComposedGuiElement.this::toString);
-                        category.addDetail("Element", AbstractComposedGuiElement.this::toString);
+                        MCVer.addDetail(category, "ComposedElement", AbstractComposedGuiElement.this::toString);
+                        MCVer.addDetail(category, "Element", AbstractComposedGuiElement.this::toString);
                         throw new ReportedException(crash);
                     }
                     if (handled != null) {
@@ -125,8 +126,8 @@ public abstract class AbstractComposedGuiElement<T extends AbstractComposedGuiEl
                         CrashReport crash = CrashReport.makeCrashReport(e, "Calling Gui method");
                         CrashReportCategory category = crash.makeCategory("Gui");
                         category.addCrashSection("Method", method);
-                        category.addDetail("ComposedElement", self::toString);
-                        category.addDetail("Element", self::toString);
+                        MCVer.addDetail(category, "ComposedElement", self::toString);
+                        MCVer.addDetail(category, "Element", self::toString);
                         throw new ReportedException(crash);
                     }
                     if (handled != null) {
@@ -166,8 +167,8 @@ public abstract class AbstractComposedGuiElement<T extends AbstractComposedGuiEl
                         CrashReport crash = CrashReport.makeCrashReport(e, "Calling Gui method");
                         CrashReportCategory category = crash.makeCategory("Gui");
                         category.addCrashSection("Method", method);
-                        category.addDetail("ComposedElement", element::toString);
-                        category.addDetail("Element", element::toString);
+                        MCVer.addDetail(category, "ComposedElement", element::toString);
+                        MCVer.addDetail(category, "Element", element::toString);
                         throw new ReportedException(crash);
                     }
                 }

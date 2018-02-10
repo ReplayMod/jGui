@@ -42,6 +42,7 @@ import de.johni0702.minecraft.gui.layout.HorizontalLayout;
 import de.johni0702.minecraft.gui.layout.VerticalLayout;
 import de.johni0702.minecraft.gui.utils.Colors;
 import de.johni0702.minecraft.gui.utils.Consumer;
+import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.Dimension;
@@ -224,7 +225,7 @@ public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> i
                 @Override
                 protected ReadableDimension calcMinSize() {
                     ReadableDimension dim = super.calcMinSize();
-                    return new Dimension(dim.getWidth() - 5 - getMinecraft().fontRenderer.FONT_HEIGHT,
+                    return new Dimension(dim.getWidth() - 5 - MCVer.getFontRenderer().FONT_HEIGHT,
                             dim.getHeight());
                 }
 

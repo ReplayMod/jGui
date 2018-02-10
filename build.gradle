@@ -1,23 +1,12 @@
 buildscript {
     repositories {
         jcenter()
-        mavenCentral()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
         classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
     }
 }
 
-apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'license'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
@@ -34,20 +23,6 @@ ext.inceptionYear = '2016'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-minecraft {
-    version = '1.12-14.21.0.2321'
-    runDir = "eclipse"
-    mappings = "snapshot_20170615"
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    compile "org.projectlombok:lombok:1.16.6"
-}
-
 license {
     ext.name = project.projectName
     ext.author = project.author
@@ -59,5 +34,33 @@ license {
     strictCheck true
     mapping {
         java = 'SLASHSTAR_STYLE'
+    }
+}
+
+apply from: 'versions/preprocessor.gradle'
+
+task setCoreVersion() {
+    doLast {
+        def vars = [MC: project.mcVersion as int, DEV_ENV: 1]
+        project.convertTree(vars, 'src/main/java')
+        project.convertTree(vars, 'src/main/resources')
+        project.convertTree(vars, 'versions/core/build.gradle')
+    }
+}
+
+subprojects {
+    buildscript {
+        repositories {
+            jcenter()
+            mavenCentral()
+            maven {
+                name = "forge"
+                url = "http://files.minecraftforge.net/maven"
+            }
+            maven {
+                name = "sonatype"
+                url = "https://oss.sonatype.org/content/repositories/snapshots/"
+            }
+        }
     }
 }

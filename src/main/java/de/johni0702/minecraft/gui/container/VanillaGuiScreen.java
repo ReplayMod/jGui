@@ -3,6 +3,7 @@ package de.johni0702.minecraft.gui.container;
 import de.johni0702.minecraft.gui.function.Draggable;
 import de.johni0702.minecraft.gui.function.Scrollable;
 import de.johni0702.minecraft.gui.function.Typeable;
+import de.johni0702.minecraft.gui.versions.MCVer;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -119,7 +120,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
 
         @SubscribeEvent
         public void onGuiRender(GuiScreenEvent.DrawScreenEvent.Post event) {
-            getSuperMcGui().drawScreen(event.getMouseX(), event.getMouseY(), event.getRenderPartialTicks());
+            getSuperMcGui().drawScreen(MCVer.getMouseX(event), MCVer.getMouseY(event), MCVer.getPartialTicks(event));
         }
 
         @SubscribeEvent

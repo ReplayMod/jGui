@@ -90,4 +90,8 @@ public class Utils {
                     segmentWidth, bottomBorder);
         }
     }
+
+    public static int clamp(int val, int min, int max) {
+        return val < min ? min : val > max ? max : val;
+    }
 }

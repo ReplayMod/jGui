@@ -32,6 +32,7 @@ import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.container.GuiPanel;
 import de.johni0702.minecraft.gui.layout.CustomLayout;
 import de.johni0702.minecraft.gui.layout.Layout;
+import de.johni0702.minecraft.gui.versions.MCVer;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.util.ReportedException;
@@ -189,7 +190,7 @@ public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends Ab
                     CrashReportCategory category = crash.makeCategory("Gui");
                     category.addCrashSection("Method", method);
                     category.addCrashSection("Layer", layer);
-                    category.addDetail("ComposedElement", this::toString);
+                    MCVer.addDetail(category, "ComposedElement", this::toString);
                     throw new ReportedException(crash);
                 }
             });
@@ -221,7 +222,7 @@ public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends Ab
                         CrashReportCategory category = crash.makeCategory("Gui");
                         category.addCrashSection("Method", method);
                         category.addCrashSection("Layer", layer);
-                        category.addDetail("ComposedElement", AbstractGuiPopup.this::toString);
+                        MCVer.addDetail(category, "ComposedElement", AbstractGuiPopup.this::toString);
                         throw new ReportedException(crash);
                     }
                     if (handled != null) {

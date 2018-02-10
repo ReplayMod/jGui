@@ -31,6 +31,7 @@ import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.element.GuiElement;
 import de.johni0702.minecraft.gui.function.*;
 import de.johni0702.minecraft.gui.utils.MouseUtils;
+import de.johni0702.minecraft.gui.versions.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.crash.CrashReport;
@@ -152,13 +153,13 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
                     CrashReport crashReport = CrashReport.makeCrashReport(ex, "Rendering Gui Tooltip");
                     renderInfo.addTo(crashReport);
                     CrashReportCategory category = crashReport.makeCategory("Gui container details");
-                    category.addDetail("Container", this::toString);
+                    MCVer.addDetail(category, "Container", this::toString);
                     category.addCrashSection("Width", size.getWidth());
                     category.addCrashSection("Height", size.getHeight());
                     category = crashReport.makeCategory("Tooltip details");
-                    category.addDetail("Element", tooltip::toString);
-                    category.addDetail("Position", position::toString);
-                    category.addDetail("Size", tooltipSize::toString);
+                    MCVer.addDetail(category, "Element", tooltip::toString);
+                    MCVer.addDetail(category, "Position", position::toString);
+                    MCVer.addDetail(category, "Size", tooltipSize::toString);
                     throw new ReportedException(crashReport);
                 }
             }
@@ -180,7 +181,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
 
         @SubscribeEvent
         public void renderOverlay(RenderGameOverlayEvent.Post event) {
-            if (event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
+            if (MCVer.getType(event) == RenderGameOverlayEvent.ElementType.ALL) {
                 updateRenderer();
                 int layers = getMaxLayer();
                 int mouseX = -1, mouseY = -1;
@@ -190,7 +191,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
                     mouseY = mouse.getY();
                 }
                 for (int layer = 0; layer <= layers; layer++) {
-                    draw(renderer, screenSize, new RenderInfo(event.getPartialTicks(), mouseX, mouseY, layer));
+                    draw(renderer, screenSize, new RenderInfo(MCVer.getPartialTicks(event), mouseX, mouseY, layer));
                 }
             }
         }
@@ -204,7 +205,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
 
         private void updateRenderer() {
             Minecraft mc = getMinecraft();
-            ScaledResolution res = new ScaledResolution(mc);
+            ScaledResolution res = MCVer.newScaledResolution(mc);
             if (screenSize == null
                     || screenSize.getWidth() != res.getScaledWidth()
                     || screenSize.getHeight() != res.getScaledHeight()) {

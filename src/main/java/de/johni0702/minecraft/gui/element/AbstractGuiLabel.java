@@ -27,6 +27,7 @@ package de.johni0702.minecraft.gui.element;
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
+import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
@@ -53,7 +54,7 @@ public abstract class AbstractGuiLabel<T extends AbstractGuiLabel<T>> extends Ab
     @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         super.draw(renderer, size, renderInfo);
-        FontRenderer fontRenderer = getMinecraft().fontRenderer;
+        FontRenderer fontRenderer = MCVer.getFontRenderer();
         @SuppressWarnings("unchecked")
         List<String> lines = fontRenderer.listFormattedStringToWidth(text, size.getWidth());
         int y = 0;
@@ -65,7 +66,7 @@ public abstract class AbstractGuiLabel<T extends AbstractGuiLabel<T>> extends Ab
 
     @Override
     public ReadableDimension calcMinSize() {
-        FontRenderer fontRenderer = getMinecraft().fontRenderer;
+        FontRenderer fontRenderer = MCVer.getFontRenderer();
         return new Dimension(fontRenderer.getStringWidth(text), fontRenderer.FONT_HEIGHT);
     }
 

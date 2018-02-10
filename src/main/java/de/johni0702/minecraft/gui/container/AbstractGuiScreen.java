@@ -32,9 +32,9 @@ import de.johni0702.minecraft.gui.element.GuiElement;
 import de.johni0702.minecraft.gui.element.GuiLabel;
 import de.johni0702.minecraft.gui.function.*;
 import de.johni0702.minecraft.gui.utils.MouseUtils;
+import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
@@ -117,13 +117,13 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                     CrashReport crashReport = CrashReport.makeCrashReport(ex, "Rendering Gui Tooltip");
                     renderInfo.addTo(crashReport);
                     CrashReportCategory category = crashReport.makeCategory("Gui container details");
-                    category.addDetail("Container", this::toString);
+                    MCVer.addDetail(category, "Container", this::toString);
                     category.addCrashSection("Width", size.getWidth());
                     category.addCrashSection("Height", size.getHeight());
                     category = crashReport.makeCategory("Tooltip details");
-                    category.addDetail("Element", tooltip::toString);
-                    category.addDetail("Position", position::toString);
-                    category.addDetail("Size", tooltipSize::toString);
+                    MCVer.addDetail(category, "Element", tooltip::toString);
+                    MCVer.addDetail(category, "Position", position::toString);
+                    MCVer.addDetail(category, "Size", tooltipSize::toString);
                     throw new ReportedException(crashReport);
                 }
             }
@@ -220,7 +220,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                 Keyboard.enableRepeatEvents(true);
             }
             screenSize = new Dimension(width, height);
-            renderer = new MinecraftGuiRenderer(new ScaledResolution(mc));
+            renderer = new MinecraftGuiRenderer(MCVer.newScaledResolution(mc));
             forEach(Loadable.class).load();
         }
 

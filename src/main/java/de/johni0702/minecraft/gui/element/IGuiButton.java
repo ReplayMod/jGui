@@ -24,14 +24,18 @@
  */
 package de.johni0702.minecraft.gui.element;
 
+//#if MC>=10904
 import net.minecraft.util.SoundEvent;
+//#endif
 
 public interface IGuiButton<T extends IGuiButton<T>> extends IGuiClickable<T> {
     T setLabel(String label);
 
     T setI18nLabel(String label, Object... args);
 
+    //#if MC>=10904
     T setSound(SoundEvent sound);
+    //#endif
 
     String getLabel();
 }

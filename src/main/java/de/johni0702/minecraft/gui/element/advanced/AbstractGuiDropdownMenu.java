@@ -36,6 +36,7 @@ import de.johni0702.minecraft.gui.element.IGuiClickable;
 import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.layout.VerticalLayout;
 import de.johni0702.minecraft.gui.utils.Consumer;
+import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.client.gui.FontRenderer;
@@ -82,7 +83,7 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
 
     @Override
     protected ReadableDimension calcMinSize() {
-        FontRenderer fontRenderer = getMinecraft().fontRenderer;
+        FontRenderer fontRenderer = MCVer.getFontRenderer();
         int maxWidth = 0;
         for (V value : values) {
             int width = fontRenderer.getStringWidth(toString.apply(value));
@@ -96,7 +97,7 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
     @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         super.draw(renderer, size, renderInfo);
-        FontRenderer fontRenderer = getMinecraft().fontRenderer;
+        FontRenderer fontRenderer = MCVer.getFontRenderer();
         if (renderInfo.layer == 0) {
             int width = size.getWidth();
             int height = size.getHeight();
@@ -241,7 +242,7 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
 
         @Override
         protected ReadableDimension calcMinSize() {
-            return new Dimension(0, getMinecraft().fontRenderer.FONT_HEIGHT + 5);
+            return new Dimension(0, MCVer.getFontRenderer().FONT_HEIGHT + 5);
         }
 
         @Override

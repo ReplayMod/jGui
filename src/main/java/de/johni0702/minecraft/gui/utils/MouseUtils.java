@@ -24,6 +24,7 @@
  */
 package de.johni0702.minecraft.gui.utils;
 
+import de.johni0702.minecraft.gui.versions.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.input.Mouse;
@@ -44,7 +45,7 @@ public class MouseUtils {
     }
 
     public static Point getScaledDimensions() {
-        ScaledResolution res = new ScaledResolution(mc);
+        ScaledResolution res = MCVer.newScaledResolution(mc);
         return new Point(res.getScaledWidth(), res.getScaledHeight());
     }
 }

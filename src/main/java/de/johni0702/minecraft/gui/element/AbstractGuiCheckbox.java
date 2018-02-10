@@ -27,11 +27,14 @@ package de.johni0702.minecraft.gui.element;
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
+import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
+//#if MC>=10904
 import net.minecraft.init.SoundEvents;
+//#endif
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.util.Color;
 import org.lwjgl.util.Dimension;
@@ -78,7 +81,7 @@ public abstract class AbstractGuiCheckbox<T extends AbstractGuiCheckbox<T>>
 
     @Override
     public ReadableDimension calcMinSize() {
-        FontRenderer fontRenderer = getMinecraft().fontRenderer;
+        FontRenderer fontRenderer = MCVer.getFontRenderer();
         int height = fontRenderer.FONT_HEIGHT + 2;
         int width = height + 2 + fontRenderer.getStringWidth(label);
         return new Dimension(width, height);
@@ -91,7 +94,11 @@ public abstract class AbstractGuiCheckbox<T extends AbstractGuiCheckbox<T>>
 
     @Override
     public void onClick() {
+        //#if MC>=10904
         getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        //#else
+        //$$ getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(BUTTON_SOUND, 1.0F));
+        //#endif
         setChecked(!isChecked());
         super.onClick();
     }

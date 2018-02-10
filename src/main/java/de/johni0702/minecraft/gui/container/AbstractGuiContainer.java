@@ -35,6 +35,7 @@ import de.johni0702.minecraft.gui.element.GuiElement;
 import de.johni0702.minecraft.gui.layout.HorizontalLayout;
 import de.johni0702.minecraft.gui.layout.Layout;
 import de.johni0702.minecraft.gui.layout.LayoutData;
+import de.johni0702.minecraft.gui.versions.MCVer;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.util.ReportedException;
@@ -138,8 +139,8 @@ public abstract class AbstractGuiContainer<T extends AbstractGuiContainer<T>>
             CrashReport crashReport = CrashReport.makeCrashReport(ex, "Gui Layout");
             renderInfo.addTo(crashReport);
             CrashReportCategory category = crashReport.makeCategory("Gui container details");
-            category.addDetail("Container", this::toString);
-            category.addDetail("Layout", layout::toString);
+            MCVer.addDetail(category, "Container", this::toString);
+            MCVer.addDetail(category, "Layout", layout::toString);
             throw new ReportedException(crashReport);
         }
         if (backgroundColor != null && renderInfo.getLayer() == 0) {
@@ -171,16 +172,16 @@ public abstract class AbstractGuiContainer<T extends AbstractGuiContainer<T>>
                 CrashReport crashReport = CrashReport.makeCrashReport(ex, "Rendering Gui");
                 renderInfo.addTo(crashReport);
                 CrashReportCategory category = crashReport.makeCategory("Gui container details");
-                category.addDetail("Container", this::toString);
+                MCVer.addDetail(category, "Container", this::toString);
                 category.addCrashSection("Width", size.getWidth());
                 category.addCrashSection("Height", size.getHeight());
-                category.addDetail("Layout", layout::toString);
+                MCVer.addDetail(category, "Layout", layout::toString);
                 category = crashReport.makeCategory("Gui element details");
-                category.addDetail("Element", () -> e.getKey().toString());
-                category.addDetail("Position", ePosition::toString);
-                category.addDetail("Size", eSize::toString);
+                MCVer.addDetail(category, "Element", () -> e.getKey().toString());
+                MCVer.addDetail(category, "Position", ePosition::toString);
+                MCVer.addDetail(category, "Size", eSize::toString);
                 if (e.getKey() instanceof GuiContainer) {
-                    category.addDetail("Layout", () -> ((GuiContainer) e.getKey()).getLayout().toString());
+                    MCVer.addDetail(category, "Layout", () -> ((GuiContainer) e.getKey()).getLayout().toString());
                 }
                 throw new ReportedException(crashReport);
             }

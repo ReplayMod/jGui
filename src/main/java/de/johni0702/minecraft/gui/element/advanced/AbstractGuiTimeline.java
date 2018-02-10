@@ -32,8 +32,9 @@ import de.johni0702.minecraft.gui.element.GuiTooltip;
 import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.utils.Colors;
 import de.johni0702.minecraft.gui.utils.Utils;
-import net.minecraft.util.math.MathHelper;
 import org.lwjgl.util.*;
+
+import static de.johni0702.minecraft.gui.utils.Utils.clamp;
 
 public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> extends AbstractGuiElement<T> implements IGuiTimeline<T>, Clickable {
     protected static final int TEXTURE_WIDTH = 64;
@@ -123,7 +124,7 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
         renderer.bindTexture(TEXTURE);
 
         int visibleLength = (int) (length * zoom);
-        int cursor = MathHelper.clamp(cursorPosition, offset, offset + visibleLength);
+        int cursor = clamp(cursorPosition, offset, offset + visibleLength);
         double positionInVisible = cursor - offset;
         double fractionOfVisible = positionInVisible / visibleLength;
         int cursorX = (int) (BORDER_LEFT + fractionOfVisible * (size.getWidth() - BORDER_LEFT - BORDER_RIGHT));

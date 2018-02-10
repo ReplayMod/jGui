@@ -29,6 +29,7 @@ import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.element.AbstractGuiElement;
 import de.johni0702.minecraft.gui.utils.Colors;
+import de.johni0702.minecraft.gui.versions.MCVer;
 import org.lwjgl.util.Dimension;
 import org.lwjgl.util.ReadableDimension;
 
@@ -70,7 +71,7 @@ public abstract class AbstractGuiTimelineTime<T extends AbstractGuiTimelineTime<
         double fractionOfVisible = positionInVisible / visibleLength;
         int positionX = (int) (BORDER_LEFT + fractionOfVisible * (size.getWidth() - BORDER_LEFT - BORDER_RIGHT)) + offset;
         String str = String.format("%02d:%02d", time / 1000 / 60, time / 1000 % 60);
-        int stringWidth = getMinecraft().fontRenderer.getStringWidth(str);
+        int stringWidth = MCVer.getFontRenderer().getStringWidth(str);
         positionX = Math.max(stringWidth / 2, Math.min(size.getWidth() - stringWidth / 2, positionX));
         renderer.drawCenteredString(positionX, 0, Colors.WHITE, str, true);
     }

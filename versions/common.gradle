@@ -1,0 +1,52 @@
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+group 'de.johni0702.minecraft'
+version '1.0.0'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.projectlombok:lombok:1.16.6'
+}
+
+if (project.name != 'core') {
+    apply from: '../preprocessor.gradle'
+
+    def preprocessedSrc = 'build/preprocessed/src'
+    def preprocessedRes = 'build/preprocessed/res'
+    def originalSrc = '../../src/main/java'
+    def originalRes = '../../src/main/resources'
+    def (major, minor, patch) = project.name.tokenize('.')
+    def mcVersion = "${major}${minor.padLeft(2, '0')}${(patch ?: '').padLeft(2, '0')}"
+    def vars = [MC: mcVersion as int]
+
+    sourceSets {
+        main.java.srcDir preprocessedSrc
+        main.resources.srcDir preprocessedRes
+    }
+
+    task preprocessJava {
+        inputs.dir(originalSrc)
+        outputs.dir(preprocessedSrc)
+        doLast {
+            project.convertTree(vars, originalSrc, preprocessedSrc)
+        }
+    }
+
+    task preprocessResources {
+        inputs.dir(originalRes)
+        outputs.dir(preprocessedRes)
+        doLast {
+            project.convertTree(vars, originalRes, preprocessedRes)
+        }
+    }
+
+    compileJava.dependsOn preprocessJava
+    processResources.dependsOn preprocessResources
+}
+

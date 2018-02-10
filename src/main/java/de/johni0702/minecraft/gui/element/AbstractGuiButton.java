@@ -28,17 +28,21 @@ import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.function.Clickable;
+import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.util.Dimension;
 import org.lwjgl.util.Point;
 import org.lwjgl.util.ReadableDimension;
+
+//#if MC>=10904
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundEvent;
+//#endif
 
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
@@ -47,8 +51,10 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
     protected static final ResourceLocation BUTTON_SOUND = new ResourceLocation("gui.button.press");
     protected static final ResourceLocation WIDGETS_TEXTURE = new ResourceLocation("textures/gui/widgets.png");
 
+    //#if MC>=10904
     @Getter
     private SoundEvent sound = SoundEvents.UI_BUTTON_CLICK;
+    //#endif
 
     @Getter
     private String label;
@@ -92,13 +98,17 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
 
     @Override
     public ReadableDimension calcMinSize() {
-        FontRenderer fontRenderer = getMinecraft().fontRenderer;
+        FontRenderer fontRenderer = MCVer.getFontRenderer();
         return new Dimension(fontRenderer.getStringWidth(label), 20);
     }
 
     @Override
     public void onClick() {
+        //#if MC>=10904
         getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(sound, 1.0F));
+        //#else
+        //$$ getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(BUTTON_SOUND, 1.0F));
+        //#endif
         super.onClick();
     }
 
@@ -108,11 +118,13 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
         return getThis();
     }
 
+    //#if MC>=10904
     @Override
     public T setSound(SoundEvent sound) {
         this.sound = sound;
         return getThis();
     }
+    //#endif
 
     @Override
     public T setI18nLabel(String label, Object... args) {

@@ -25,7 +25,9 @@
 package de.johni0702.minecraft.gui.element;
 
 import net.minecraft.util.ResourceLocation;
+//#if MC>=10904
 import net.minecraft.util.SoundEvent;
+//#endif
 import org.lwjgl.util.ReadableDimension;
 import org.lwjgl.util.ReadablePoint;
 
@@ -51,5 +53,7 @@ public interface IGuiTexturedButton<T extends IGuiTexturedButton<T>> extends IGu
     T setTexturePos(int normalX, int normalY, int hoverX, int hoverY, int disabledX, int disabledY);
     T setTexturePos(ReadablePoint normal, ReadablePoint hover, ReadablePoint disabled);
 
+    //#if MC>=10904
     T setSound(SoundEvent sound);
+    //#endif
 }
