@@ -1,3 +1,37 @@
+buildscript {
+    def mcVersion
+    if (project.name != 'core') {
+        def (major, minor, patch) = project.name.tokenize('.')
+        mcVersion = "${major}${minor.padLeft(2, '0')}${(patch ?: '').padLeft(2, '0')}" as int
+    } else {
+        def f = file('mcVersion')
+        mcVersion = f.exists() ? f.readLines().first() as int : 11200
+    }
+    project.ext.mcVersion = mcVersion
+
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "https://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:' + [
+                11200: '2.3-SNAPSHOT',
+                10904: '2.2-SNAPSHOT',
+                10809: '2.1-SNAPSHOT',
+                10800: '2.0-SNAPSHOT',
+        ][mcVersion]
+    }
+}
+
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 group 'de.johni0702.minecraft'
@@ -14,6 +48,21 @@ dependencies {
     compile 'org.projectlombok:lombok:1.16.6'
 }
 
+minecraft {
+    version = [
+            11200: '1.12.2-14.23.0.2486',
+            10904: '1.9.4-12.17.0.1976',
+            10809: '1.8.9-11.15.1.1722',
+            10800: '1.8-11.14.4.1563',
+    ][mcVersion]
+    mappings = [
+            11200: 'snapshot_20170615',
+            10904: 'snapshot_20160518',
+            10809: 'stable_22',
+            10800: 'snapshot_nodoc_20141130',
+    ][mcVersion]
+}
+
 if (project.name != 'core') {
     apply from: '../preprocessor.gradle'
 
@@ -21,8 +70,6 @@ if (project.name != 'core') {
     def preprocessedRes = 'build/preprocessed/res'
     def originalSrc = '../../src/main/java'
     def originalRes = '../../src/main/resources'
-    def (major, minor, patch) = project.name.tokenize('.')
-    def mcVersion = "${major}${minor.padLeft(2, '0')}${(patch ?: '').padLeft(2, '0')}"
     def vars = [MC: mcVersion as int]
 
     sourceSets {
@@ -48,5 +95,10 @@ if (project.name != 'core') {
 
     compileJava.dependsOn preprocessJava
     processResources.dependsOn preprocessResources
+} else {
+    sourceSets {
+        main.java.srcDirs = ['../../src/main/java']
+        main.resources.srcDirs = ['../../src/main/resources']
+    }
 }
 

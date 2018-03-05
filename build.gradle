@@ -44,23 +44,6 @@ task setCoreVersion() {
         def vars = [MC: project.mcVersion as int, DEV_ENV: 1]
         project.convertTree(vars, 'src/main/java')
         project.convertTree(vars, 'src/main/resources')
-        project.convertTree(vars, 'versions/core/build.gradle')
-    }
-}
-
-subprojects {
-    buildscript {
-        repositories {
-            jcenter()
-            mavenCentral()
-            maven {
-                name = "forge"
-                url = "http://files.minecraftforge.net/maven"
-            }
-            maven {
-                name = "sonatype"
-                url = "https://oss.sonatype.org/content/repositories/snapshots/"
-            }
-        }
+        project.file('versions/core/mcVersion').write(vars.MC.toString())
     }
 }
