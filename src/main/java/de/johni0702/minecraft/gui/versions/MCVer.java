@@ -1,5 +1,6 @@
 package de.johni0702.minecraft.gui.versions;
 
+import de.johni0702.minecraft.gui.GuiRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
@@ -21,6 +22,13 @@ import net.minecraft.client.renderer.BufferBuilder;
 //#endif
 //#if MC>=10809
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+//#endif
+
+//#if MC>=10800
+import static net.minecraft.client.renderer.GlStateManager.*;
+//#else
+//$$ import net.minecraft.client.renderer.OpenGlHelper;
+//$$ import static org.lwjgl.opengl.GL11.*;
 //#endif
 
 import java.util.concurrent.Callable;
@@ -50,14 +58,22 @@ public class MCVer {
     }
 
     public static void drawRect(int right, int bottom, int left, int top) {
+        //#if MC>=10800
         Tessellator tessellator = Tessellator.getInstance();
+        //#else
+        //$$ Tessellator tessellator = Tessellator.instance;
+        //#endif
         //#if MC>=11200
         BufferBuilder vertexBuffer = tessellator.getBuffer();
         //#else
         //#if MC>=10904
         //$$ VertexBuffer vertexBuffer = tessellator.getBuffer();
         //#else
+        //#if MC>=10800
         //$$ WorldRenderer vertexBuffer = tessellator.getWorldRenderer();
+        //#else
+        //$$ Tessellator vertexBuffer = tessellator;
+        //#endif
         //#endif
         //#endif
         //#if MC>=10809
@@ -76,15 +92,53 @@ public class MCVer {
         tessellator.draw();
     }
 
+    /**
+     * Inverts all colors on the screen.
+     * @param guiRenderer The GUI Renderer
+     * @param right Right border of the inverted rectangle
+     * @param bottom Bottom border of the inverted rectangle
+     * @param left Left border of the inverted rectangle
+     * @param top Top border of the inverted rectangle
+     */
+    public static void invertColors(GuiRenderer guiRenderer, int right, int bottom, int left, int top) {
+        if (left >= right || top >= bottom) return;
+
+        int x = guiRenderer.getOpenGlOffset().getX();
+        int y = guiRenderer.getOpenGlOffset().getY();
+        right += x;
+        left += x;
+        bottom += y;
+        top += y;
+
+        color(0, 0, 255, 255);
+        disableTexture2D();
+        enableColorLogic();
+        colorLogicOp(GL11.GL_OR_REVERSE);
+
+        MCVer.drawRect(right, bottom, left, top);
+
+        disableColorLogic();
+        enableTexture2D();
+        color(255, 255, 255, 255);
+    }
+
     public static void drawRect(int x, int y, int width, int height, ReadableColor tl, ReadableColor tr, ReadableColor bl, ReadableColor br) {
+        //#if MC>=10800
         Tessellator tessellator = Tessellator.getInstance();
+        //#else
+        //$$ Tessellator tessellator = Tessellator.instance;
+        //#endif
         //#if MC>=11200
         BufferBuilder vertexBuffer = tessellator.getBuffer();
         //#else
         //#if MC>=10904
         //$$ VertexBuffer vertexBuffer = tessellator.getBuffer();
         //#else
+        //#if MC>=10800
         //$$ WorldRenderer vertexBuffer = tessellator.getWorldRenderer();
+        //#else
+        //$$ Tessellator vertexBuffer = tessellator;
+        //#endif
         //#endif
         //#endif
         //#if MC>=10809
@@ -154,4 +208,20 @@ public class MCVer {
         //$$ return event.mouseY;
         //#endif
     }
+
+    //#if MC<=10710
+    //$$ public static void color(float r, float g, float b) { GL11.glColor3f(r, g, b); }
+    //$$ public static void color(float r, float g, float b, float a) { GL11.glColor4f(r, g, b, a); }
+    //$$ public static void enableBlend() { GL11.glEnable(GL_BLEND); }
+    //$$ public static void enableTexture2D() { GL11.glEnable(GL_TEXTURE_2D); }
+    //$$ public static void enableAlpha() { GL11.glEnable(GL_ALPHA_TEST); }
+    //$$ public static void disableTexture2D() { GL11.glDisable(GL_TEXTURE_2D); }
+    //$$ public static void disableAlpha() { GL11.glDisable(GL_ALPHA_TEST); }
+    //$$ public static void blendFunc(int s, int d) { GL11.glBlendFunc(s, d); }
+    //$$ public static void tryBlendFuncSeparate(int l, int r, int vl, int vr) { OpenGlHelper.glBlendFunc(l, r, vl, vr); }
+    //$$ public static void shadeModel(int mode) { GL11.glShadeModel(mode); }
+    //$$ public static void enableColorLogic() { GL11.glEnable(GL_COLOR_LOGIC_OP); }
+    //$$ public static void disableColorLogic() { GL11.glDisable(GL_COLOR_LOGIC_OP); }
+    //$$ public static void colorLogicOp(int op) { GL11.glLogicOp(op); }
+    //#endif
 }

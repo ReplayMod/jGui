@@ -30,7 +30,6 @@ import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.function.Clickable;
 import lombok.Getter;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.util.*;
 
@@ -39,6 +38,12 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundEvent;
 //#else
 //$$ import static de.johni0702.minecraft.gui.element.AbstractGuiButton.BUTTON_SOUND;
+//#endif
+
+//#if MC>=10800
+import static net.minecraft.client.renderer.GlStateManager.*;
+//#else
+//$$ import static de.johni0702.minecraft.gui.versions.MCVer.*;
 //#endif
 
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
@@ -104,13 +109,13 @@ public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedBut
         }
 
         if (texture == null) { // Button is disabled but we have no texture for that
-            GlStateManager.color(0.5f, 0.5f, 0.5f, 1);
+            color(0.5f, 0.5f, 0.5f, 1);
             texture = textureNormal;
         }
 
-        GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-        GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        enableBlend();
+        tryBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+        blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         renderer.drawTexturedRect(0, 0, texture.getX(), texture.getY(), size.getWidth(), size.getHeight(),
                 textureSize.getWidth(), textureSize.getHeight(),
@@ -127,7 +132,11 @@ public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedBut
         //#if MC>=10904
         getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(sound, 1.0F));
         //#else
+        //#if MC>=10800
         //$$ getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(BUTTON_SOUND, 1.0F));
+        //#else
+        //$$ getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.createPositionedSoundRecord(BUTTON_SOUND, 1.0F));
+        //#endif
         //#endif
         super.onClick();
     }

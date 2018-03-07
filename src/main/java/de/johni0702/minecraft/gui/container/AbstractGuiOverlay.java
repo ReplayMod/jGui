@@ -39,13 +39,19 @@ import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.util.ReportedException;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.Dimension;
 import org.lwjgl.util.Point;
 import org.lwjgl.util.ReadableDimension;
 import org.lwjgl.util.ReadablePoint;
+
+//#if MC>=10800
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+//#else
+//$$ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+//$$ import cpw.mods.fml.common.gameevent.TickEvent;
+//#endif
 
 import java.io.IOException;
 
@@ -176,8 +182,15 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         return screenSize;
     }
 
-    private class EventHandler {
+    //#if MC>=10800
+    private
+    //#else
+    //$$ public
+    //#endif
+    class EventHandler {
         private MinecraftGuiRenderer renderer;
+
+        private EventHandler() {}
 
         @SubscribeEvent
         public void renderOverlay(RenderGameOverlayEvent.Post event) {
@@ -222,7 +235,11 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         }
 
         @Override
-        protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        protected void keyTyped(char typedChar, int keyCode)
+                //#if MC>=10800
+                throws IOException
+                //#endif
+        {
             forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), keyCode, typedChar, isCtrlKeyDown(), isShiftKeyDown());
             if (closeable) {
                 super.keyTyped(typedChar, keyCode);
@@ -230,7 +247,11 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         }
 
         @Override
-        protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        protected void mouseClicked(int mouseX, int mouseY, int mouseButton)
+                //#if MC>=10800
+                throws IOException
+                //#endif
+        {
             forEach(Clickable.class).mouseClick(new Point(mouseX, mouseY), mouseButton);
         }
 
@@ -250,7 +271,11 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         }
 
         @Override
-        public void handleMouseInput() throws IOException {
+        public void handleMouseInput()
+                //#if MC>=10800
+                throws IOException
+                //#endif
+        {
             super.handleMouseInput();
             if (Mouse.hasWheel() && Mouse.getEventDWheel() != 0) {
                 forEach(Scrollable.class).scroll(MouseUtils.getMousePos(), Mouse.getEventDWheel());

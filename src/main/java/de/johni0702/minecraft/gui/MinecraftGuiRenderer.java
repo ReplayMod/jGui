@@ -30,13 +30,19 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.*;
 
+//#if MC>=10800
+import net.minecraft.client.renderer.GlStateManager;
 import static net.minecraft.client.renderer.GlStateManager.*;
+//#else
+//$$ import net.minecraft.client.renderer.OpenGlHelper;
+//$$ import static de.johni0702.minecraft.gui.versions.MCVer.*;
+//#endif
+
 import static org.lwjgl.opengl.GL11.*;
 
 public class MinecraftGuiRenderer implements GuiRenderer {
@@ -91,7 +97,11 @@ public class MinecraftGuiRenderer implements GuiRenderer {
 
     @Override
     public void bindTexture(ITextureObject texture) {
+        //#if MC>=10800
         GlStateManager.bindTexture(texture.getGlTextureId());
+        //#else
+        //$$ GL11.glBindTexture(GL_TEXTURE_2D, texture.getGlTextureId());
+        //#endif
     }
 
     @Override
@@ -101,14 +111,14 @@ public class MinecraftGuiRenderer implements GuiRenderer {
 
     @Override
     public void drawTexturedRect(int x, int y, int u, int v, int width, int height, int uWidth, int vHeight, int textureWidth, int textureHeight) {
-        GlStateManager.color(1, 1, 1);
+        color(1, 1, 1);
         Gui.drawScaledCustomSizeModalRect(x, y, u, v, uWidth, vHeight, width, height, textureWidth, textureHeight);
     }
 
     @Override
     public void drawRect(int x, int y, int width, int height, int color) {
         Gui.drawRect(x, y, x + width, y + height, color);
-        GlStateManager.color(1, 1, 1);
+        color(1, 1, 1);
         enableBlend();
     }
 
@@ -159,7 +169,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     public int drawString(int x, int y, int color, String text, boolean shadow) {
         FontRenderer fontRenderer = MCVer.getFontRenderer();
         int ret = shadow ? fontRenderer.drawStringWithShadow(text, x, y, color) : fontRenderer.drawString(text, x, y, color);
-        GlStateManager.color(1, 1, 1);
+        color(1, 1, 1);
         return ret;
     }
 
@@ -189,5 +199,13 @@ public class MinecraftGuiRenderer implements GuiRenderer {
 
     private ReadableColor color(int color) {
         return new Color((color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff, (color >> 24) & 0xff);
+    }
+
+    private void color(int r, int g, int b) {
+        //#if MC>=10800
+        GlStateManager.color(r, g, b);
+        //#else
+        //$$ MCVer.color(r, g, b);
+        //#endif
     }
 }

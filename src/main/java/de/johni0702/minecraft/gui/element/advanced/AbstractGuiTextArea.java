@@ -40,13 +40,12 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatAllowedCharacters;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.*;
 
 import java.util.Arrays;
 
 import static de.johni0702.minecraft.gui.utils.Utils.clamp;
-import static net.minecraft.client.renderer.GlStateManager.*;
+import static de.johni0702.minecraft.gui.versions.MCVer.*;
 
 public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
         extends AbstractGuiElement<T> implements Clickable, Typeable, Tickable, IGuiTextArea<T> {
@@ -357,27 +356,6 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
         selectionY = cursorY = clamp(y, 0, text.length - 1);
         selectionX = cursorX = clamp(x, 0, text[cursorY].length());
         return getThis();
-    }
-
-    private void invertColors(GuiRenderer guiRenderer, int right, int bottom, int left, int top) {
-        if (left >= right || top >= bottom) return;
-
-        int x = guiRenderer.getOpenGlOffset().getX();
-        int y = guiRenderer.getOpenGlOffset().getY();
-        right+=x;
-        left+=x;
-        bottom+=y;
-        top+=y;
-
-        color(0, 0, 255, 255);
-        disableTexture2D();
-        enableColorLogic();
-        colorLogicOp(GL11.GL_OR_REVERSE);
-
-        MCVer.drawRect(right, bottom, left, top);
-
-        disableColorLogic();
-        enableTexture2D();
     }
 
     @Override

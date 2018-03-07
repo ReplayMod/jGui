@@ -35,7 +35,6 @@ import de.johni0702.minecraft.gui.utils.MouseUtils;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.util.ReportedException;
@@ -45,6 +44,10 @@ import org.lwjgl.util.Dimension;
 import org.lwjgl.util.Point;
 import org.lwjgl.util.ReadableDimension;
 import org.lwjgl.util.ReadablePoint;
+
+//#if MC>=10800
+import net.minecraft.client.renderer.GlStateManager;
+//#endif
 
 import java.io.IOException;
 
@@ -159,8 +162,10 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         public void drawScreen(int mouseX, int mouseY, float partialTicks) {
             // The Forge loading screen apparently leaves one of the textures of the GlStateManager in an
             // incorrect state which can cause the whole screen to just remain white. This is a workaround.
+            //#if MC>=10800
             GlStateManager.disableTexture2D();
             GlStateManager.enableTexture2D();
+            //#endif
 
             int layers = getMaxLayer();
             for (int layer = 0; layer <= layers; layer++) {
@@ -169,7 +174,11 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         }
 
         @Override
-        protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        protected void keyTyped(char typedChar, int keyCode)
+                //#if MC>=10800
+                throws IOException
+                //#endif
+        {
             if (!forEach(Typeable.class).typeKey(
                     MouseUtils.getMousePos(), keyCode, typedChar, isCtrlKeyDown(), isShiftKeyDown())) {
                 super.keyTyped(typedChar, keyCode);
@@ -177,7 +186,11 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         }
 
         @Override
-        protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        protected void mouseClicked(int mouseX, int mouseY, int mouseButton)
+                //#if MC>=10800
+                throws IOException
+                //#endif
+        {
             forEach(Clickable.class).mouseClick(new Point(mouseX, mouseY), mouseButton);
         }
 
@@ -197,7 +210,11 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         }
 
         @Override
-        public void handleMouseInput() throws IOException {
+        public void handleMouseInput()
+                //#if MC>=10800
+                throws IOException
+                //#endif
+        {
             super.handleMouseInput();
             if (Mouse.hasWheel() && Mouse.getEventDWheel() != 0) {
                 forEach(Scrollable.class).scroll(MouseUtils.getMousePos(), Mouse.getEventDWheel());

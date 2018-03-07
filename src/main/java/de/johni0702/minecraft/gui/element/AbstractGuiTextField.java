@@ -42,12 +42,11 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatAllowedCharacters;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Color;
 import org.lwjgl.util.*;
 
 import static de.johni0702.minecraft.gui.utils.Utils.clamp;
-import static net.minecraft.client.renderer.GlStateManager.*;
+import static de.johni0702.minecraft.gui.versions.MCVer.*;
 
 public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         extends AbstractGuiElement<T> implements Clickable, Tickable, Typeable, IGuiTextField<T> {
@@ -285,36 +284,6 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         Preconditions.checkArgument(pos >= 0 && pos <= text.length());
         selectionPos = cursorPos = pos;
         return getThis();
-    }
-
-    /**
-     * Inverts all colors on the screen.
-     * @param guiRenderer The GUI Renderer
-     * @param right Right border of the inverted rectangle
-     * @param bottom Bottom border of the inverted rectangle
-     * @param left Left border of the inverted rectangle
-     * @param top Top border of the inverted rectangle
-     */
-    private void invertColors(GuiRenderer guiRenderer, int right, int bottom, int left, int top) {
-        if (left >= right || top >= bottom) return;
-
-        int x = guiRenderer.getOpenGlOffset().getX();
-        int y = guiRenderer.getOpenGlOffset().getY();
-        right+=x;
-        left+=x;
-        bottom+=y;
-        top+=y;
-
-        color(0, 0, 255, 255);
-        disableTexture2D();
-        enableColorLogic();
-        colorLogicOp(GL11.GL_OR_REVERSE);
-
-        MCVer.drawRect(right, bottom, left, top);
-
-        disableColorLogic();
-        enableTexture2D();
-        color(255, 255, 255, 255);
     }
 
     @Override

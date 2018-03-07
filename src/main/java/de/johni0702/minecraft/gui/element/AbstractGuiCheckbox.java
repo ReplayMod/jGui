@@ -97,7 +97,11 @@ public abstract class AbstractGuiCheckbox<T extends AbstractGuiCheckbox<T>>
         //#if MC>=10904
         getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
         //#else
+        //#if MC>=10800
         //$$ getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(BUTTON_SOUND, 1.0F));
+        //#else
+        //$$ getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.createPositionedSoundRecord(BUTTON_SOUND, 1.0F));
+        //#endif
         //#endif
         setChecked(!isChecked());
         super.onClick();

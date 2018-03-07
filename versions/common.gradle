@@ -28,11 +28,16 @@ buildscript {
                 10904: '2.2-SNAPSHOT',
                 10809: '2.1-SNAPSHOT',
                 10800: '2.0-SNAPSHOT',
+                10710: '1.2-SNAPSHOT',
         ][mcVersion]
     }
 }
 
-apply plugin: 'net.minecraftforge.gradle.forge'
+if (mcVersion >= 10800) {
+    apply plugin: 'net.minecraftforge.gradle.forge'
+} else {
+    apply plugin: 'forge'
+}
 
 group 'de.johni0702.minecraft'
 version '1.0.0'
@@ -54,12 +59,14 @@ minecraft {
             10904: '1.9.4-12.17.0.1976',
             10809: '1.8.9-11.15.1.1722',
             10800: '1.8-11.14.4.1563',
+            10710: '1.7.10-10.13.4.1558-1.7.10',
     ][mcVersion]
     mappings = [
             11200: 'snapshot_20170615',
             10904: 'snapshot_20160518',
             10809: 'stable_22',
             10800: 'snapshot_nodoc_20141130',
+            10710: 'stable_12',
     ][mcVersion]
 }
 
