@@ -87,6 +87,9 @@ public abstract class AbstractGuiContainer<T extends AbstractGuiContainer<T>>
 
     @Override
     public void convertFor(GuiElement element, Point point, int relativeLayer) {
+        if (layedOutElements == null) {
+            layout(null, null);
+        }
         checkState(layedOutElements != null, "Cannot convert position unless rendered at least once.");
         Pair<ReadablePoint, ReadableDimension> pair = layedOutElements.get(element);
         checkState(pair != null, "Element " + element + " not part of " + this);
@@ -131,8 +134,9 @@ public abstract class AbstractGuiContainer<T extends AbstractGuiContainer<T>>
     }
 
     @Override
-    public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
-        super.draw(renderer, size, renderInfo);
+    public void layout(ReadableDimension size, RenderInfo renderInfo) {
+        super.layout(size, renderInfo);
+        if (size == null) return;
         try {
             layedOutElements = layout.layOut(this, size);
         } catch (Exception ex) {
@@ -143,6 +147,27 @@ public abstract class AbstractGuiContainer<T extends AbstractGuiContainer<T>>
             MCVer.addDetail(category, "Layout", layout::toString);
             throw new ReportedException(crashReport);
         }
+        for (final Map.Entry<GuiElement, Pair<ReadablePoint, ReadableDimension>> e : layedOutElements.entrySet()) {
+            GuiElement element = e.getKey();
+            if (element instanceof ComposedGuiElement) {
+                if (((ComposedGuiElement) element).getMaxLayer() < renderInfo.layer) {
+                    continue;
+                }
+            } else {
+                if (element.getLayer() != renderInfo.layer) {
+                    continue;
+                }
+            }
+            ReadablePoint ePosition = e.getValue().getLeft();
+            ReadableDimension eSize = e.getValue().getRight();
+            element.layout(eSize, renderInfo.offsetMouse(ePosition.getX(), ePosition.getY())
+                    .layer(renderInfo.getLayer() - element.getLayer()));
+        }
+    }
+
+    @Override
+    public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
+        super.draw(renderer, size, renderInfo);
         if (backgroundColor != null && renderInfo.getLayer() == 0) {
             renderer.drawRect(0, 0, size.getWidth(), size.getHeight(), backgroundColor);
         }

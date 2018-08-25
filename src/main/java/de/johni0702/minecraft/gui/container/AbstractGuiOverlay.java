@@ -134,6 +134,20 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
     }
 
     @Override
+    public void layout(ReadableDimension size, RenderInfo renderInfo) {
+        if (size == null) {
+            size = screenSize;
+        }
+        super.layout(size, renderInfo);
+        if (mouseVisible && renderInfo.layer == getMaxLayer()) {
+            final GuiElement tooltip = forEach(GuiElement.class).getTooltip(renderInfo);
+            if (tooltip != null) {
+                tooltip.layout(tooltip.getMinSize(), renderInfo);
+            }
+        }
+    }
+
+    @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         super.draw(renderer, size, renderInfo);
         if (mouseVisible && renderInfo.layer == getMaxLayer()) {
@@ -203,8 +217,12 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
                     mouseX = mouse.getX();
                     mouseY = mouse.getY();
                 }
+                RenderInfo renderInfo = new RenderInfo(MCVer.getPartialTicks(event), mouseX, mouseY, 0);
                 for (int layer = 0; layer <= layers; layer++) {
-                    draw(renderer, screenSize, new RenderInfo(MCVer.getPartialTicks(event), mouseX, mouseY, layer));
+                    layout(screenSize, renderInfo.layer(layer));
+                }
+                for (int layer = 0; layer <= layers; layer++) {
+                    draw(renderer, screenSize, renderInfo.layer(layer));
                 }
             }
         }

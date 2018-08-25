@@ -73,7 +73,6 @@ public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> i
     private final GuiScrollable pathScrollable = new GuiScrollable(popup) {
         @Override
         public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
-            this.lastRenderSize = size;
             scrollX(0);
             super.draw(renderer, size, renderInfo);
         }

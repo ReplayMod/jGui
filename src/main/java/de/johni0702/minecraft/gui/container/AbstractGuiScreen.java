@@ -73,6 +73,25 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
     }
 
     @Override
+    public void layout(ReadableDimension size, RenderInfo renderInfo) {
+        if (size == null) {
+            size = screenSize;
+        }
+        if (renderInfo.layer == 0) {
+            if (title != null) {
+                title.layout(title.getMinSize(), renderInfo);
+            }
+        }
+        super.layout(size, renderInfo);
+        if (renderInfo.layer == getMaxLayer()) {
+            final GuiElement tooltip = forEach(GuiElement.class).getTooltip(renderInfo);
+            if (tooltip != null) {
+                tooltip.layout(tooltip.getMinSize(), renderInfo);
+            }
+        }
+    }
+
+    @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         if (renderInfo.layer == 0) {
             switch (background) {
@@ -168,8 +187,12 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
             //#endif
 
             int layers = getMaxLayer();
+            RenderInfo renderInfo = new RenderInfo(partialTicks, mouseX, mouseY, 0);
             for (int layer = 0; layer <= layers; layer++) {
-                draw(renderer, screenSize, new RenderInfo(partialTicks, mouseX, mouseY, layer));
+                layout(screenSize, renderInfo.layer(layer));
+            }
+            for (int layer = 0; layer <= layers; layer++) {
+                draw(renderer, screenSize, renderInfo.layer(layer));
             }
         }
 

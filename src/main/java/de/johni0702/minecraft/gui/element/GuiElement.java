@@ -37,6 +37,7 @@ public interface GuiElement<T extends GuiElement<T>> {
     GuiContainer getContainer();
     T setContainer(GuiContainer container);
 
+    void layout(ReadableDimension size, RenderInfo renderInfo);
     void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo);
 
     ReadableDimension getMinSize();

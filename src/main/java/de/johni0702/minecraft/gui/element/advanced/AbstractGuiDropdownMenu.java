@@ -95,6 +95,17 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
     }
 
     @Override
+    public void layout(ReadableDimension size, RenderInfo renderInfo) {
+        super.layout(size, renderInfo);
+        FontRenderer fontRenderer = MCVer.getFontRenderer();
+        if (renderInfo.layer == 1) {
+            ReadablePoint offsetPoint = new Point(0, size.getHeight());
+            ReadableDimension offsetSize = new Dimension(size.getWidth(), (fontRenderer.FONT_HEIGHT + 5) *  values.length);
+            dropdown.layout(offsetSize, renderInfo.offsetMouse(0, offsetPoint.getY()).layer(0));
+        }
+    }
+
+    @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         super.draw(renderer, size, renderInfo);
         FontRenderer fontRenderer = MCVer.getFontRenderer();

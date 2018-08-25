@@ -74,10 +74,22 @@ public abstract class AbstractGuiScrollable<T extends AbstractGuiScrollable<T>> 
     }
 
     @Override
+    public void layout(ReadableDimension size, RenderInfo renderInfo) {
+        if (size != null) {
+            int width = size.getWidth();
+            int height = size.getHeight();
+            lastRenderSize = size;
+            size = super.calcMinSize();
+            size = new Dimension(Math.max(width, size.getWidth()), Math.max(height, size.getHeight()));
+            renderInfo = renderInfo.offsetMouse(-offsetX, -offsetY);
+        }
+        super.layout(size, renderInfo);
+    }
+
+    @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         int width = size.getWidth();
         int height = size.getHeight();
-        lastRenderSize = size;
         size = super.calcMinSize();
         size = new Dimension(Math.max(width, size.getWidth()), Math.max(height, size.getHeight()));
         renderInfo = renderInfo.offsetMouse(-offsetX, -offsetY);

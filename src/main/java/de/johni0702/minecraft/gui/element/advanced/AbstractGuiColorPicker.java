@@ -73,6 +73,16 @@ public abstract class AbstractGuiColorPicker<T extends AbstractGuiColorPicker<T>
     }
 
     @Override
+    public void layout(ReadableDimension size, RenderInfo renderInfo) {
+        super.layout(size, renderInfo);
+        if (size == null) return;
+        if (renderInfo.layer == 1) {
+            ReadableDimension offsetSize = new Dimension(PICKER_SIZE, PICKER_SIZE);
+            picker.layout(offsetSize, renderInfo);
+        }
+    }
+
+    @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         super.draw(renderer, size, renderInfo);
         if (renderInfo.layer == 0) {

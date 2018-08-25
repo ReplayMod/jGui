@@ -68,10 +68,21 @@ public abstract class AbstractGuiElement<T extends AbstractGuiElement<T>> implem
     protected abstract T getThis();
 
     @Override
-    public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
+    public void layout(ReadableDimension size, RenderInfo renderInfo) {
+        if (size == null) {
+            if (getContainer() == null) {
+                throw new RuntimeException("Any top containers must implement layout(null, ...) themselves!");
+            }
+            getContainer().layout(size, renderInfo.layer(renderInfo.layer + getLayer()));
+            return;
+        }
         if (renderInfo.layer == 0) {
             lastSize = size;
         }
+    }
+
+    @Override
+    public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
     }
 
     @Override
