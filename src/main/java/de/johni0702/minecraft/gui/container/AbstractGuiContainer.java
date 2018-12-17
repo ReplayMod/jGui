@@ -88,7 +88,7 @@ public abstract class AbstractGuiContainer<T extends AbstractGuiContainer<T>>
     @Override
     public void convertFor(GuiElement element, Point point, int relativeLayer) {
         if (layedOutElements == null) {
-            layout(null, null);
+            layout(null, new RenderInfo(0, 0, 0, relativeLayer));
         }
         checkState(layedOutElements != null, "Cannot convert position unless rendered at least once.");
         Pair<ReadablePoint, ReadableDimension> pair = layedOutElements.get(element);
