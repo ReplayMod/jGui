@@ -195,7 +195,7 @@ public abstract class AbstractGuiResourceLoadingList
 
         @Override
         public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
-            if (selected == this) {
+            if (renderInfo.layer == 0 && selected == this) {
                 // Draw selection
                 int w = size.getWidth();
                 int h = size.getHeight();
