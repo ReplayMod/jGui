@@ -28,23 +28,24 @@ import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.function.Clickable;
+import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.Point;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
+import de.johni0702.minecraft.gui.utils.lwjgl.WritableDimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.WritablePoint;
 import lombok.Getter;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.util.*;
 
 //#if MC>=10904
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundEvent;
-//#else
-//$$ import static de.johni0702.minecraft.gui.element.AbstractGuiButton.BUTTON_SOUND;
 //#endif
 
 //#if MC>=10800
 import static net.minecraft.client.renderer.GlStateManager.*;
-//#else
-//$$ import static de.johni0702.minecraft.gui.versions.MCVer.*;
 //#endif
+import static de.johni0702.minecraft.gui.versions.MCVer.*;
 
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
@@ -130,13 +131,9 @@ public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedBut
     @Override
     public void onClick() {
         //#if MC>=10904
-        getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(sound, 1.0F));
+        AbstractGuiButton.playClickSound(getMinecraft(), sound);
         //#else
-        //#if MC>=10800
-        //$$ getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(BUTTON_SOUND, 1.0F));
-        //#else
-        //$$ getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.createPositionedSoundRecord(BUTTON_SOUND, 1.0F));
-        //#endif
+        AbstractGuiButton.playClickSound(getMinecraft());
         //#endif
         super.onClick();
     }

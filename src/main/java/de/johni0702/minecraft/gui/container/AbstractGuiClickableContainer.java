@@ -28,9 +28,9 @@ import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.element.IGuiClickable;
 import de.johni0702.minecraft.gui.function.Clickable;
-import org.lwjgl.util.Point;
-import org.lwjgl.util.ReadableDimension;
-import org.lwjgl.util.ReadablePoint;
+import de.johni0702.minecraft.gui.utils.lwjgl.Point;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 
 public abstract class AbstractGuiClickableContainer<T extends AbstractGuiClickableContainer<T>>
         extends AbstractGuiContainer<T> implements Clickable, IGuiClickable<T> {

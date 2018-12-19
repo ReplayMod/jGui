@@ -28,11 +28,11 @@ import com.google.common.base.Preconditions;
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
+import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.util.Dimension;
-import org.lwjgl.util.ReadableDimension;
 
 import java.awt.image.BufferedImage;
 
@@ -102,7 +102,7 @@ public abstract class AbstractGuiImage<T extends AbstractGuiImage<T>>
         if (texture != null) {
             texture.deleteGlTexture();
         }
-        texture = new DynamicTexture(img);
+        // FIXME texture = new DynamicTexture(img);
         textureWidth = uWidth = img.getWidth();
         textureHeight = vHeight = img.getHeight();
         return getThis();

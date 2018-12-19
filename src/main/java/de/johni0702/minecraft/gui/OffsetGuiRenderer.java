@@ -24,14 +24,14 @@
  */
 package de.johni0702.minecraft.gui;
 
+import de.johni0702.minecraft.gui.utils.lwjgl.Point;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import lombok.NonNull;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.Point;
-import org.lwjgl.util.ReadableColor;
-import org.lwjgl.util.ReadableDimension;
-import org.lwjgl.util.ReadablePoint;
 
 public class OffsetGuiRenderer implements GuiRenderer {
 

@@ -33,14 +33,24 @@ import de.johni0702.minecraft.gui.function.Focusable;
 import de.johni0702.minecraft.gui.function.Tickable;
 import de.johni0702.minecraft.gui.function.Typeable;
 import de.johni0702.minecraft.gui.utils.Consumer;
+import de.johni0702.minecraft.gui.utils.lwjgl.Color;
+import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.Point;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ChatAllowedCharacters;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.util.*;
+
+//#if MC>=11300
+import net.minecraft.util.SharedConstants;
+//#else
+//$$ import net.minecraft.util.ChatAllowedCharacters;
+//$$ import org.lwjgl.input.Keyboard;
+//#endif
 
 import java.util.Arrays;
 
@@ -225,7 +235,11 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
 
     @Override
     public void writeChar(char c) {
-        if (!ChatAllowedCharacters.isAllowedCharacter(c) && c != '\n') {
+        //#if MC>=11300
+        if (!SharedConstants.isAllowedCharacter(c)) {
+        //#else
+        //$$ if (!ChatAllowedCharacters.isAllowedCharacter(c)) {
+        //#endif
             return;
         }
 
@@ -522,16 +536,16 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
                     selectionX = text[selectionY].length();
                     return true;
                 case Keyboard.KEY_C: // Copy
-                    GuiScreen.setClipboardString(getSelectedText());
+                    // FIXME GuiScreen.setClipboardString(getSelectedText());
                     return true;
                 case Keyboard.KEY_V: // Paste
                     if (isEnabled()) {
-                        writeText(GuiScreen.getClipboardString());
+                        // FIXME writeText(GuiScreen.getClipboardString());
                     }
                     return true;
                 case Keyboard.KEY_X: // Cut
                     if (isEnabled()) {
-                        GuiScreen.setClipboardString(cutSelectedText());
+                        // FIXME GuiScreen.setClipboardString(cutSelectedText());
                     }
                     return true;
             }

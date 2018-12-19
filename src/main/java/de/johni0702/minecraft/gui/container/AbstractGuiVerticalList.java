@@ -29,11 +29,16 @@ import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.function.Draggable;
 import de.johni0702.minecraft.gui.layout.CustomLayout;
 import de.johni0702.minecraft.gui.layout.VerticalLayout;
+import de.johni0702.minecraft.gui.utils.lwjgl.Color;
+import de.johni0702.minecraft.gui.utils.lwjgl.Point;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
+import de.johni0702.minecraft.gui.utils.lwjgl.WritableDimension;
 import lombok.Getter;
-import org.lwjgl.util.*;
 
 import static de.johni0702.minecraft.gui.utils.Colors.TRANSPARENT;
-import static org.lwjgl.util.ReadableColor.BLACK;
+import static de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor.BLACK;
 
 public abstract class AbstractGuiVerticalList<T extends AbstractGuiVerticalList<T>> extends AbstractGuiScrollable<T>
         implements Draggable {

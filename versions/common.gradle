@@ -5,11 +5,12 @@ buildscript {
         mcVersion = "${major}${minor.padLeft(2, '0')}${(patch ?: '').padLeft(2, '0')}" as int
     } else {
         def f = file('mcVersion')
-        mcVersion = f.exists() ? f.readLines().first() as int : 11200
+        mcVersion = f.exists() ? f.readLines().first() as int : 11300
     }
     project.ext.mcVersion = mcVersion
 
     repositories {
+        mavenLocal()
         jcenter()
         mavenCentral()
         maven {
@@ -24,6 +25,7 @@ buildscript {
 
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:' + [
+                11300: '3.+',
                 11200: '2.3-SNAPSHOT',
                 10904: '2.2-SNAPSHOT',
                 10809: '2.1-SNAPSHOT',
@@ -33,7 +35,11 @@ buildscript {
     }
 }
 
-if (mcVersion >= 10800) {
+def FG3 = mcVersion >= 11300
+
+if (FG3) {
+    apply plugin: 'net.minecraftforge.gradle'
+} else if (mcVersion >= 10800) {
     apply plugin: 'net.minecraftforge.gradle.forge'
 } else {
     apply plugin: 'forge'
@@ -46,6 +52,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -54,20 +61,31 @@ dependencies {
 }
 
 minecraft {
-    version = [
-            11200: '1.12.2-14.23.0.2486',
-            10904: '1.9.4-12.17.0.1976',
-            10809: '1.8.9-11.15.1.1722',
-            10800: '1.8-11.14.4.1563',
-            10710: '1.7.10-10.13.4.1558-1.7.10',
-    ][mcVersion]
+    if (!FG3) {
+        version = [
+                11200: '1.12.2-14.23.0.2486',
+                10904: '1.9.4-12.17.0.1976',
+                10809: '1.8.9-11.15.1.1722',
+                10800: '1.8-11.14.4.1563',
+                10710: '1.7.10-10.13.4.1558-1.7.10',
+        ][mcVersion]
+    }
     mappings = [
+            11300: 'snapshot_20180921-1.13',
             11200: 'snapshot_20170615',
             10904: 'snapshot_20160518',
             10809: 'stable_22',
             10800: 'snapshot_nodoc_20141130',
             10710: 'stable_12',
     ][mcVersion]
+}
+
+dependencies {
+    if (FG3) {
+        minecraft 'net.minecraftforge.test:forge:' + [
+                11300: '1.13-24.0.33-1.13-pre',
+        ][mcVersion]
+    }
 }
 
 if (project.name != 'core') {

@@ -24,6 +24,7 @@
  */
 package de.johni0702.minecraft.gui;
 
+import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Data;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
@@ -45,9 +46,9 @@ public class RenderInfo {
 
     public void addTo(CrashReport crashReport) {
         CrashReportCategory category = crashReport.makeCategory("Render info details");
-        category.addCrashSection("Partial Tick", partialTick);
-        category.addCrashSection("Mouse X", mouseX);
-        category.addCrashSection("Mouse Y", mouseY);
-        category.addCrashSection("Layer", layer);
+        MCVer.addDetail(category, "Partial Tick", () -> "" + partialTick);
+        MCVer.addDetail(category, "Mouse X", () -> "" + mouseX);
+        MCVer.addDetail(category, "Mouse Y", () -> "" + mouseY);
+        MCVer.addDetail(category, "Layer", () -> "" + layer);
     }
 }

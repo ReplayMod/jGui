@@ -31,10 +31,10 @@ import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.function.Draggable;
 import de.johni0702.minecraft.gui.utils.Utils;
-import org.lwjgl.util.Dimension;
-import org.lwjgl.util.Point;
-import org.lwjgl.util.ReadableDimension;
-import org.lwjgl.util.ReadablePoint;
+import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.Point;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 
 public abstract class AbstractGuiHorizontalScrollbar<T extends AbstractGuiHorizontalScrollbar<T>> extends AbstractGuiElement<T> implements Clickable, Draggable, IGuiHorizontalScrollbar<T> {
     protected static final int TEXTURE_FG_X = 0;

@@ -27,8 +27,8 @@ package de.johni0702.minecraft.gui.element;
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import lombok.Getter;
-import org.lwjgl.util.ReadableDimension;
 
 public abstract class AbstractGuiToggleButton<V, T extends AbstractGuiToggleButton<V, T>>
         extends AbstractGuiButton<T> implements IGuiToggleButton<V,T> {

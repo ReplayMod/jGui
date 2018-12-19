@@ -28,8 +28,8 @@ import de.johni0702.minecraft.gui.element.ComposedGuiElement;
 import de.johni0702.minecraft.gui.element.GuiElement;
 import de.johni0702.minecraft.gui.layout.Layout;
 import de.johni0702.minecraft.gui.layout.LayoutData;
-import org.lwjgl.util.Point;
-import org.lwjgl.util.ReadableColor;
+import de.johni0702.minecraft.gui.utils.lwjgl.Point;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 
 import java.util.Comparator;
 import java.util.Map;

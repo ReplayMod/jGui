@@ -27,13 +27,13 @@ package de.johni0702.minecraft.gui.element;
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
+import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
-import org.lwjgl.util.Dimension;
-import org.lwjgl.util.ReadableColor;
-import org.lwjgl.util.ReadableDimension;
 
 import java.util.List;
 

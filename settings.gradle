@@ -2,11 +2,12 @@ rootProject.name = 'jGui'
 
 [
         'core',
-        '1.7.10',
+        //'1.7.10', FIXME
         '1.8',
         '1.8.9',
         '1.9.4',
-        '1.12'
+        '1.12',
+        '1.13'
 ].each { version ->
     include ":$version"
     project(":$version").with {

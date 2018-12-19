@@ -24,11 +24,11 @@
  */
 package de.johni0702.minecraft.gui;
 
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.util.ReadableColor;
-import org.lwjgl.util.ReadableDimension;
-import org.lwjgl.util.ReadablePoint;
 
 public interface GuiRenderer {
 

@@ -34,8 +34,13 @@ import de.johni0702.minecraft.gui.element.GuiElement;
 import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.function.Draggable;
 import de.johni0702.minecraft.gui.utils.Consumer;
+import de.johni0702.minecraft.gui.utils.lwjgl.Color;
+import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.Point;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import lombok.Getter;
-import org.lwjgl.util.*;
 
 import java.util.Collection;
 import java.util.Collections;

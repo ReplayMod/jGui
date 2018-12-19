@@ -32,24 +32,30 @@ import de.johni0702.minecraft.gui.element.GuiElement;
 import de.johni0702.minecraft.gui.element.GuiLabel;
 import de.johni0702.minecraft.gui.function.*;
 import de.johni0702.minecraft.gui.utils.MouseUtils;
+import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.Point;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
-import net.minecraft.util.ReportedException;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.util.Dimension;
-import org.lwjgl.util.Point;
-import org.lwjgl.util.ReadableDimension;
-import org.lwjgl.util.ReadablePoint;
+
+//#if MC>=11300
+// FIXME
+//#else
+//$$ import org.lwjgl.input.Keyboard;
+//$$ import org.lwjgl.input.Mouse;
+//#endif
 
 //#if MC>=10800
 import net.minecraft.client.renderer.GlStateManager;
 //#endif
 
 import java.io.IOException;
+
+import static de.johni0702.minecraft.gui.versions.MCVer.newReportedException;
 
 public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends AbstractGuiContainer<T> {
 
@@ -140,13 +146,13 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                     renderInfo.addTo(crashReport);
                     CrashReportCategory category = crashReport.makeCategory("Gui container details");
                     MCVer.addDetail(category, "Container", this::toString);
-                    category.addCrashSection("Width", size.getWidth());
-                    category.addCrashSection("Height", size.getHeight());
+                    MCVer.addDetail(category, "Width", () -> "" + size.getWidth());
+                    MCVer.addDetail(category, "Height", () -> "" + size.getHeight());
                     category = crashReport.makeCategory("Tooltip details");
                     MCVer.addDetail(category, "Element", tooltip::toString);
                     MCVer.addDetail(category, "Position", position::toString);
                     MCVer.addDetail(category, "Size", tooltipSize::toString);
-                    throw new ReportedException(crashReport);
+                    throw newReportedException(crashReport);
                 }
             }
         }
@@ -165,7 +171,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
     public void setEnabledRepeatedKeyEvents(boolean enableRepeatKeyEvents) {
         this.enabledRepeatedKeyEvents = enableRepeatKeyEvents;
         if (wrapped.active) {
-            Keyboard.enableRepeatEvents(enableRepeatKeyEvents);
+            // FIXME Keyboard.enableRepeatEvents(enableRepeatKeyEvents);
         }
     }
 
@@ -177,6 +183,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         private MinecraftGuiRenderer renderer;
         private boolean active;
 
+        /* FIXME
         @Override
         public void drawScreen(int mouseX, int mouseY, float partialTicks) {
             // The Forge loading screen apparently leaves one of the textures of the GlStateManager in an
@@ -243,13 +250,14 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                 forEach(Scrollable.class).scroll(MouseUtils.getMousePos(), Mouse.getEventDWheel());
             }
         }
+        */
 
         @Override
         public void onGuiClosed() {
             forEach(Closeable.class).close();
             active = false;
             if (enabledRepeatedKeyEvents) {
-                Keyboard.enableRepeatEvents(false);
+                // FIXME Keyboard.enableRepeatEvents(false);
             }
         }
 
@@ -257,7 +265,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         public void initGui() {
             active = false;
             if (enabledRepeatedKeyEvents) {
-                Keyboard.enableRepeatEvents(true);
+                // FIXME Keyboard.enableRepeatEvents(true);
             }
             screenSize = new Dimension(width, height);
             renderer = new MinecraftGuiRenderer(MCVer.newScaledResolution(mc));

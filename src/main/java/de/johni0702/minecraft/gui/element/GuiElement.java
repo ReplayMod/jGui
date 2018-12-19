@@ -27,8 +27,8 @@ package de.johni0702.minecraft.gui.element;
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import net.minecraft.client.Minecraft;
-import org.lwjgl.util.ReadableDimension;
 
 public interface GuiElement<T extends GuiElement<T>> {
 

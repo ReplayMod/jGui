@@ -29,9 +29,9 @@ import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.element.AbstractGuiElement;
 import de.johni0702.minecraft.gui.utils.Colors;
+import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
-import org.lwjgl.util.Dimension;
-import org.lwjgl.util.ReadableDimension;
 
 import static de.johni0702.minecraft.gui.element.advanced.AbstractGuiTimeline.BORDER_LEFT;
 import static de.johni0702.minecraft.gui.element.advanced.AbstractGuiTimeline.BORDER_RIGHT;

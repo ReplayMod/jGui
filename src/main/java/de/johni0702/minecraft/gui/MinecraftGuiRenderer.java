@@ -24,16 +24,25 @@
  */
 package de.johni0702.minecraft.gui;
 
+import de.johni0702.minecraft.gui.utils.lwjgl.Color;
+import de.johni0702.minecraft.gui.utils.lwjgl.Point;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
+import de.johni0702.minecraft.gui.utils.lwjgl.WritableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.NonNull;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.*;
+
+//#if MC>=11300
+import net.minecraft.client.MainWindow;
+//#else
+//$$ import net.minecraft.client.gui.ScaledResolution;
+//#endif
 
 //#if MC>=10800
 import net.minecraft.client.renderer.GlStateManager;
@@ -43,16 +52,25 @@ import static net.minecraft.client.renderer.GlStateManager.*;
 //$$ import static de.johni0702.minecraft.gui.versions.MCVer.*;
 //#endif
 
+import static de.johni0702.minecraft.gui.versions.MCVer.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class MinecraftGuiRenderer implements GuiRenderer {
 
-    private final Gui gui = new Gui();
+    private final Gui gui = new Gui(){};
 
     @NonNull
-    private final ScaledResolution size;
+    //#if MC>=11300
+    private final MainWindow size;
+    //#else
+    //$$ private final ScaledResolution size;
+    //#endif
 
-    public MinecraftGuiRenderer(ScaledResolution size) {
+    //#if MC>=11300
+    public MinecraftGuiRenderer(MainWindow size) {
+    //#else
+    //$$ public MinecraftGuiRenderer(ScaledResolution size) {
+    //#endif
         this.size = size;
     }
 
@@ -86,13 +104,17 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         // glScissor origin is bottom left corner whereas otherwise it's top left
         y = size.getScaledHeight() - y - height;
 
-        int f = size.getScaleFactor();
+        //#if MC>=11300
+        int f = (int) size.getGuiScaleFactor();
+        //#else
+        //$$ int f = size.getScaleFactor();
+        //#endif
         GL11.glScissor(x * f, y * f, width * f, height * f);
     }
 
     @Override
     public void bindTexture(ResourceLocation location) {
-        Minecraft.getMinecraft().getTextureManager().bindTexture(location);
+        MCVer.getMinecraft().getTextureManager().bindTexture(location);
     }
 
     @Override
@@ -203,7 +225,11 @@ public class MinecraftGuiRenderer implements GuiRenderer {
 
     private void color(int r, int g, int b) {
         //#if MC>=10800
-        GlStateManager.color(r, g, b);
+        //#if MC>=11300
+        GlStateManager.color3f(r, g, b);
+        //#else
+        //$$ GlStateManager.color(r, g, b);
+        //#endif
         //#else
         //$$ MCVer.color(r, g, b);
         //#endif

@@ -32,12 +32,11 @@ import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.container.GuiPanel;
 import de.johni0702.minecraft.gui.layout.CustomLayout;
 import de.johni0702.minecraft.gui.layout.Layout;
+import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
-import net.minecraft.util.ReportedException;
-import org.lwjgl.util.Dimension;
-import org.lwjgl.util.ReadableDimension;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -45,6 +44,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
+
+import static de.johni0702.minecraft.gui.versions.MCVer.newReportedException;
 
 public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends AbstractGuiContainer<T> {
     private final GuiPanel popupContainer = new GuiPanel(this){
@@ -188,10 +189,10 @@ public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends Ab
                     }
                     CrashReport crash = CrashReport.makeCrashReport(e, "Calling Gui method");
                     CrashReportCategory category = crash.makeCategory("Gui");
-                    category.addCrashSection("Method", method);
-                    category.addCrashSection("Layer", layer);
+                    MCVer.addDetail(category, "Method", method::toString);
+                    MCVer.addDetail(category, "Layer", () -> "" + layer);
                     MCVer.addDetail(category, "ComposedElement", this::toString);
-                    throw new ReportedException(crash);
+                    throw newReportedException(crash);
                 }
             });
         } else {
@@ -220,10 +221,10 @@ public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends Ab
                         }
                         CrashReport crash = CrashReport.makeCrashReport(e, "Calling Gui method");
                         CrashReportCategory category = crash.makeCategory("Gui");
-                        category.addCrashSection("Method", method);
-                        category.addCrashSection("Layer", layer);
-                        MCVer.addDetail(category, "ComposedElement", AbstractGuiPopup.this::toString);
-                        throw new ReportedException(crash);
+                        MCVer.addDetail(category, "Method", method::toString);
+                        MCVer.addDetail(category, "Layer", () -> "" + layer);
+                        MCVer.addDetail(category, "ComposedElement", this::toString);
+                        throw newReportedException(crash);
                     }
                     if (handled != null) {
                         if (handled instanceof Boolean) {

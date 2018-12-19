@@ -24,8 +24,9 @@
  */
 package de.johni0702.minecraft.gui.utils;
 
-import org.lwjgl.util.Color;
-import org.lwjgl.util.ReadableColor;
+
+import de.johni0702.minecraft.gui.utils.lwjgl.Color;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 
 public interface Colors extends ReadableColor {
     ReadableColor TRANSPARENT = new Color(0, 0, 0, 0);

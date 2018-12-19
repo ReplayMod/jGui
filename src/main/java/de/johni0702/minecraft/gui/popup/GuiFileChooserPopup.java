@@ -42,16 +42,21 @@ import de.johni0702.minecraft.gui.layout.HorizontalLayout;
 import de.johni0702.minecraft.gui.layout.VerticalLayout;
 import de.johni0702.minecraft.gui.utils.Colors;
 import de.johni0702.minecraft.gui.utils.Consumer;
+import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.util.Dimension;
-import org.lwjgl.util.ReadableDimension;
-import org.lwjgl.util.ReadablePoint;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+
+//#if MC>=11300
+import de.johni0702.minecraft.gui.versions.MCVer.Keyboard;
+//#else
+//$$ import org.lwjgl.input.Keyboard;
+//#endif
 
 public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> implements Typeable {
     public static GuiFileChooserPopup openSaveGui(GuiContainer container, String buttonLabel, String...fileExtensions) {

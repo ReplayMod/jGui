@@ -34,12 +34,17 @@ import de.johni0702.minecraft.gui.function.Typeable;
 import de.johni0702.minecraft.gui.layout.HorizontalLayout;
 import de.johni0702.minecraft.gui.layout.VerticalLayout;
 import de.johni0702.minecraft.gui.utils.Colors;
+import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.util.Dimension;
-import org.lwjgl.util.ReadablePoint;
+
+//#if MC>=11300
+import de.johni0702.minecraft.gui.versions.MCVer.Keyboard;
+//#else
+//$$ import org.lwjgl.input.Keyboard;
+//#endif
 
 public class GuiYesNoPopup extends AbstractGuiPopup<GuiYesNoPopup> implements Typeable {
     public static GuiYesNoPopup open(GuiContainer container, GuiElement... info) {

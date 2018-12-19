@@ -27,8 +27,8 @@ package de.johni0702.minecraft.gui.element;
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import org.apache.commons.lang3.StringUtils;
-import org.lwjgl.util.ReadableDimension;
 
 public abstract class AbstractGuiPasswordField<T extends AbstractGuiPasswordField<T>> extends AbstractGuiTextField<T> {
     public AbstractGuiPasswordField() {

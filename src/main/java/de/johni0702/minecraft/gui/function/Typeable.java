@@ -24,7 +24,7 @@
  */
 package de.johni0702.minecraft.gui.function;
 
-import org.lwjgl.util.ReadablePoint;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 
 public interface Typeable {
     boolean typeKey(ReadablePoint mousePosition, int keyCode, char keyChar, boolean ctrlDown, boolean shiftDown);

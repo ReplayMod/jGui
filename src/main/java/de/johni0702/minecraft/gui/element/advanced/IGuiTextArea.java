@@ -26,7 +26,7 @@ package de.johni0702.minecraft.gui.element.advanced;
 
 import de.johni0702.minecraft.gui.element.GuiElement;
 import de.johni0702.minecraft.gui.function.Focusable;
-import org.lwjgl.util.ReadableColor;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 
 public interface IGuiTextArea<T extends IGuiTextArea<T>> extends GuiElement<T>, Focusable<T> {
     T setText(String[] lines);

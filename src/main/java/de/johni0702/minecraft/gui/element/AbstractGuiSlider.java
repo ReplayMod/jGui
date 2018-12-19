@@ -29,11 +29,11 @@ import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.function.Draggable;
+import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.Point;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import net.minecraft.client.resources.I18n;
-import org.lwjgl.util.Dimension;
-import org.lwjgl.util.Point;
-import org.lwjgl.util.ReadableDimension;
-import org.lwjgl.util.ReadablePoint;
 
 // TODO: Currently assumes a height of 20
 public abstract class AbstractGuiSlider<T extends AbstractGuiSlider<T>> extends AbstractGuiElement<T> implements Clickable, Draggable, IGuiSlider<T> {

@@ -36,11 +36,16 @@ import de.johni0702.minecraft.gui.element.IGuiClickable;
 import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.layout.VerticalLayout;
 import de.johni0702.minecraft.gui.utils.Consumer;
+import de.johni0702.minecraft.gui.utils.lwjgl.Color;
+import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.Point;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.client.gui.FontRenderer;
-import org.lwjgl.util.*;
 
 import java.util.Collection;
 import java.util.Collections;

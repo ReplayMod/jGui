@@ -27,19 +27,15 @@ package de.johni0702.minecraft.gui.element;
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
+import de.johni0702.minecraft.gui.utils.lwjgl.Color;
+import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
-//#if MC>=10904
-import net.minecraft.init.SoundEvents;
-//#endif
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.util.Color;
-import org.lwjgl.util.Dimension;
-import org.lwjgl.util.ReadableColor;
-import org.lwjgl.util.ReadableDimension;
 
 public abstract class AbstractGuiCheckbox<T extends AbstractGuiCheckbox<T>>
         extends AbstractGuiClickable<T> implements IGuiCheckbox<T> {
@@ -94,15 +90,7 @@ public abstract class AbstractGuiCheckbox<T extends AbstractGuiCheckbox<T>>
 
     @Override
     public void onClick() {
-        //#if MC>=10904
-        getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-        //#else
-        //#if MC>=10800
-        //$$ getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(BUTTON_SOUND, 1.0F));
-        //#else
-        //$$ getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.createPositionedSoundRecord(BUTTON_SOUND, 1.0F));
-        //#endif
-        //#endif
+        AbstractGuiButton.playClickSound(getMinecraft());
         setChecked(!isChecked());
         super.onClick();
     }

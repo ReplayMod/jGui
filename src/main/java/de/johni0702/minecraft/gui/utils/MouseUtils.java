@@ -24,28 +24,43 @@
  */
 package de.johni0702.minecraft.gui.utils;
 
+import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.util.Point;
+
+//#if MC>=11300
+import net.minecraft.client.MainWindow;
+//#else
+//$$ import net.minecraft.client.gui.ScaledResolution;
+//$$ import org.lwjgl.input.Mouse;
+//#endif
 
 public class MouseUtils {
-    private static final Minecraft mc = Minecraft.getMinecraft();
+    private static final Minecraft mc = MCVer.getMinecraft();
 
     public static Point getMousePos() {
-        Point scaled = getScaledDimensions();
-        int width = scaled.getX();
-        int height = scaled.getY();
+        //#if MC>=11300
+        int mouseX = (int) mc.mouseHelper.getMouseX();
+        int mouseY = (int) mc.mouseHelper.getMouseX();
+        //#else
+        //$$ Point scaled = getScaledDimensions();
+        //$$ int width = scaled.getX();
+        //$$ int height = scaled.getY();
 
-        int mouseX = (Mouse.getX() * width / mc.displayWidth);
-        int mouseY = (height - Mouse.getY() * height / mc.displayHeight);
+        //$$ int mouseX = (Mouse.getX() * width / mc.displayWidth);
+        //$$ int mouseY = (height - Mouse.getY() * height / mc.displayHeight);
+        //#endif
 
         return new Point(mouseX, mouseY);
     }
 
     public static Point getScaledDimensions() {
-        ScaledResolution res = MCVer.newScaledResolution(mc);
+        //#if MC>=11300
+        MainWindow
+        //#else
+        //$$ ScaledResolution
+        //#endif
+                res = MCVer.newScaledResolution(mc);
         return new Point(res.getScaledWidth(), res.getScaledHeight());
     }
 }

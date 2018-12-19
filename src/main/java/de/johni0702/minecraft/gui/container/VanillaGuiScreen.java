@@ -3,15 +3,20 @@ package de.johni0702.minecraft.gui.container;
 import de.johni0702.minecraft.gui.function.Draggable;
 import de.johni0702.minecraft.gui.function.Scrollable;
 import de.johni0702.minecraft.gui.function.Typeable;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
-import org.lwjgl.util.ReadablePoint;
 
 //#if MC>=10800
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+//#if MC>=11300
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+//#else
+//$$ import net.minecraftforge.fml.common.eventhandler.EventPriority;
+//$$ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+//#endif
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 //#else
 //$$ import cpw.mods.fml.common.eventhandler.Cancelable;
@@ -47,8 +52,8 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
 
             MinecraftForge.EVENT_BUS.register(eventHandler);
 
-            getSuperMcGui().setWorldAndResolution(mcScreen.mc, mcScreen.width, mcScreen.height);
-            getSuperMcGui().initGui();
+            getSuperMcGui().setWorldAndResolution(MCVer.getMinecraft(), mcScreen.width, mcScreen.height);
+            // FIXME getSuperMcGui().initGui();
         }
     }
 
@@ -97,11 +102,13 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
 
     private void forwardMouseInput() {
         //#if MC>=10800
+        /* FIXME
         try {
             mcScreen.handleMouseInput();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        */
         //#else
         //$$ mcScreen.handleMouseInput();
         //#endif
@@ -110,11 +117,13 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
     @Override
     public boolean typeKey(ReadablePoint mousePosition, int keyCode, char keyChar, boolean ctrlDown, boolean shiftDown) {
         //#if MC>=10800
+        /* FIXME
         try {
             mcScreen.handleKeyboardInput();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        */
         //#else
         //$$ mcScreen.handleKeyboardInput();
         //#endif
@@ -140,6 +149,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
             }
         }
 
+        /* FIXME
         @SubscribeEvent
         public void onGuiRender(GuiScreenEvent.DrawScreenEvent.Post event) {
             getSuperMcGui().drawScreen(MCVer.getMouseX(event), MCVer.getMouseY(event), MCVer.getPartialTicks(event));
@@ -188,6 +198,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
             }
             //#endif
         }
+        */
     }
     //#if MC<=10710
     //$$ @Cancelable

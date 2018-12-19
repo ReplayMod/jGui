@@ -1,15 +1,24 @@
 package de.johni0702.minecraft.gui.versions;
 
 import de.johni0702.minecraft.gui.GuiRenderer;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.ReadableColor;
+
+//#if MC>=11300
+import net.minecraft.client.MainWindow;
+import net.minecraft.crash.ReportedException;
+import org.lwjgl.glfw.GLFW;
+//#else
+//$$ import net.minecraft.client.gui.ScaledResolution;
+//$$ import net.minecraft.util.ReportedException;
+//#endif
 
 //#if MC>=11200
 import net.minecraft.client.renderer.BufferBuilder;
@@ -37,13 +46,27 @@ import java.util.concurrent.Callable;
  * Abstraction over things that have changed between different MC versions.
  */
 public class MCVer {
-    public static ScaledResolution newScaledResolution(Minecraft mc) {
+    public static Minecraft getMinecraft() {
+        //#if MC>=11300
+        return Minecraft.getInstance();
+        //#else
+        //$$ return Minecraft.getMinecraft();
+        //#endif
+    }
+
+    //#if MC>=11300
+    public static MainWindow newScaledResolution(Minecraft mc) {
+        return mc.mainWindow;
+    }
+    //#else
+    //$$ public static ScaledResolution newScaledResolution(Minecraft mc) {
         //#if MC>=10809
-        return new ScaledResolution(mc);
+        //$$ return new ScaledResolution(mc);
         //#else
         //$$ return new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
         //#endif
-    }
+    //$$ }
+    //#endif
 
     public static void addDetail(CrashReportCategory category, String name, Callable<String> callable) {
         //#if MC>=10904
@@ -163,7 +186,7 @@ public class MCVer {
 
     public static FontRenderer getFontRenderer() {
         //#if MC>=11200
-        return Minecraft.getMinecraft().fontRenderer;
+        return getMinecraft().fontRenderer;
         //#else
         //$$ return Minecraft.getMinecraft().fontRendererObj;
         //#endif
@@ -209,6 +232,10 @@ public class MCVer {
         //#endif
     }
 
+    public static ReportedException newReportedException(CrashReport crashReport) {
+        return new ReportedException(crashReport);
+    }
+
     //#if MC<=10710
     //$$ public static void color(float r, float g, float b) { GL11.glColor3f(r, g, b); }
     //$$ public static void color(float r, float g, float b, float a) { GL11.glColor4f(r, g, b, a); }
@@ -223,5 +250,31 @@ public class MCVer {
     //$$ public static void enableColorLogic() { GL11.glEnable(GL_COLOR_LOGIC_OP); }
     //$$ public static void disableColorLogic() { GL11.glDisable(GL_COLOR_LOGIC_OP); }
     //$$ public static void colorLogicOp(int op) { GL11.glLogicOp(op); }
+    //#endif
+
+    //#if MC>=11300
+    public static void color(float r, float g, float b, float a) { color4f(r, g, b, a); }
+    public static void enableAlpha() { enableAlphaTest(); }
+    public static void disableAlpha() { disableAlphaTest(); }
+    public static void tryBlendFuncSeparate(int l, int r, int vl, int vr) { blendFuncSeparate(l, r, vl, vr); }
+    public static void colorLogicOp(int op) { logicOp(op); }
+
+    public static abstract class Keyboard {
+        public static final int KEY_ESCAPE = GLFW.GLFW_KEY_ESCAPE;
+        public static final int KEY_HOME = GLFW.GLFW_KEY_HOME;
+        public static final int KEY_END = GLFW.GLFW_KEY_END;
+        public static final int KEY_UP = GLFW.GLFW_KEY_UP;
+        public static final int KEY_DOWN = GLFW.GLFW_KEY_DOWN;
+        public static final int KEY_LEFT = GLFW.GLFW_KEY_LEFT;
+        public static final int KEY_RIGHT = GLFW.GLFW_KEY_RIGHT;
+        public static final int KEY_BACK = GLFW.GLFW_KEY_BACKSPACE;
+        public static final int KEY_DELETE = GLFW.GLFW_KEY_DELETE;
+        public static final int KEY_RETURN = GLFW.GLFW_KEY_ENTER;
+        public static final int KEY_TAB = GLFW.GLFW_KEY_TAB;
+        public static final int KEY_A = GLFW.GLFW_KEY_A;
+        public static final int KEY_C = GLFW.GLFW_KEY_C;
+        public static final int KEY_V = GLFW.GLFW_KEY_V;
+        public static final int KEY_X = GLFW.GLFW_KEY_X;
+    }
     //#endif
 }

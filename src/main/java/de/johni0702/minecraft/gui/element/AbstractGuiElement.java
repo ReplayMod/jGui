@@ -27,19 +27,20 @@ package de.johni0702.minecraft.gui.element;
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
+import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.Point;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
+import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.util.Dimension;
-import org.lwjgl.util.Point;
-import org.lwjgl.util.ReadableDimension;
 
 public abstract class AbstractGuiElement<T extends AbstractGuiElement<T>> implements GuiElement<T> {
     protected static final ResourceLocation TEXTURE = new ResourceLocation("jgui", "gui.png");
 
     @Getter
-    private final Minecraft minecraft = Minecraft.getMinecraft();
+    private final Minecraft minecraft = MCVer.getMinecraft();
 
     @Getter
     private GuiContainer container;

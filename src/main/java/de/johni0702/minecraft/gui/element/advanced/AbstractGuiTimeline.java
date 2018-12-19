@@ -32,7 +32,11 @@ import de.johni0702.minecraft.gui.element.GuiTooltip;
 import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.utils.Colors;
 import de.johni0702.minecraft.gui.utils.Utils;
-import org.lwjgl.util.*;
+import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.Point;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 
 import static de.johni0702.minecraft.gui.utils.Utils.clamp;
 

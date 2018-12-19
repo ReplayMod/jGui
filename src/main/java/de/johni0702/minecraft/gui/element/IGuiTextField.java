@@ -26,8 +26,8 @@ package de.johni0702.minecraft.gui.element;
 
 import de.johni0702.minecraft.gui.function.Focusable;
 import de.johni0702.minecraft.gui.utils.Consumer;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import lombok.NonNull;
-import org.lwjgl.util.ReadableColor;
 
 public interface IGuiTextField<T extends IGuiTextField<T>> extends GuiElement<T>, Focusable<T> {
     /**

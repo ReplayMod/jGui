@@ -29,7 +29,11 @@ import de.johni0702.minecraft.gui.OffsetGuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.element.GuiElement;
 import de.johni0702.minecraft.gui.function.Scrollable;
-import org.lwjgl.util.*;
+import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.Point;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
+import de.johni0702.minecraft.gui.utils.lwjgl.WritablePoint;
 
 public abstract class AbstractGuiScrollable<T extends AbstractGuiScrollable<T>> extends AbstractGuiContainer<T>
         implements Scrollable {
