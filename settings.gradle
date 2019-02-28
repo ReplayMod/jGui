@@ -7,7 +7,7 @@ rootProject.name = 'jGui'
         '1.8.9',
         '1.9.4',
         '1.12',
-        '1.13'
+        '1.13.2'
 ].each { version ->
     include ":$version"
     project(":$version").with {

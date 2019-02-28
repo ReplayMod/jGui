@@ -5,7 +5,7 @@ buildscript {
         mcVersion = "${major}${minor.padLeft(2, '0')}${(patch ?: '').padLeft(2, '0')}" as int
     } else {
         def f = file('mcVersion')
-        mcVersion = f.exists() ? f.readLines().first() as int : 11300
+        mcVersion = f.exists() ? f.readLines().first() as int : 11302
     }
     project.ext.mcVersion = mcVersion
 
@@ -25,7 +25,7 @@ buildscript {
 
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:' + [
-                11300: '3.+',
+                11302: '3.+',
                 11200: '2.3-SNAPSHOT',
                 10904: '2.2-SNAPSHOT',
                 10809: '2.1-SNAPSHOT',
@@ -82,8 +82,8 @@ minecraft {
 
 dependencies {
     if (FG3) {
-        minecraft 'net.minecraftforge.test:forge:' + [
-                11300: '1.13-24.0.33-1.13-pre',
+        minecraft 'net.minecraftforge:forge:' + [
+                11302: '1.13.2-25.0.63',
         ][mcVersion]
     }
 }
