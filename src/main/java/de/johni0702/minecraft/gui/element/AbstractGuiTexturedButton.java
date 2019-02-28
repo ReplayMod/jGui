@@ -133,7 +133,7 @@ public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedBut
         //#if MC>=10904
         AbstractGuiButton.playClickSound(getMinecraft(), sound);
         //#else
-        AbstractGuiButton.playClickSound(getMinecraft());
+        //$$ AbstractGuiButton.playClickSound(getMinecraft());
         //#endif
         super.onClick();
     }

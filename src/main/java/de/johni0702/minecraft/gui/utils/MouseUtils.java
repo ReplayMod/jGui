@@ -41,12 +41,15 @@ public class MouseUtils {
     public static Point getMousePos() {
         //#if MC>=11300
         int mouseX = (int) mc.mouseHelper.getMouseX();
-        int mouseY = (int) mc.mouseHelper.getMouseX();
+        int mouseY = (int) mc.mouseHelper.getMouseY();
+        MainWindow mainWindow = MCVer.newScaledResolution(mc);
+        mouseX = (int) Math.round((double) mouseX * mainWindow.getScaledWidth() / mainWindow.getWidth());
+        mouseY = (int) Math.round((double) mouseY * mainWindow.getScaledHeight() / mainWindow.getHeight());
         //#else
         //$$ Point scaled = getScaledDimensions();
         //$$ int width = scaled.getX();
         //$$ int height = scaled.getY();
-
+        //$$
         //$$ int mouseX = (Mouse.getX() * width / mc.displayWidth);
         //$$ int mouseY = (height - Mouse.getY() * height / mc.displayHeight);
         //#endif

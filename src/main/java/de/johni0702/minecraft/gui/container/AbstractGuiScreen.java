@@ -43,7 +43,6 @@ import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 
 //#if MC>=11300
-// FIXME
 //#else
 //$$ import org.lwjgl.input.Keyboard;
 //$$ import org.lwjgl.input.Mouse;
@@ -51,9 +50,11 @@ import net.minecraft.crash.CrashReportCategory;
 
 //#if MC>=10800
 import net.minecraft.client.renderer.GlStateManager;
-//#endif
 
-import java.io.IOException;
+//#if MC<11300
+//$$ import java.io.IOException;
+//#endif
+//#endif
 
 import static de.johni0702.minecraft.gui.versions.MCVer.newReportedException;
 
@@ -183,9 +184,12 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         private MinecraftGuiRenderer renderer;
         private boolean active;
 
-        /* FIXME
         @Override
-        public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        //#if MC>=11300
+        public void render(int mouseX, int mouseY, float partialTicks) {
+        //#else
+        //$$ public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        //#endif
             // The Forge loading screen apparently leaves one of the textures of the GlStateManager in an
             // incorrect state which can cause the whole screen to just remain white. This is a workaround.
             //#if MC>=10800
@@ -203,54 +207,102 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
             }
         }
 
+        //#if MC>=11300
         @Override
-        protected void keyTyped(char typedChar, int keyCode)
-                //#if MC>=10800
-                throws IOException
-                //#endif
-        {
-            if (!forEach(Typeable.class).typeKey(
-                    MouseUtils.getMousePos(), keyCode, typedChar, isCtrlKeyDown(), isShiftKeyDown())) {
-                super.keyTyped(typedChar, keyCode);
+        public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+            if (!forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), keyCode, '\0', isCtrlKeyDown(), isShiftKeyDown())) {
+                return super.keyPressed(keyCode, scanCode, modifiers);
             }
+            return true;
         }
 
         @Override
-        protected void mouseClicked(int mouseX, int mouseY, int mouseButton)
+        public boolean charTyped(char keyChar, int modifiers) {
+            if (!forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), 0, keyChar, isCtrlKeyDown(), isShiftKeyDown())) {
+                return super.charTyped(keyChar, modifiers);
+            }
+            return true;
+        }
+        //#else
+        //$$ @Override
+        //$$ protected void keyTyped(char typedChar, int keyCode)
                 //#if MC>=10800
-                throws IOException
+                //$$ throws IOException
                 //#endif
-        {
+        //$$ {
+        //$$     if (!forEach(Typeable.class).typeKey(
+        //$$             MouseUtils.getMousePos(), keyCode, typedChar, isCtrlKeyDown(), isShiftKeyDown())) {
+        //$$         super.keyTyped(typedChar, keyCode);
+        //$$     }
+        //$$ }
+        //#endif
+
+        @Override
+        //#if MC>=11300
+        public boolean mouseClicked(double mouseXD, double mouseYD, int mouseButton) {
+            int mouseX = (int) Math.round(mouseXD), mouseY = (int) Math.round(mouseYD);
+            return
+        //#else
+        //$$ protected void mouseClicked(int mouseX, int mouseY, int mouseButton)
+                //#if MC>=10800
+                //$$ throws IOException
+                //#endif
+        //$$ {
+        //#endif
             forEach(Clickable.class).mouseClick(new Point(mouseX, mouseY), mouseButton);
         }
 
         @Override
-        protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
+        //#if MC>=11300
+        public boolean mouseReleased(double mouseXD, double mouseYD, int mouseButton) {
+            int mouseX = (int) Math.round(mouseXD), mouseY = (int) Math.round(mouseYD);
+            return
+        //#else
+        //$$ protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
+        //#endif
             forEach(Draggable.class).mouseRelease(new Point(mouseX, mouseY), mouseButton);
         }
 
         @Override
-        protected void mouseClickMove(int mouseX, int mouseY, int mouseButton, long timeSinceLastClick) {
+        //#if MC>=11300
+        public boolean mouseDragged(double mouseXD, double mouseYD, int mouseButton, double deltaX, double deltaY) {
+            int mouseX = (int) Math.round(mouseXD), mouseY = (int) Math.round(mouseYD);
+            long timeSinceLastClick = 0;
+            return
+        //#else
+        //$$ protected void mouseClickMove(int mouseX, int mouseY, int mouseButton, long timeSinceLastClick) {
+        //#endif
             forEach(Draggable.class).mouseDrag(new Point(mouseX, mouseY), mouseButton, timeSinceLastClick);
         }
 
         @Override
-        public void updateScreen() {
+        //#if MC>=11300
+        public void tick() {
+        //#else
+        //$$ public void updateScreen() {
+        //#endif
             forEach(Tickable.class).tick();
         }
 
+        //#if MC>=11300
         @Override
-        public void handleMouseInput()
-                //#if MC>=10800
-                throws IOException
-                //#endif
-        {
-            super.handleMouseInput();
-            if (Mouse.hasWheel() && Mouse.getEventDWheel() != 0) {
-                forEach(Scrollable.class).scroll(MouseUtils.getMousePos(), Mouse.getEventDWheel());
-            }
+        public boolean mouseScrolled(double dWheel) {
+            dWheel *= 120;
+            return forEach(Scrollable.class).scroll(MouseUtils.getMousePos(), (int) dWheel);
         }
-        */
+        //#else
+        //$$ @Override
+        //$$ public void handleMouseInput()
+                //#if MC>=10800
+                //$$ throws IOException
+                //#endif
+        //$$ {
+        //$$     super.handleMouseInput();
+        //$$     if (Mouse.hasWheel() && Mouse.getEventDWheel() != 0) {
+        //$$         forEach(Scrollable.class).scroll(MouseUtils.getMousePos(), Mouse.getEventDWheel());
+        //$$     }
+        //$$ }
+        //#endif
 
         @Override
         public void onGuiClosed() {

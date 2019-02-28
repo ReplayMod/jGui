@@ -36,6 +36,8 @@ import net.minecraft.util.ResourceLocation;
 
 import java.awt.image.BufferedImage;
 
+import static de.johni0702.minecraft.gui.versions.MCVer.newDynamicTexture;
+
 public abstract class AbstractGuiImage<T extends AbstractGuiImage<T>>
         extends AbstractGuiElement<T> implements IGuiImage<T> {
     private DynamicTexture texture;
@@ -102,7 +104,7 @@ public abstract class AbstractGuiImage<T extends AbstractGuiImage<T>>
         if (texture != null) {
             texture.deleteGlTexture();
         }
-        // FIXME texture = new DynamicTexture(img);
+        texture = newDynamicTexture(img);
         textureWidth = uWidth = img.getWidth();
         textureHeight = vHeight = img.getHeight();
         return getThis();

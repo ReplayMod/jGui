@@ -18,6 +18,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 //$$ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 //#endif
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.lwjgl.glfw.GLFW;
 //#else
 //$$ import cpw.mods.fml.common.eventhandler.Cancelable;
 //$$ import cpw.mods.fml.common.eventhandler.Event;
@@ -53,7 +54,6 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
             MinecraftForge.EVENT_BUS.register(eventHandler);
 
             getSuperMcGui().setWorldAndResolution(MCVer.getMinecraft(), mcScreen.width, mcScreen.height);
-            // FIXME getSuperMcGui().initGui();
         }
     }
 
@@ -116,18 +116,25 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
 
     @Override
     public boolean typeKey(ReadablePoint mousePosition, int keyCode, char keyChar, boolean ctrlDown, boolean shiftDown) {
-        //#if MC>=10800
-        /* FIXME
-        try {
-            mcScreen.handleKeyboardInput();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        //#if MC>=11300
+        int modifiers = (ctrlDown ? GLFW.GLFW_MOD_CONTROL : 0) | (shiftDown ? GLFW.GLFW_MOD_SHIFT : 0);
+        if (keyCode == 0) {
+            return mcScreen.charTyped(keyChar, modifiers);
+        } else {
+            return mcScreen.keyPressed(keyCode, GLFW.GLFW_KEY_UNKNOWN, modifiers);
         }
-        */
+        //#else
+        //#if MC>=10800
+        //$$$ try {
+        //$$$     mcScreen.handleKeyboardInput();
+        //$$$ } catch (IOException e) {
+        //$$$     throw new RuntimeException(e);
+        //$$$ }
         //#else
         //$$ mcScreen.handleKeyboardInput();
         //#endif
-        return false;
+        //$$ return false;
+        //#endif
     }
 
     // Used when wrapping an already existing mc.GuiScreen
@@ -149,19 +156,27 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
             }
         }
 
-        /* FIXME
         @SubscribeEvent
         public void onGuiRender(GuiScreenEvent.DrawScreenEvent.Post event) {
-            getSuperMcGui().drawScreen(MCVer.getMouseX(event), MCVer.getMouseY(event), MCVer.getPartialTicks(event));
+            //#if MC>=11300
+            getSuperMcGui().render(MCVer.getMouseX(event), MCVer.getMouseY(event), MCVer.getPartialTicks(event));
+            //#else
+            //$$ getSuperMcGui().drawScreen(MCVer.getMouseX(event), MCVer.getMouseY(event), MCVer.getPartialTicks(event));
+            //#endif
         }
 
         @SubscribeEvent
         public void tickOverlay(TickEvent.ClientTickEvent event) {
             if (event.phase == TickEvent.Phase.START) {
-                getSuperMcGui().updateScreen();
+                //#if MC>=11300
+                getSuperMcGui().tick();
+                //#else
+                //$$ getSuperMcGui().updateScreen();
+                //#endif
             }
         }
 
+        /* FIXME waiting for 1.13 forge events
         // Mouse/Keyboard events aren't supported in 1.7.10
         // so this requires a mixin in any mod making use of it
         // (see ReplayMod: GuiScreenMixin)

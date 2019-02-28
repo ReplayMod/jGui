@@ -5,6 +5,7 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -40,6 +41,7 @@ import static net.minecraft.client.renderer.GlStateManager.*;
 //$$ import static org.lwjgl.opengl.GL11.*;
 //#endif
 
+import java.awt.image.BufferedImage;
 import java.util.concurrent.Callable;
 
 /**
@@ -234,6 +236,28 @@ public class MCVer {
 
     public static ReportedException newReportedException(CrashReport crashReport) {
         return new ReportedException(crashReport);
+    }
+
+    public static DynamicTexture newDynamicTexture(BufferedImage from) {
+        //#if MC>=11300
+        DynamicTexture texture = new DynamicTexture(from.getWidth(), from.getHeight(), false) {
+            @Override
+            protected void finalize() throws Throwable {
+                // Great, now we're using a language with GC but still need to take care of memory management.. thanks MC
+                getTextureData().close();
+                super.finalize();
+            }
+        };
+        for (int y = from.getHeight() - 1; y >= 0; y--) {
+            for (int x = from.getWidth() - 1; x >= 0; x--) {
+                texture.getTextureData().setPixelRGBA(x, y, from.getRGB(x, y) | 0xff000000);
+            }
+        }
+        texture.updateDynamicTexture();
+        return texture;
+        //#else
+        //$$ return new DynamicTexture(from);
+        //#endif
     }
 
     //#if MC<=10710
