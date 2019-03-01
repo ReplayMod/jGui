@@ -78,41 +78,59 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
 
     @Override
     public boolean mouseClick(ReadablePoint position, int button) {
-        forwardMouseInput();
+        //#if MC>=11300
+        mcScreen.mouseClicked(position.getX(), position.getY(), button);
+        //#else
+        //$$ forwardMouseInput();
+        //#endif
         return false;
     }
 
     @Override
     public boolean mouseDrag(ReadablePoint position, int button, long timeSinceLastCall) {
-        forwardMouseInput();
+        //#if MC>=11300
+        double dx = position.getX() - mcScreen.mc.mouseHelper.getMouseX();
+        double dy = position.getY() - mcScreen.mc.mouseHelper.getMouseY();
+        mcScreen.mouseDragged(position.getX(), position.getY(), button, dx, dy);
+        //#else
+        //$$ forwardMouseInput();
+        //#endif
         return false;
     }
 
     @Override
     public boolean mouseRelease(ReadablePoint position, int button) {
-        forwardMouseInput();
+        //#if MC>=11300
+        mcScreen.mouseReleased(position.getX(), position.getY(), button);
+        //#else
+        //$$ forwardMouseInput();
+        //#endif
         return false;
     }
 
     @Override
     public boolean scroll(ReadablePoint mousePosition, int dWheel) {
-        forwardMouseInput();
+        //#if MC>=11300
+        mcScreen.mouseScrolled(dWheel / 120.0);
+        //#else
+        //$$ forwardMouseInput();
+        //#endif
         return false;
     }
 
-    private void forwardMouseInput() {
+    //#if MC<11300
+    //$$ private void forwardMouseInput() {
         //#if MC>=10800
-        /* FIXME
-        try {
-            mcScreen.handleMouseInput();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        */
+        //$$ try {
+        //$$     mcScreen.handleMouseInput();
+        //$$ } catch (IOException e) {
+        //$$     throw new RuntimeException(e);
+        //$$ }
         //#else
         //$$ mcScreen.handleMouseInput();
         //#endif
-    }
+    //$$ }
+    //#endif
 
     @Override
     public boolean typeKey(ReadablePoint mousePosition, int keyCode, char keyChar, boolean ctrlDown, boolean shiftDown) {
@@ -176,44 +194,114 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
             }
         }
 
-        /* FIXME waiting for 1.13 forge events
-        // Mouse/Keyboard events aren't supported in 1.7.10
-        // so this requires a mixin in any mod making use of it
-        // (see ReplayMod: GuiScreenMixin)
+        //#if MC>=11300
         @SubscribeEvent(priority = EventPriority.LOWEST)
+        public void onMouseClick(GuiScreenEvent.MouseClickedEvent.Pre event) {
+            event.setCanceled(true);
+            getSuperMcGui().mouseClicked(event.getMouseX(), event.getMouseY(), event.getButton());
+            if (mcScreen.equals(getMinecraft().currentScreen)) {
+                MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.MouseClickedEvent.Post(
+                        event.getGui(), event.getMouseX(), event.getMouseY(), event.getButton()));
+            }
+        }
+
+        @SubscribeEvent(priority = EventPriority.LOWEST)
+        public void onMouseReleased(GuiScreenEvent.MouseReleasedEvent.Pre event) {
+            event.setCanceled(true);
+            getSuperMcGui().mouseReleased(event.getMouseX(), event.getMouseY(), event.getButton());
+            if (mcScreen.equals(getMinecraft().currentScreen)) {
+                MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.MouseReleasedEvent.Post(
+                        event.getGui(), event.getMouseX(), event.getMouseY(), event.getButton()));
+            }
+        }
+
+        @SubscribeEvent(priority = EventPriority.LOWEST)
+        public void onMouseDrag(GuiScreenEvent.MouseDragEvent.Pre event) {
+            event.setCanceled(true);
+            getSuperMcGui().mouseDragged(event.getMouseX(), event.getMouseY(), event.getMouseButton(), event.getDragX(), event.getDragY());
+            if (mcScreen.equals(getMinecraft().currentScreen)) {
+                MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.MouseDragEvent.Post(
+                        event.getGui(), event.getMouseX(), event.getMouseY(), event.getMouseButton(), event.getDragX(), event.getDragY()));
+            }
+        }
+
+        @SubscribeEvent(priority = EventPriority.LOWEST)
+        public void onMouseScroll(GuiScreenEvent.MouseScrollEvent.Pre event) {
+            event.setCanceled(true);
+            getSuperMcGui().mouseScrolled(event.getScrollDelta());
+            if (mcScreen.equals(getMinecraft().currentScreen)) {
+                MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.MouseScrollEvent.Post(
+                        event.getGui(), event.getMouseX(), event.getMouseY(), event.getScrollDelta()));
+            }
+        }
+
+        @SubscribeEvent(priority = EventPriority.LOWEST)
+        public void onKeyPressed(GuiScreenEvent.KeyboardKeyPressedEvent.Pre event) {
+            event.setCanceled(true);
+            getSuperMcGui().keyPressed(event.getKeyCode(), event.getModifiers(), event.getScanCode());
+            if (mcScreen.equals(getMinecraft().currentScreen)) {
+                MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.KeyboardKeyPressedEvent.Post(
+                        event.getGui(), event.getKeyCode(), event.getModifiers(), event.getScanCode()));
+            }
+        }
+
+        @SubscribeEvent(priority = EventPriority.LOWEST)
+        public void onKeyReleased(GuiScreenEvent.KeyboardKeyReleasedEvent.Pre event) {
+            event.setCanceled(true);
+            getSuperMcGui().keyReleased(event.getKeyCode(), event.getModifiers(), event.getScanCode());
+            if (mcScreen.equals(getMinecraft().currentScreen)) {
+                MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.KeyboardKeyReleasedEvent.Post(
+                        event.getGui(), event.getKeyCode(), event.getModifiers(), event.getScanCode()));
+            }
+        }
+
+        @SubscribeEvent(priority = EventPriority.LOWEST)
+        public void onCharTyped(GuiScreenEvent.KeyboardCharTypedEvent.Pre event) {
+            event.setCanceled(true);
+            getSuperMcGui().charTyped(event.getCodePoint(), event.getModifiers());
+            if (mcScreen.equals(getMinecraft().currentScreen)) {
+                MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.KeyboardCharTypedEvent.Post(
+                        event.getGui(), event.getCodePoint(), event.getModifiers()));
+            }
+        }
+        //#else
+        //$$ // Mouse/Keyboard events aren't supported in 1.7.10
+        //$$ // so this requires a mixin in any mod making use of it
+        //$$ // (see ReplayMod: GuiScreenMixin)
+        //$$ @SubscribeEvent(priority = EventPriority.LOWEST)
         //#if MC>=10800
-        public void onMouseInput(GuiScreenEvent.MouseInputEvent.Pre event) throws IOException {
+        //$$ public void onMouseInput(GuiScreenEvent.MouseInputEvent.Pre event) throws IOException {
         //#else
         //$$ public void onMouseInput(MouseInputEvent event) throws IOException {
         //#endif
-            event.setCanceled(true);
-
-            getSuperMcGui().handleMouseInput();
-
+        //$$     event.setCanceled(true);
+        //$$
+        //$$     getSuperMcGui().handleMouseInput();
+        //$$
             //#if MC>=10800
-            if (mcScreen.equals(getMinecraft().currentScreen)) {
-                MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.MouseInputEvent.Post(mcScreen));
-            }
+            //$$ if (mcScreen.equals(getMinecraft().currentScreen)) {
+            //$$     MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.MouseInputEvent.Post(mcScreen));
+            //$$ }
             //#endif
-        }
-
-        @SubscribeEvent(priority = EventPriority.LOWEST)
+        //$$ }
+        //$$
+        //$$ @SubscribeEvent(priority = EventPriority.LOWEST)
         //#if MC>=10800
-        public void onKeyboardInput(GuiScreenEvent.KeyboardInputEvent.Pre event) throws IOException {
+        //$$ public void onKeyboardInput(GuiScreenEvent.KeyboardInputEvent.Pre event) throws IOException {
         //#else
         //$$ public void onKeyboardInput(KeyboardInputEvent event) throws IOException {
         //#endif
-            event.setCanceled(true);
-
-            getSuperMcGui().handleKeyboardInput();
-
+        //$$     event.setCanceled(true);
+        //$$
+        //$$     getSuperMcGui().handleKeyboardInput();
+        //$$
             //#if MC>=10800
-            if (mcScreen.equals(getMinecraft().currentScreen)) {
-                MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.KeyboardInputEvent.Post(mcScreen));
-            }
+            //$$ if (mcScreen.equals(getMinecraft().currentScreen)) {
+            //$$     MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.KeyboardInputEvent.Post(mcScreen));
+            //$$ }
             //#endif
-        }
-        */
+        //$$ }
+        //#endif
     }
     //#if MC<=10710
     //$$ @Cancelable
