@@ -34,10 +34,15 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+
+//#if MC>=11300
+import net.minecraft.client.audio.SimpleSound;
+//#else
+//$$ import net.minecraft.client.audio.PositionedSoundRecord;
+//#endif
 
 //#if MC>=10904
 import net.minecraft.init.SoundEvents;
@@ -120,7 +125,7 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
     public static void playClickSound(Minecraft mc, SoundEvent sound) {
     //#endif
         //#if MC>=11300
-        mc.getSoundHandler().play(PositionedSoundRecord.getMasterRecord(sound, 1.0F));
+        mc.getSoundHandler().play(SimpleSound.getMasterRecord(sound, 1.0F));
         //#else
         //#if MC>=10904
         //$$ mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(sound, 1.0F));
