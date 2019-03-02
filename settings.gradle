@@ -1,14 +1,29 @@
 rootProject.name = 'jGui'
 
-[
-        'core',
-        //'1.7.10', FIXME
-        '1.8',
-        '1.8.9',
-        '1.9.4',
-        '1.12',
-        '1.13.2'
-].each { version ->
+def f = file('versions/core/mcVersion')
+def coreMcVersion = f.exists() ? f.readLines().first() as int : 11302
+
+def versions = []
+if (gradle.gradleVersion.startsWith('2.')) {
+    if (coreMcVersion <= 10710) {
+        versions += ['core']
+    }
+    versions += [
+            '1.7.10',
+    ]
+} else {
+    if (coreMcVersion > 10710) {
+        versions += ['core']
+    }
+    versions += [
+            '1.8',
+            '1.8.9',
+            '1.9.4',
+            '1.12',
+            '1.13.2'
+    ]
+}
+versions.each { version ->
     include ":$version"
     project(":$version").with {
         projectDir = file("versions/$version")

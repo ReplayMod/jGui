@@ -192,6 +192,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         //#endif
             // The Forge loading screen apparently leaves one of the textures of the GlStateManager in an
             // incorrect state which can cause the whole screen to just remain white. This is a workaround.
+            // FIXME is this still required?
             //#if MC>=10800
             GlStateManager.disableTexture2D();
             GlStateManager.enableTexture2D();

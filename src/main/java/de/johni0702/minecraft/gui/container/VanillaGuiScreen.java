@@ -13,12 +13,12 @@ import net.minecraftforge.common.MinecraftForge;
 //#if MC>=11300
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.lwjgl.glfw.GLFW;
 //#else
 //$$ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 //$$ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 //#endif
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.lwjgl.glfw.GLFW;
 //#else
 //$$ import cpw.mods.fml.common.eventhandler.Cancelable;
 //$$ import cpw.mods.fml.common.eventhandler.Event;
@@ -143,11 +143,11 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
         }
         //#else
         //#if MC>=10800
-        //$$$ try {
-        //$$$     mcScreen.handleKeyboardInput();
-        //$$$ } catch (IOException e) {
-        //$$$     throw new RuntimeException(e);
-        //$$$ }
+        //$$ try {
+        //$$     mcScreen.handleKeyboardInput();
+        //$$ } catch (IOException e) {
+        //$$     throw new RuntimeException(e);
+        //$$ }
         //#else
         //$$ mcScreen.handleKeyboardInput();
         //#endif
