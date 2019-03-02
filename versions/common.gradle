@@ -71,7 +71,7 @@ minecraft {
         ][mcVersion]
     }
     mappings = [
-            11300: 'snapshot_20180921-1.13',
+            11302: 'snapshot_20180921-1.13',
             11200: 'snapshot_20170615',
             10904: 'snapshot_20160518',
             10809: 'stable_22',
