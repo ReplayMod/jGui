@@ -17,6 +17,7 @@ import net.minecraft.client.MainWindow;
 import net.minecraft.crash.ReportedException;
 import org.lwjgl.glfw.GLFW;
 //#else
+//$$ import net.minecraft.client.gui.GuiScreen;
 //$$ import net.minecraft.client.gui.ScaledResolution;
 //$$ import net.minecraft.util.ReportedException;
 //#endif
@@ -238,6 +239,22 @@ public class MCVer {
         return new ReportedException(crashReport);
     }
 
+    public static void setClipboardString(String text) {
+        //#if MC>=11300
+        getMinecraft().keyboardListener.setClipboardString(text);
+        //#else
+        //$$ GuiScreen.setClipboardString(text);
+        //#endif
+    }
+
+    public static String getClipboardString() {
+        //#if MC>=11300
+        return getMinecraft().keyboardListener.getClipboardString();
+        //#else
+        //$$ return GuiScreen.getClipboardString();
+        //#endif
+    }
+
     public static DynamicTexture newDynamicTexture(BufferedImage from) {
         //#if MC>=11300
         DynamicTexture texture = new DynamicTexture(from.getWidth(), from.getHeight(), false) {
@@ -299,6 +316,10 @@ public class MCVer {
         public static final int KEY_C = GLFW.GLFW_KEY_C;
         public static final int KEY_V = GLFW.GLFW_KEY_V;
         public static final int KEY_X = GLFW.GLFW_KEY_X;
+
+        public static void enableRepeatEvents(boolean enabled) {
+            getMinecraft().keyboardListener.enableRepeatEvents(enabled);
+        }
     }
     //#endif
 }

@@ -536,16 +536,16 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
                     selectionX = text[selectionY].length();
                     return true;
                 case Keyboard.KEY_C: // Copy
-                    // FIXME GuiScreen.setClipboardString(getSelectedText());
+                    MCVer.setClipboardString(getSelectedText());
                     return true;
                 case Keyboard.KEY_V: // Paste
                     if (isEnabled()) {
-                        // FIXME writeText(GuiScreen.getClipboardString());
+                        writeText(MCVer.getClipboardString());
                     }
                     return true;
                 case Keyboard.KEY_X: // Cut
                     if (isEnabled()) {
-                        // FIXME GuiScreen.setClipboardString(cutSelectedText());
+                        MCVer.setClipboardString(cutSelectedText());
                     }
                     return true;
             }

@@ -431,16 +431,16 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
                         selectionPos = text.length();
                         return true;
                     case Keyboard.KEY_C: // Copy
-                        // FIXME GuiScreen.setClipboardString(getSelectedText());
+                        MCVer.setClipboardString(getSelectedText());
                         return true;
                     case Keyboard.KEY_V: // Paste
                         if (isEnabled()) {
-                            // FIXME writeText(GuiScreen.getClipboardString());
+                            writeText(MCVer.getClipboardString());
                         }
                         return true;
                     case Keyboard.KEY_X: // Cut
                         if (isEnabled()) {
-                            // FIXME GuiScreen.setClipboardString(deleteSelectedText());
+                            MCVer.setClipboardString(deleteSelectedText());
                         }
                         return true;
                 }

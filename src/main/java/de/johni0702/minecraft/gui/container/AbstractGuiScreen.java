@@ -43,6 +43,7 @@ import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 
 //#if MC>=11300
+import de.johni0702.minecraft.gui.versions.MCVer.Keyboard;
 //#else
 //$$ import org.lwjgl.input.Keyboard;
 //$$ import org.lwjgl.input.Mouse;
@@ -172,7 +173,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
     public void setEnabledRepeatedKeyEvents(boolean enableRepeatKeyEvents) {
         this.enabledRepeatedKeyEvents = enableRepeatKeyEvents;
         if (wrapped.active) {
-            // FIXME Keyboard.enableRepeatEvents(enableRepeatKeyEvents);
+            Keyboard.enableRepeatEvents(enableRepeatKeyEvents);
         }
     }
 
@@ -192,10 +193,9 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         //#endif
             // The Forge loading screen apparently leaves one of the textures of the GlStateManager in an
             // incorrect state which can cause the whole screen to just remain white. This is a workaround.
-            // FIXME is this still required?
-            //#if MC>=10800
-            GlStateManager.disableTexture2D();
-            GlStateManager.enableTexture2D();
+            //#if MC>=10800 && MC<11300
+            //$$ GlStateManager.disableTexture2D();
+            //$$ GlStateManager.enableTexture2D();
             //#endif
 
             int layers = getMaxLayer();
@@ -310,7 +310,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
             forEach(Closeable.class).close();
             active = false;
             if (enabledRepeatedKeyEvents) {
-                // FIXME Keyboard.enableRepeatEvents(false);
+                Keyboard.enableRepeatEvents(false);
             }
         }
 
@@ -318,7 +318,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         public void initGui() {
             active = false;
             if (enabledRepeatedKeyEvents) {
-                // FIXME Keyboard.enableRepeatEvents(true);
+                Keyboard.enableRepeatEvents(true);
             }
             screenSize = new Dimension(width, height);
             renderer = new MinecraftGuiRenderer(MCVer.newScaledResolution(mc));
