@@ -27,7 +27,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 //$$ import cpw.mods.fml.common.gameevent.TickEvent;
 //#endif
 
-import java.io.IOException;
 
 public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, Scrollable {
 
@@ -79,7 +78,6 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
     @Override
     public boolean mouseClick(ReadablePoint position, int button) {
         //#if MC>=11300
-        mcScreen.mouseClicked(position.getX(), position.getY(), button);
         //#else
         //$$ forwardMouseInput();
         //#endif
@@ -89,9 +87,6 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
     @Override
     public boolean mouseDrag(ReadablePoint position, int button, long timeSinceLastCall) {
         //#if MC>=11300
-        double dx = position.getX() - mcScreen.mc.mouseHelper.getMouseX();
-        double dy = position.getY() - mcScreen.mc.mouseHelper.getMouseY();
-        mcScreen.mouseDragged(position.getX(), position.getY(), button, dx, dy);
         //#else
         //$$ forwardMouseInput();
         //#endif
@@ -101,7 +96,6 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
     @Override
     public boolean mouseRelease(ReadablePoint position, int button) {
         //#if MC>=11300
-        mcScreen.mouseReleased(position.getX(), position.getY(), button);
         //#else
         //$$ forwardMouseInput();
         //#endif
@@ -111,7 +105,6 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
     @Override
     public boolean scroll(ReadablePoint mousePosition, int dWheel) {
         //#if MC>=11300
-        mcScreen.mouseScrolled(dWheel / 120.0);
         //#else
         //$$ forwardMouseInput();
         //#endif
@@ -135,12 +128,6 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
     @Override
     public boolean typeKey(ReadablePoint mousePosition, int keyCode, char keyChar, boolean ctrlDown, boolean shiftDown) {
         //#if MC>=11300
-        int modifiers = (ctrlDown ? GLFW.GLFW_MOD_CONTROL : 0) | (shiftDown ? GLFW.GLFW_MOD_SHIFT : 0);
-        if (keyCode == 0) {
-            return mcScreen.charTyped(keyChar, modifiers);
-        } else {
-            return mcScreen.keyPressed(keyCode, GLFW.GLFW_KEY_UNKNOWN, modifiers);
-        }
         //#else
         //#if MC>=10800
         //$$ try {
@@ -151,8 +138,8 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
         //#else
         //$$ mcScreen.handleKeyboardInput();
         //#endif
-        //$$ return false;
         //#endif
+        return false;
     }
 
     // Used when wrapping an already existing mc.GuiScreen
@@ -195,73 +182,52 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
         }
 
         //#if MC>=11300
-        @SubscribeEvent(priority = EventPriority.LOWEST)
+        @SubscribeEvent(priority = EventPriority.HIGH)
         public void onMouseClick(GuiScreenEvent.MouseClickedEvent.Pre event) {
-            event.setCanceled(true);
-            getSuperMcGui().mouseClicked(event.getMouseX(), event.getMouseY(), event.getButton());
-            if (mcScreen.equals(getMinecraft().currentScreen)) {
-                MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.MouseClickedEvent.Post(
-                        event.getGui(), event.getMouseX(), event.getMouseY(), event.getButton()));
+            if (getSuperMcGui().mouseClicked(event.getMouseX(), event.getMouseY(), event.getButton())) {
+                event.setCanceled(true);
             }
         }
 
-        @SubscribeEvent(priority = EventPriority.LOWEST)
+        @SubscribeEvent(priority = EventPriority.HIGH)
         public void onMouseReleased(GuiScreenEvent.MouseReleasedEvent.Pre event) {
-            event.setCanceled(true);
-            getSuperMcGui().mouseReleased(event.getMouseX(), event.getMouseY(), event.getButton());
-            if (mcScreen.equals(getMinecraft().currentScreen)) {
-                MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.MouseReleasedEvent.Post(
-                        event.getGui(), event.getMouseX(), event.getMouseY(), event.getButton()));
+            if (getSuperMcGui().mouseReleased(event.getMouseX(), event.getMouseY(), event.getButton())) {
+                event.setCanceled(true);
             }
         }
 
-        @SubscribeEvent(priority = EventPriority.LOWEST)
+        @SubscribeEvent(priority = EventPriority.HIGH)
         public void onMouseDrag(GuiScreenEvent.MouseDragEvent.Pre event) {
-            event.setCanceled(true);
-            getSuperMcGui().mouseDragged(event.getMouseX(), event.getMouseY(), event.getMouseButton(), event.getDragX(), event.getDragY());
-            if (mcScreen.equals(getMinecraft().currentScreen)) {
-                MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.MouseDragEvent.Post(
-                        event.getGui(), event.getMouseX(), event.getMouseY(), event.getMouseButton(), event.getDragX(), event.getDragY()));
+            if (getSuperMcGui().mouseDragged(event.getMouseX(), event.getMouseY(), event.getMouseButton(), event.getDragX(), event.getDragY())) {
+                event.setCanceled(true);
             }
         }
 
-        @SubscribeEvent(priority = EventPriority.LOWEST)
+        @SubscribeEvent(priority = EventPriority.HIGH)
         public void onMouseScroll(GuiScreenEvent.MouseScrollEvent.Pre event) {
-            event.setCanceled(true);
-            getSuperMcGui().mouseScrolled(event.getScrollDelta());
-            if (mcScreen.equals(getMinecraft().currentScreen)) {
-                MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.MouseScrollEvent.Post(
-                        event.getGui(), event.getMouseX(), event.getMouseY(), event.getScrollDelta()));
+            if (getSuperMcGui().mouseScrolled(event.getScrollDelta())) {
+                event.setCanceled(true);
             }
         }
 
-        @SubscribeEvent(priority = EventPriority.LOWEST)
+        @SubscribeEvent(priority = EventPriority.HIGH)
         public void onKeyPressed(GuiScreenEvent.KeyboardKeyPressedEvent.Pre event) {
-            event.setCanceled(true);
-            getSuperMcGui().keyPressed(event.getKeyCode(), event.getModifiers(), event.getScanCode());
-            if (mcScreen.equals(getMinecraft().currentScreen)) {
-                MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.KeyboardKeyPressedEvent.Post(
-                        event.getGui(), event.getKeyCode(), event.getModifiers(), event.getScanCode()));
+            if (getSuperMcGui().keyPressed(event.getKeyCode(), event.getModifiers(), event.getScanCode())) {
+                event.setCanceled(true);
             }
         }
 
-        @SubscribeEvent(priority = EventPriority.LOWEST)
+        @SubscribeEvent(priority = EventPriority.HIGH)
         public void onKeyReleased(GuiScreenEvent.KeyboardKeyReleasedEvent.Pre event) {
-            event.setCanceled(true);
-            getSuperMcGui().keyReleased(event.getKeyCode(), event.getModifiers(), event.getScanCode());
-            if (mcScreen.equals(getMinecraft().currentScreen)) {
-                MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.KeyboardKeyReleasedEvent.Post(
-                        event.getGui(), event.getKeyCode(), event.getModifiers(), event.getScanCode()));
+            if (getSuperMcGui().keyReleased(event.getKeyCode(), event.getModifiers(), event.getScanCode())) {
+                event.setCanceled(true);
             }
         }
 
-        @SubscribeEvent(priority = EventPriority.LOWEST)
+        @SubscribeEvent(priority = EventPriority.HIGH)
         public void onCharTyped(GuiScreenEvent.KeyboardCharTypedEvent.Pre event) {
-            event.setCanceled(true);
-            getSuperMcGui().charTyped(event.getCodePoint(), event.getModifiers());
-            if (mcScreen.equals(getMinecraft().currentScreen)) {
-                MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.KeyboardCharTypedEvent.Post(
-                        event.getGui(), event.getCodePoint(), event.getModifiers()));
+            if (getSuperMcGui().charTyped(event.getCodePoint(), event.getModifiers())) {
+                event.setCanceled(true);
             }
         }
         //#else
