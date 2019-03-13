@@ -13,10 +13,10 @@ import net.minecraftforge.common.MinecraftForge;
 //#if MC>=11300
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.lwjgl.glfw.GLFW;
 //#else
 //$$ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 //$$ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+//$$ import java.io.IOException;
 //#endif
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 //#else
