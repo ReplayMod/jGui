@@ -24,6 +24,14 @@ buildscript {
     }
 
     dependencies {
+        if (mcVersion >= 10800) {
+            classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.2' // for Gradle 4
+        } else {
+            classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4' // for Gradle 3
+        }
+        classpath('ch.raffael.gradlePlugins.preshadow:gradle-preshadow-plugin:1.0'){
+            exclude group: 'com.github.jengelman.gradle.plugins', module: 'shadow'
+        }
         classpath 'net.minecraftforge.gradle:ForgeGradle:' + [
                 11302: '3.+',
                 11200: '2.3-SNAPSHOT',
@@ -44,6 +52,7 @@ if (FG3) {
 } else {
     apply plugin: 'forge'
 }
+apply plugin: 'ch.raffael.preshadow'
 
 group 'de.johni0702.minecraft'
 version '1.0.0'
@@ -58,6 +67,14 @@ repositories {
 
 dependencies {
     compile 'org.projectlombok:lombok:1.16.6'
+
+    preshadow('org.lwjgl.lwjgl:lwjgl_util:2.9.3') {
+        transitive = false // only want col, dim, point, vec, mat, quat, etc.
+    }
+}
+
+preshadowJar {
+    relocate 'org.lwjgl.util', 'de.johni0702.minecraft.gui.utils.lwjgl'
 }
 
 minecraft {
