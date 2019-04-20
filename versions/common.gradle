@@ -21,6 +21,7 @@ buildscript {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
+        maven { url 'https://jitpack.io' }
     }
 
     dependencies {
@@ -40,6 +41,7 @@ buildscript {
                 10800: '2.0-SNAPSHOT',
                 10710: '1.2-SNAPSHOT',
         ][mcVersion]
+        classpath 'com.github.replaymod:preprocessor:3654e32'
     }
 }
 
@@ -53,6 +55,7 @@ if (FG3) {
     apply plugin: 'forge'
 }
 apply plugin: 'ch.raffael.preshadow'
+apply plugin: 'com.replaymod.preprocess'
 
 group 'de.johni0702.minecraft'
 version '1.0.0'
@@ -104,43 +107,3 @@ dependencies {
         ][mcVersion]
     }
 }
-
-if (project.name != 'core') {
-    apply from: '../preprocessor.gradle'
-
-    def preprocessedSrc = 'build/preprocessed/src'
-    def preprocessedRes = 'build/preprocessed/res'
-    def originalSrc = '../../src/main/java'
-    def originalRes = '../../src/main/resources'
-    def vars = [MC: mcVersion as int]
-
-    sourceSets {
-        main.java.srcDir preprocessedSrc
-        main.resources.srcDir preprocessedRes
-    }
-
-    task preprocessJava {
-        inputs.dir(originalSrc)
-        outputs.dir(preprocessedSrc)
-        doLast {
-            project.convertTree(vars, originalSrc, preprocessedSrc)
-        }
-    }
-
-    task preprocessResources {
-        inputs.dir(originalRes)
-        outputs.dir(preprocessedRes)
-        doLast {
-            project.convertTree(vars, originalRes, preprocessedRes)
-        }
-    }
-
-    compileJava.dependsOn preprocessJava
-    processResources.dependsOn preprocessResources
-} else {
-    sourceSets {
-        main.java.srcDirs = ['../../src/main/java']
-        main.resources.srcDirs = ['../../src/main/resources']
-    }
-}
-

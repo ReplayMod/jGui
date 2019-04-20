@@ -36,14 +36,3 @@ license {
         java = 'SLASHSTAR_STYLE'
     }
 }
-
-apply from: 'versions/preprocessor.gradle'
-
-task setCoreVersion() {
-    doLast {
-        def vars = [MC: project.mcVersion as int, DEV_ENV: 1]
-        project.convertTree(vars, 'src/main/java')
-        project.convertTree(vars, 'src/main/resources')
-        project.file('versions/core/mcVersion').write(vars.MC.toString())
-    }
-}
