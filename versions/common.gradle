@@ -25,7 +25,7 @@ buildscript {
     }
 
     dependencies {
-        if (mcVersion >= 10800) {
+        if (!gradle.gradleVersion.startsWith('3.')) {
             classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.2' // for Gradle 4
         } else {
             classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4' // for Gradle 3
@@ -41,7 +41,7 @@ buildscript {
                 10800: '2.0-SNAPSHOT',
                 10710: '1.2-SNAPSHOT',
         ][mcVersion]
-        classpath 'com.github.replaymod:preprocessor:92151f1'
+        classpath 'com.github.replaymod:preprocessor:03f3f44'
     }
 }
 
