@@ -4,33 +4,23 @@ import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.lwjgl.opengl.GL11;
 
+
 //#if MC>=11300
 import net.minecraft.client.MainWindow;
-import net.minecraft.crash.ReportedException;
 import org.lwjgl.glfw.GLFW;
 //#else
 //$$ import net.minecraft.client.gui.GuiScreen;
 //$$ import net.minecraft.client.gui.ScaledResolution;
-//$$ import net.minecraft.util.ReportedException;
 //#endif
 
-//#if MC>=11200
-import net.minecraft.client.renderer.BufferBuilder;
-//#else
-//#if MC>=10904
-//$$ import net.minecraft.client.renderer.VertexBuffer;
-//#else
-//$$ import net.minecraft.client.renderer.WorldRenderer;
-//#endif
-//#endif
 //#if MC>=10809
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 //#endif
@@ -50,11 +40,7 @@ import java.util.concurrent.Callable;
  */
 public class MCVer {
     public static Minecraft getMinecraft() {
-        //#if MC>=11300
         return Minecraft.getInstance();
-        //#else
-        //$$ return Minecraft.getMinecraft();
-        //#endif
     }
 
     //#if MC>=11300
@@ -89,17 +75,13 @@ public class MCVer {
         //#else
         //$$ Tessellator tessellator = Tessellator.instance;
         //#endif
-        //#if MC>=11200
-        BufferBuilder vertexBuffer = tessellator.getBuffer();
-        //#else
         //#if MC>=10904
-        //$$ VertexBuffer vertexBuffer = tessellator.getBuffer();
+        BufferBuilder vertexBuffer = tessellator.getBuffer();
         //#else
         //#if MC>=10800
         //$$ WorldRenderer vertexBuffer = tessellator.getWorldRenderer();
         //#else
         //$$ Tessellator vertexBuffer = tessellator;
-        //#endif
         //#endif
         //#endif
         //#if MC>=10809
@@ -151,21 +133,10 @@ public class MCVer {
     public static void drawRect(int x, int y, int width, int height, ReadableColor tl, ReadableColor tr, ReadableColor bl, ReadableColor br) {
         //#if MC>=10800
         Tessellator tessellator = Tessellator.getInstance();
-        //#else
-        //$$ Tessellator tessellator = Tessellator.instance;
-        //#endif
-        //#if MC>=11200
         BufferBuilder vertexBuffer = tessellator.getBuffer();
         //#else
-        //#if MC>=10904
-        //$$ VertexBuffer vertexBuffer = tessellator.getBuffer();
-        //#else
-        //#if MC>=10800
-        //$$ WorldRenderer vertexBuffer = tessellator.getWorldRenderer();
-        //#else
+        //$$ Tessellator tessellator = Tessellator.instance;
         //$$ Tessellator vertexBuffer = tessellator;
-        //#endif
-        //#endif
         //#endif
         //#if MC>=10809
         vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
@@ -188,11 +159,7 @@ public class MCVer {
     }
 
     public static FontRenderer getFontRenderer() {
-        //#if MC>=11200
         return getMinecraft().fontRenderer;
-        //#else
-        //$$ return Minecraft.getMinecraft().fontRendererObj;
-        //#endif
     }
 
     public static RenderGameOverlayEvent.ElementType getType(RenderGameOverlayEvent.Post event) {
@@ -233,10 +200,6 @@ public class MCVer {
         //#else
         //$$ return event.mouseY;
         //#endif
-    }
-
-    public static ReportedException newReportedException(CrashReport crashReport) {
-        return new ReportedException(crashReport);
     }
 
     public static void setClipboardString(String text) {

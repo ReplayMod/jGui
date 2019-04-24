@@ -1,0 +1,2 @@
+net.minecraft.client.renderer.VertexBuffer net.minecraft.client.renderer.WorldRenderer
+net.minecraft.client.renderer.Tessellator getBuffer() getWorldRenderer()

@@ -41,6 +41,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.crash.ReportedException;
 
 //#if MC>=11300
 import de.johni0702.minecraft.gui.versions.MCVer.Keyboard;
@@ -56,8 +57,6 @@ import net.minecraft.client.renderer.GlStateManager;
 //$$ import java.io.IOException;
 //#endif
 //#endif
-
-import static de.johni0702.minecraft.gui.versions.MCVer.newReportedException;
 
 public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends AbstractGuiContainer<T> {
 
@@ -154,7 +153,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                     MCVer.addDetail(category, "Element", tooltip::toString);
                     MCVer.addDetail(category, "Position", position::toString);
                     MCVer.addDetail(category, "Size", tooltipSize::toString);
-                    throw newReportedException(crashReport);
+                    throw new ReportedException(crashReport);
                 }
             }
         }

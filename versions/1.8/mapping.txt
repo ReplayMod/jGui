@@ -1,0 +1,3 @@
+net.minecraftforge.fml.common.gameevent.TickEvent cpw.mods.fml.common.gameevent.TickEvent
+net.minecraftforge.fml.common.eventhandler.EventPriority cpw.mods.fml.common.eventhandler.EventPriority
+net.minecraftforge.fml.common.eventhandler.SubscribeEvent cpw.mods.fml.common.eventhandler.SubscribeEvent

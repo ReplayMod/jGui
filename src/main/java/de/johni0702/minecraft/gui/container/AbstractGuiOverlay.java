@@ -39,6 +39,7 @@ import de.johni0702.minecraft.gui.versions.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.crash.ReportedException;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -62,8 +63,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 //#endif
 
 import java.io.IOException;
-
-import static de.johni0702.minecraft.gui.versions.MCVer.newReportedException;
 
 public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extends AbstractGuiContainer<T> {
 
@@ -190,7 +189,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
                     MCVer.addDetail(category, "Element", tooltip::toString);
                     MCVer.addDetail(category, "Position", position::toString);
                     MCVer.addDetail(category, "Size", tooltipSize::toString);
-                    throw newReportedException(crashReport);
+                    throw new ReportedException(crashReport);
                 }
             }
         }

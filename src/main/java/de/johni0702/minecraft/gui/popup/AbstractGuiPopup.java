@@ -37,6 +37,7 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.crash.ReportedException;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -44,8 +45,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
-
-import static de.johni0702.minecraft.gui.versions.MCVer.newReportedException;
 
 public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends AbstractGuiContainer<T> {
     private final GuiPanel popupContainer = new GuiPanel(this){
@@ -192,7 +191,7 @@ public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends Ab
                     MCVer.addDetail(category, "Method", method::toString);
                     MCVer.addDetail(category, "Layer", () -> "" + layer);
                     MCVer.addDetail(category, "ComposedElement", this::toString);
-                    throw newReportedException(crash);
+                    throw new ReportedException(crash);
                 }
             });
         } else {
@@ -224,7 +223,7 @@ public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends Ab
                         MCVer.addDetail(category, "Method", method::toString);
                         MCVer.addDetail(category, "Layer", () -> "" + layer);
                         MCVer.addDetail(category, "ComposedElement", this::toString);
-                        throw newReportedException(crash);
+                        throw new ReportedException(crash);
                     }
                     if (handled != null) {
                         if (handled instanceof Boolean) {
