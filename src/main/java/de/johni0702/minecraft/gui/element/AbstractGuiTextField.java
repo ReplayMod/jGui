@@ -42,7 +42,6 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
-import lombok.NonNull;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -74,7 +73,6 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
     private int maxLength = 32;
 
     @Getter
-    @NonNull
     private String text = "";
 
     private int cursorPos;
@@ -112,7 +110,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
     }
 
     @Override
-    public T setI18nText(@NonNull String text, @NonNull Object... args) {
+    public T setI18nText(String text, Object... args) {
         return setText(I18n.format(text, args));
     }
 
