@@ -184,6 +184,17 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         private MinecraftGuiRenderer renderer;
         private boolean active;
 
+        //#if MC>=11400
+        //$$ protected MinecraftGuiScreen() {
+        //$$     super(null);
+        //$$ }
+        //$$
+        //$$ @Override
+        //$$ public String getNarrationMessage() {
+        //$$     return title == null ? "" : title.getText();
+        //$$ }
+        //#endif
+
         @Override
         //#if MC>=11300
         public void render(int mouseX, int mouseY, float partialTicks) {
@@ -286,9 +297,22 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
 
         //#if MC>=11300
         @Override
-        public boolean mouseScrolled(double dWheel) {
+        public boolean mouseScrolled(
+                //#if MC>=11400
+                //$$ double mouseX,
+                //$$ double mouseY,
+                //#endif
+                double dWheel
+        ) {
             dWheel *= 120;
-            return forEach(Scrollable.class).scroll(MouseUtils.getMousePos(), (int) dWheel);
+            return forEach(Scrollable.class).scroll(
+                    //#if MC>=11400
+                    //$$ new Point((int) mouseX, (int) mouseY),
+                    //#else
+                    MouseUtils.getMousePos(),
+                    //#endif
+                    (int) dWheel
+            );
         }
         //#else
         //$$ @Override
@@ -305,7 +329,11 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         //#endif
 
         @Override
+        //#if MC>=11400
+        //$$ public void removed() {
+        //#else
         public void onGuiClosed() {
+        //#endif
             forEach(Closeable.class).close();
             active = false;
             if (enabledRepeatedKeyEvents) {
@@ -314,13 +342,17 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         }
 
         @Override
+        //#if MC>=11400
+        //$$ public void init() {
+        //#else
         public void initGui() {
+        //#endif
             active = false;
             if (enabledRepeatedKeyEvents) {
                 Keyboard.enableRepeatEvents(true);
             }
             screenSize = new Dimension(width, height);
-            renderer = new MinecraftGuiRenderer(MCVer.newScaledResolution(mc));
+            renderer = new MinecraftGuiRenderer(MCVer.newScaledResolution(this.mc));
             forEach(Loadable.class).load();
         }
 

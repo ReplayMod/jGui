@@ -8,10 +8,13 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.crash.CrashReportCategory;
-import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.lwjgl.opengl.GL11;
 
+//#if MC>=11400
+//#else
+import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+//#endif
 
 //#if MC>=11300
 import net.minecraft.client.MainWindow;
@@ -162,6 +165,7 @@ public class MCVer {
         return getMinecraft().fontRenderer;
     }
 
+    //#if MC<11400
     public static RenderGameOverlayEvent.ElementType getType(RenderGameOverlayEvent.Post event) {
         //#if MC>=10904
         return event.getType();
@@ -201,6 +205,7 @@ public class MCVer {
         //$$ return event.mouseY;
         //#endif
     }
+    //#endif
 
     public static void setClipboardString(String text) {
         //#if MC>=11300

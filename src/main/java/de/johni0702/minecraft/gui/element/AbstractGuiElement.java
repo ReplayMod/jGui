@@ -39,6 +39,7 @@ import net.minecraft.util.ResourceLocation;
 public abstract class AbstractGuiElement<T extends AbstractGuiElement<T>> implements GuiElement<T> {
     protected static final ResourceLocation TEXTURE = new ResourceLocation("jgui", "gui.png");
 
+
     @Getter
     private final Minecraft minecraft = MCVer.getMinecraft();
 

@@ -88,7 +88,11 @@ public abstract class AbstractGuiImage<T extends AbstractGuiImage<T>>
     protected void finalize() throws Throwable {
         super.finalize();
         if (texture != null && copyOf == null) {
+            //#if MC>=11400
+            //$$ getMinecraft().execute(new Finalizer(texture));
+            //#else
             getMinecraft().addScheduledTask(new Finalizer(texture));
+            //#endif
         }
     }
 

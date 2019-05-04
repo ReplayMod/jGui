@@ -128,13 +128,21 @@ public class MinecraftGuiRenderer implements GuiRenderer {
 
     @Override
     public void drawTexturedRect(int x, int y, int u, int v, int width, int height) {
+        //#if MC>=11400
+        //$$ gui.blit(x, y, u, v, width, height);
+        //#else
         gui.drawTexturedModalRect(x, y, u, v, width, height);
+        //#endif
     }
 
     @Override
     public void drawTexturedRect(int x, int y, int u, int v, int width, int height, int uWidth, int vHeight, int textureWidth, int textureHeight) {
         color(1, 1, 1);
+        //#if MC>=11400
+        //$$ DrawableHelper.blit(x, y, width, height, u, v, uWidth, vHeight, textureWidth, textureHeight);
+        //#else
         Gui.drawScaledCustomSizeModalRect(x, y, u, v, uWidth, vHeight, width, height, textureWidth, textureHeight);
+        //#endif
     }
 
     @Override

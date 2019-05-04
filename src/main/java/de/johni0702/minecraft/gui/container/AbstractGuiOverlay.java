@@ -30,6 +30,7 @@ import de.johni0702.minecraft.gui.OffsetGuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.element.GuiElement;
 import de.johni0702.minecraft.gui.function.*;
+import de.johni0702.minecraft.gui.utils.EventRegistrations;
 import de.johni0702.minecraft.gui.utils.MouseUtils;
 import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.Point;
@@ -40,8 +41,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.crash.ReportedException;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.common.MinecraftForge;
 
 //#if MC>=11300
 import net.minecraft.client.MainWindow;
@@ -50,6 +49,12 @@ import net.minecraft.client.MainWindow;
 //$$ import net.minecraft.client.gui.ScaledResolution;
 //#endif
 
+//#if MC>=11400
+//$$ import de.johni0702.minecraft.gui.versions.callbacks.PostRenderHudCallback;
+//$$ import de.johni0702.minecraft.gui.versions.callbacks.PreTickCallback;
+//$$ import net.minecraft.text.StringTextComponent;
+//#else
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 //#if MC>=10800
 //#if MC>=11300
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -61,8 +66,11 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 //$$ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 //$$ import cpw.mods.fml.common.gameevent.TickEvent;
 //#endif
+//#endif
 
-import java.io.IOException;
+//#if MC>=10800 && MC<11300
+//$$ import java.io.IOException;
+//#endif
 
 public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extends AbstractGuiContainer<T> {
 
@@ -81,10 +89,10 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         if (this.visible != visible) {
             if (visible) {
                 forEach(Loadable.class).load();
-                MinecraftForge.EVENT_BUS.register(eventHandler);
+                eventHandler.register();
             } else {
                 forEach(Closeable.class).close();
-                MinecraftForge.EVENT_BUS.unregister(eventHandler);
+                eventHandler.unregister();
             }
             updateUserInputGui();
         }
@@ -210,38 +218,47 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
     //#else
     //$$ public
     //#endif
-    class EventHandler {
+    class EventHandler extends EventRegistrations {
         private MinecraftGuiRenderer renderer;
 
         private EventHandler() {}
 
+        //#if MC>=11400
+        //$$ { on(PostRenderHudCallback.EVENT, this::renderOverlay); }
+        //$$ private void renderOverlay(float partialTicks) {
+        //#else
         @SubscribeEvent
         public void renderOverlay(RenderGameOverlayEvent.Post event) {
-            if (MCVer.getType(event) == RenderGameOverlayEvent.ElementType.ALL) {
-                updateRenderer();
-                int layers = getMaxLayer();
-                int mouseX = -1, mouseY = -1;
-                if (mouseVisible) {
-                    Point mouse = MouseUtils.getMousePos();
-                    mouseX = mouse.getX();
-                    mouseY = mouse.getY();
-                }
-                RenderInfo renderInfo = new RenderInfo(MCVer.getPartialTicks(event), mouseX, mouseY, 0);
-                for (int layer = 0; layer <= layers; layer++) {
-                    layout(screenSize, renderInfo.layer(layer));
-                }
-                for (int layer = 0; layer <= layers; layer++) {
-                    draw(renderer, screenSize, renderInfo.layer(layer));
-                }
+            if (MCVer.getType(event) != RenderGameOverlayEvent.ElementType.ALL) return;
+            float partialTicks = MCVer.getPartialTicks(event);
+        //#endif
+            updateRenderer();
+            int layers = getMaxLayer();
+            int mouseX = -1, mouseY = -1;
+            if (mouseVisible) {
+                Point mouse = MouseUtils.getMousePos();
+                mouseX = mouse.getX();
+                mouseY = mouse.getY();
+            }
+            RenderInfo renderInfo = new RenderInfo(partialTicks, mouseX, mouseY, 0);
+            for (int layer = 0; layer <= layers; layer++) {
+                layout(screenSize, renderInfo.layer(layer));
+            }
+            for (int layer = 0; layer <= layers; layer++) {
+                draw(renderer, screenSize, renderInfo.layer(layer));
             }
         }
 
+        //#if MC>=11400
+        //$$ { on(PreTickCallback.EVENT, () -> forEach(Tickable.class).tick()); }
+        //#else
         @SubscribeEvent
         public void tickOverlay(TickEvent.ClientTickEvent event) {
             if (event.phase == TickEvent.Phase.START) {
                 forEach(Tickable.class).tick();
             }
         }
+        //#endif
 
         private void updateRenderer() {
             Minecraft mc = getMinecraft();
@@ -262,8 +279,14 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
 
     protected class UserInputGuiScreen extends net.minecraft.client.gui.GuiScreen {
 
+        //#if MC>=11400
+        //$$ UserInputGuiScreen() {
+        //$$     super(new StringTextComponent(""));
+        //$$ }
+        //#endif
+
         {
-            allowUserInput = true;
+            this.allowUserInput = true;
         }
 
         //#if MC>=11300
@@ -345,9 +368,22 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
 
         //#if MC>=11300
         @Override
-        public boolean mouseScrolled(double dWheel) {
+        public boolean mouseScrolled(
+                //#if MC>=11400
+                //$$ double mouseX,
+                //$$ double mouseY,
+                //#endif
+                double dWheel
+        ) {
             dWheel *= 120;
-            return forEach(Scrollable.class).scroll(MouseUtils.getMousePos(), (int) dWheel);
+            return forEach(Scrollable.class).scroll(
+                    //#if MC>=11400
+                    //$$ new Point((int) mouseX, (int) mouseY),
+                    //#else
+                    MouseUtils.getMousePos(),
+                    //#endif
+                    (int) dWheel
+            );
         }
         //#else
         //$$ @Override
@@ -364,7 +400,11 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         //#endif
 
         @Override
+        //#if MC>=11400
+        //$$ public void removed() {
+        //#else
         public void onGuiClosed() {
+        //#endif
             mouseVisible = false;
         }
 

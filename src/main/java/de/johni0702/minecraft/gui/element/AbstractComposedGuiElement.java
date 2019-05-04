@@ -33,7 +33,6 @@ import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.crash.ReportedException;
 
-import javax.annotation.Nullable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -56,7 +55,6 @@ public abstract class AbstractComposedGuiElement<T extends AbstractComposedGuiEl
         return getLayer() + Ordering.natural().max(Iterables.concat(Collections.singleton(0),
                 Iterables.transform(getChildren(), new Function<GuiElement, Integer>() {
 
-                    @Nullable
                     @Override
                     public Integer apply(GuiElement e) {
                         return e instanceof ComposedGuiElement ? ((ComposedGuiElement) e).getMaxLayer() : e.getLayer();
