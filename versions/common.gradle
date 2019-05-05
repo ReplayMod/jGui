@@ -84,6 +84,7 @@ repositories {
         name = "fabric"
         url = "https://maven.fabricmc.net/"
     }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
