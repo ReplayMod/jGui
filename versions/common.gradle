@@ -32,25 +32,22 @@ buildscript {
     }
 
     dependencies {
-        if (!gradle.gradleVersion.startsWith('3.')) {
-            classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.2' // for Gradle 4
-        } else {
-            classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4' // for Gradle 3
-        }
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.2'
         classpath('ch.raffael.gradlePlugins.preshadow:gradle-preshadow-plugin:1.0'){
             exclude group: 'com.github.jengelman.gradle.plugins', module: 'shadow'
         }
         if (mcVersion >= 11400) {
             classpath 'fabric-loom:fabric-loom.gradle.plugin:0.2.2-SNAPSHOT'
-        } else {
+        } else if (mcVersion >= 10800) {
             classpath 'net.minecraftforge.gradle:ForgeGradle:' + [
                     11302: '3.+',
                     11200: '2.3-SNAPSHOT',
                     10904: '2.2-SNAPSHOT',
                     10809: '2.1-SNAPSHOT',
                     10800: '2.0-SNAPSHOT',
-                    10710: '1.2-SNAPSHOT',
             ][mcVersion]
+        } else {
+            classpath 'com.github.Team-Fruit:ForgeGradle:3be8636'
         }
         classpath 'com.github.replaymod:preprocessor:9d3202c'
     }
@@ -88,9 +85,7 @@ repositories {
 }
 
 dependencies {
-    if (!gradle.gradleVersion.startsWith('3.')) {
-        annotationProcessor 'org.projectlombok:lombok:1.16.6'
-    }
+    annotationProcessor 'org.projectlombok:lombok:1.16.6'
     compile 'org.projectlombok:lombok:1.16.6'
 
     preshadow('org.lwjgl.lwjgl:lwjgl_util:2.9.3') {
