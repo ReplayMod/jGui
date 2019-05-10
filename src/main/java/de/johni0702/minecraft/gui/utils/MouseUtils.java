@@ -26,23 +26,23 @@ package de.johni0702.minecraft.gui.utils;
 
 import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.versions.MCVer;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 
 //#if MC>=11300
-import net.minecraft.client.MainWindow;
+import net.minecraft.client.util.Window;
 //#else
 //$$ import net.minecraft.client.gui.ScaledResolution;
 //$$ import org.lwjgl.input.Mouse;
 //#endif
 
 public class MouseUtils {
-    private static final Minecraft mc = MCVer.getMinecraft();
+    private static final MinecraftClient mc = MCVer.getMinecraft();
 
     public static Point getMousePos() {
         //#if MC>=11300
-        int mouseX = (int) mc.mouseHelper.getMouseX();
-        int mouseY = (int) mc.mouseHelper.getMouseY();
-        MainWindow mainWindow = MCVer.newScaledResolution(mc);
+        int mouseX = (int) mc.mouse.getX();
+        int mouseY = (int) mc.mouse.getY();
+        Window mainWindow = MCVer.newScaledResolution(mc);
         mouseX = (int) Math.round((double) mouseX * mainWindow.getScaledWidth() / mainWindow.getWidth());
         mouseY = (int) Math.round((double) mouseY * mainWindow.getScaledHeight() / mainWindow.getHeight());
         //#else
@@ -59,7 +59,7 @@ public class MouseUtils {
 
     public static Point getScaledDimensions() {
         //#if MC>=11300
-        MainWindow
+        Window
         //#else
         //$$ ScaledResolution
         //#endif

@@ -45,7 +45,7 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.font.TextRenderer;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -88,7 +88,7 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
 
     @Override
     protected ReadableDimension calcMinSize() {
-        FontRenderer fontRenderer = MCVer.getFontRenderer();
+        TextRenderer fontRenderer = MCVer.getFontRenderer();
         int maxWidth = 0;
         for (V value : values) {
             int width = fontRenderer.getStringWidth(toString.apply(value));
@@ -96,16 +96,16 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
                 maxWidth = width;
             }
         }
-        return new Dimension(11 + maxWidth + fontRenderer.FONT_HEIGHT, fontRenderer.FONT_HEIGHT + 4);
+        return new Dimension(11 + maxWidth + fontRenderer.fontHeight, fontRenderer.fontHeight + 4);
     }
 
     @Override
     public void layout(ReadableDimension size, RenderInfo renderInfo) {
         super.layout(size, renderInfo);
-        FontRenderer fontRenderer = MCVer.getFontRenderer();
+        TextRenderer fontRenderer = MCVer.getFontRenderer();
         if (renderInfo.layer == 1) {
             ReadablePoint offsetPoint = new Point(0, size.getHeight());
-            ReadableDimension offsetSize = new Dimension(size.getWidth(), (fontRenderer.FONT_HEIGHT + 5) *  values.length);
+            ReadableDimension offsetSize = new Dimension(size.getWidth(), (fontRenderer.fontHeight + 5) *  values.length);
             dropdown.layout(offsetSize, renderInfo.offsetMouse(0, offsetPoint.getY()).layer(0));
         }
     }
@@ -113,7 +113,7 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
     @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         super.draw(renderer, size, renderInfo);
-        FontRenderer fontRenderer = MCVer.getFontRenderer();
+        TextRenderer fontRenderer = MCVer.getFontRenderer();
         if (renderInfo.layer == 0) {
             int width = size.getWidth();
             int height = size.getHeight();
@@ -132,10 +132,10 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
                 renderer.drawRect(x - layer, y + (tHeight - layer), layer * 2 - 1, 1, OUTLINE_COLOR);
             }
 
-            renderer.drawString(3, height / 2 - fontRenderer.FONT_HEIGHT / 2, ReadableColor.WHITE, toString.apply(getSelectedValue()));
+            renderer.drawString(3, height / 2 - fontRenderer.fontHeight / 2, ReadableColor.WHITE, toString.apply(getSelectedValue()));
         } else if (renderInfo.layer == 1) {
             ReadablePoint offsetPoint = new Point(0, size.getHeight());
-            ReadableDimension offsetSize = new Dimension(size.getWidth(), (fontRenderer.FONT_HEIGHT + 5) *  values.length);
+            ReadableDimension offsetSize = new Dimension(size.getWidth(), (fontRenderer.fontHeight + 5) *  values.length);
             OffsetGuiRenderer offsetRenderer = new OffsetGuiRenderer(renderer, offsetPoint, offsetSize);
             offsetRenderer.startUsing();
             try {
@@ -258,7 +258,7 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
 
         @Override
         protected ReadableDimension calcMinSize() {
-            return new Dimension(0, MCVer.getFontRenderer().FONT_HEIGHT + 5);
+            return new Dimension(0, MCVer.getFontRenderer().fontHeight + 5);
         }
 
         @Override

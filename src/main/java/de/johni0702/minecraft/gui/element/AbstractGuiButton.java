@@ -33,24 +33,24 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.resource.language.I18n;
+import net.minecraft.util.Identifier;
 
 //#if MC>=11300
-import net.minecraft.client.audio.SimpleSound;
+import net.minecraft.client.audio.PositionedSoundInstance;
 //#else
 //$$ import net.minecraft.client.audio.PositionedSoundRecord;
 //#endif
 
 //#if MC>=10904
-import net.minecraft.init.SoundEvents;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.sound.SoundEvent;
 //#endif
 
 //#if MC>=10800
-import static net.minecraft.client.renderer.GlStateManager.*;
+import static com.mojang.blaze3d.platform.GlStateManager.*;
 //#endif
 import static de.johni0702.minecraft.gui.versions.MCVer.*;
 
@@ -58,8 +58,8 @@ import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 
 public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends AbstractGuiClickable<T> implements Clickable, IGuiButton<T> {
-    protected static final ResourceLocation BUTTON_SOUND = new ResourceLocation("gui.button.press");
-    protected static final ResourceLocation WIDGETS_TEXTURE = new ResourceLocation("textures/gui/widgets.png");
+    protected static final Identifier BUTTON_SOUND = new Identifier("gui.button.press");
+    protected static final Identifier WIDGETS_TEXTURE = new Identifier("textures/gui/widgets.png");
 
     //#if MC>=10904
     @Getter
@@ -108,7 +108,7 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
 
     @Override
     public ReadableDimension calcMinSize() {
-        FontRenderer fontRenderer = MCVer.getFontRenderer();
+        TextRenderer fontRenderer = MCVer.getFontRenderer();
         return new Dimension(fontRenderer.getStringWidth(label), 20);
     }
 
@@ -118,14 +118,14 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
         super.onClick();
     }
 
-    public static void playClickSound(Minecraft mc) {
+    public static void playClickSound(MinecraftClient mc) {
     //#if MC>=10904
         playClickSound(mc, SoundEvents.UI_BUTTON_CLICK);
     }
-    public static void playClickSound(Minecraft mc, SoundEvent sound) {
+    public static void playClickSound(MinecraftClient mc, SoundEvent sound) {
     //#endif
         //#if MC>=11300
-        mc.getSoundHandler().play(SimpleSound.getMasterRecord(sound, 1.0F));
+        mc.getSoundManager().play(PositionedSoundInstance.master(sound, 1.0F));
         //#else
         //#if MC>=10904
         //$$ mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(sound, 1.0F));
@@ -155,6 +155,6 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
 
     @Override
     public T setI18nLabel(String label, Object... args) {
-        return setLabel(I18n.format(label, args));
+        return setLabel(I18n.translate(label, args));
     }
 }

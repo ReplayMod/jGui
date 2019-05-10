@@ -33,15 +33,15 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.AccessLevel;
 import lombok.Getter;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.Identifier;
 
 public abstract class AbstractGuiElement<T extends AbstractGuiElement<T>> implements GuiElement<T> {
-    protected static final ResourceLocation TEXTURE = new ResourceLocation("jgui", "gui.png");
+    protected static final Identifier TEXTURE = new Identifier("jgui", "gui.png");
 
 
     @Getter
-    private final Minecraft minecraft = MCVer.getMinecraft();
+    private final MinecraftClient minecraft = MCVer.getMinecraft();
 
     @Getter
     private GuiContainer container;

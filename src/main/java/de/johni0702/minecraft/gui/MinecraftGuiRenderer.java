@@ -32,21 +32,21 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.utils.lwjgl.WritableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.NonNull;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.texture.ITextureObject;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.texture.Texture;
+import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.GL11;
 
 //#if MC>=11300
-import net.minecraft.client.MainWindow;
+import net.minecraft.client.util.Window;
 //#else
 //$$ import net.minecraft.client.gui.ScaledResolution;
 //#endif
 
 //#if MC>=10800
-import net.minecraft.client.renderer.GlStateManager;
-import static net.minecraft.client.renderer.GlStateManager.*;
+import com.mojang.blaze3d.platform.GlStateManager;
+import static com.mojang.blaze3d.platform.GlStateManager.*;
 //#else
 //$$ import net.minecraft.client.renderer.OpenGlHelper;
 //$$ import static de.johni0702.minecraft.gui.versions.MCVer.*;
@@ -57,17 +57,17 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class MinecraftGuiRenderer implements GuiRenderer {
 
-    private final Gui gui = new Gui(){};
+    private final DrawableHelper gui = new DrawableHelper(){};
 
     @NonNull
     //#if MC>=11300
-    private final MainWindow size;
+    private final Window size;
     //#else
     //$$ private final ScaledResolution size;
     //#endif
 
     //#if MC>=11300
-    public MinecraftGuiRenderer(MainWindow size) {
+    public MinecraftGuiRenderer(Window size) {
     //#else
     //$$ public MinecraftGuiRenderer(ScaledResolution size) {
     //#endif
@@ -105,7 +105,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         y = size.getScaledHeight() - y - height;
 
         //#if MC>=11300
-        int f = (int) size.getGuiScaleFactor();
+        int f = (int) size.getScaleFactor();
         //#else
         //$$ int f = size.getScaleFactor();
         //#endif
@@ -113,14 +113,14 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     }
 
     @Override
-    public void bindTexture(ResourceLocation location) {
+    public void bindTexture(Identifier location) {
         MCVer.getMinecraft().getTextureManager().bindTexture(location);
     }
 
     @Override
-    public void bindTexture(ITextureObject texture) {
+    public void bindTexture(Texture texture) {
         //#if MC>=10800
-        GlStateManager.bindTexture(texture.getGlTextureId());
+        GlStateManager.bindTexture(texture.getGlId());
         //#else
         //$$ GL11.glBindTexture(GL_TEXTURE_2D, texture.getGlTextureId());
         //#endif
@@ -129,9 +129,9 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     @Override
     public void drawTexturedRect(int x, int y, int u, int v, int width, int height) {
         //#if MC>=11400
-        //$$ gui.blit(x, y, u, v, width, height);
+        gui.blit(x, y, u, v, width, height);
         //#else
-        gui.drawTexturedModalRect(x, y, u, v, width, height);
+        //$$ gui.drawTexturedModalRect(x, y, u, v, width, height);
         //#endif
     }
 
@@ -139,15 +139,15 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     public void drawTexturedRect(int x, int y, int u, int v, int width, int height, int uWidth, int vHeight, int textureWidth, int textureHeight) {
         color(1, 1, 1);
         //#if MC>=11400
-        //$$ DrawableHelper.blit(x, y, width, height, u, v, uWidth, vHeight, textureWidth, textureHeight);
+        DrawableHelper.blit(x, y, width, height, u, v, uWidth, vHeight, textureWidth, textureHeight);
         //#else
-        Gui.drawScaledCustomSizeModalRect(x, y, u, v, uWidth, vHeight, width, height, textureWidth, textureHeight);
+        //$$ Gui.drawScaledCustomSizeModalRect(x, y, u, v, uWidth, vHeight, width, height, textureWidth, textureHeight);
         //#endif
     }
 
     @Override
     public void drawRect(int x, int y, int width, int height, int color) {
-        Gui.drawRect(x, y, x + width, y + height, color);
+        DrawableHelper.fill(x, y, x + width, y + height, color);
         color(1, 1, 1);
         enableBlend();
     }
@@ -164,7 +164,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
 
     @Override
     public void drawRect(int x, int y, int width, int height, ReadableColor tl, ReadableColor tr, ReadableColor bl, ReadableColor br) {
-        disableTexture2D();
+        disableTexture();
         enableBlend();
         disableAlpha();
         tryBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
@@ -172,7 +172,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         MCVer.drawRect(x, y, width, height, tl, tr, bl, br);
         shadeModel(GL_FLAT);
         enableAlpha();
-        enableTexture2D();
+        enableTexture();
     }
 
     @Override
@@ -197,8 +197,8 @@ public class MinecraftGuiRenderer implements GuiRenderer {
 
     @Override
     public int drawString(int x, int y, int color, String text, boolean shadow) {
-        FontRenderer fontRenderer = MCVer.getFontRenderer();
-        int ret = shadow ? fontRenderer.drawStringWithShadow(text, x, y, color) : fontRenderer.drawString(text, x, y, color);
+        TextRenderer fontRenderer = MCVer.getFontRenderer();
+        int ret = shadow ? fontRenderer.drawWithShadow(text, x, y, color) : fontRenderer.draw(text, x, y, color);
         color(1, 1, 1);
         return ret;
     }
@@ -210,7 +210,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
 
     @Override
     public int drawCenteredString(int x, int y, int color, String text, boolean shadow) {
-        FontRenderer fontRenderer = MCVer.getFontRenderer();
+        TextRenderer fontRenderer = MCVer.getFontRenderer();
         x-=fontRenderer.getStringWidth(text) / 2;
         return drawString(x, y, color, text, shadow);
     }

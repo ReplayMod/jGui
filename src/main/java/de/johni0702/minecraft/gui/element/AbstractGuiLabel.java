@@ -32,8 +32,8 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.resource.language.I18n;
 
 import java.util.List;
 
@@ -54,20 +54,20 @@ public abstract class AbstractGuiLabel<T extends AbstractGuiLabel<T>> extends Ab
     @Override
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         super.draw(renderer, size, renderInfo);
-        FontRenderer fontRenderer = MCVer.getFontRenderer();
+        TextRenderer fontRenderer = MCVer.getFontRenderer();
         @SuppressWarnings("unchecked")
-        List<String> lines = fontRenderer.listFormattedStringToWidth(text, size.getWidth());
+        List<String> lines = fontRenderer.wrapStringToWidthAsList(text, size.getWidth());
         int y = 0;
         for (String line : lines) {
             renderer.drawString(0, y, isEnabled() ? color : disabledColor, line);
-            y+=fontRenderer.FONT_HEIGHT;
+            y+=fontRenderer.fontHeight;
         }
     }
 
     @Override
     public ReadableDimension calcMinSize() {
-        FontRenderer fontRenderer = MCVer.getFontRenderer();
-        return new Dimension(fontRenderer.getStringWidth(text), fontRenderer.FONT_HEIGHT);
+        TextRenderer fontRenderer = MCVer.getFontRenderer();
+        return new Dimension(fontRenderer.getStringWidth(text), fontRenderer.fontHeight);
     }
 
     @Override
@@ -83,7 +83,7 @@ public abstract class AbstractGuiLabel<T extends AbstractGuiLabel<T>> extends Ab
 
     @Override
     public T setI18nText(String text, Object... args) {
-        return setText(I18n.format(text, args));
+        return setText(I18n.translate(text, args));
     }
 
     @Override

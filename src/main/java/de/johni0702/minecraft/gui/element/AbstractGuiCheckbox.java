@@ -33,13 +33,13 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.resource.language.I18n;
+import net.minecraft.util.Identifier;
 
 public abstract class AbstractGuiCheckbox<T extends AbstractGuiCheckbox<T>>
         extends AbstractGuiClickable<T> implements IGuiCheckbox<T> {
-    protected static final ResourceLocation BUTTON_SOUND = new ResourceLocation("gui.button.press");
+    protected static final Identifier BUTTON_SOUND = new Identifier("gui.button.press");
     protected static final ReadableColor BOX_BACKGROUND_COLOR = new Color(46, 46, 46);
 
     @Getter
@@ -77,8 +77,8 @@ public abstract class AbstractGuiCheckbox<T extends AbstractGuiCheckbox<T>>
 
     @Override
     public ReadableDimension calcMinSize() {
-        FontRenderer fontRenderer = MCVer.getFontRenderer();
-        int height = fontRenderer.FONT_HEIGHT + 2;
+        TextRenderer fontRenderer = MCVer.getFontRenderer();
+        int height = fontRenderer.fontHeight + 2;
         int width = height + 2 + fontRenderer.getStringWidth(label);
         return new Dimension(width, height);
     }
@@ -103,7 +103,7 @@ public abstract class AbstractGuiCheckbox<T extends AbstractGuiCheckbox<T>>
 
     @Override
     public T setI18nLabel(String label, Object... args) {
-        return setLabel(I18n.format(label, args));
+        return setLabel(I18n.translate(label, args));
     }
 
     @Override

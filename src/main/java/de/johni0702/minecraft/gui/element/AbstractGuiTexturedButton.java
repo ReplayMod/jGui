@@ -35,15 +35,15 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.utils.lwjgl.WritableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.WritablePoint;
 import lombok.Getter;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 
 //#if MC>=10904
-import net.minecraft.init.SoundEvents;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.sound.SoundEvent;
 //#endif
 
 //#if MC>=10800
-import static net.minecraft.client.renderer.GlStateManager.*;
+import static com.mojang.blaze3d.platform.GlStateManager.*;
 //#endif
 import static de.johni0702.minecraft.gui.versions.MCVer.*;
 
@@ -52,7 +52,7 @@ import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 
 public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedButton<T>> extends AbstractGuiClickable<T> implements Clickable, IGuiTexturedButton<T> {
     @Getter
-    private ResourceLocation texture;
+    private Identifier texture;
 
     //#if MC>=10904
     @Getter
@@ -139,12 +139,12 @@ public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedBut
     }
 
     @Override
-    public T setTexture(ResourceLocation resourceLocation, int size) {
+    public T setTexture(Identifier resourceLocation, int size) {
         return setTexture(resourceLocation, size, size);
     }
 
     @Override
-    public T setTexture(ResourceLocation resourceLocation, int width, int height) {
+    public T setTexture(Identifier resourceLocation, int width, int height) {
         this.texture = resourceLocation;
         this.textureTotalSize = new Dimension(width, height);
         return getThis();

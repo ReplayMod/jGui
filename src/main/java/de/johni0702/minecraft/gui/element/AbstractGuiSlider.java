@@ -33,7 +33,7 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resource.language.I18n;
 
 // TODO: Currently assumes a height of 20
 public abstract class AbstractGuiSlider<T extends AbstractGuiSlider<T>> extends AbstractGuiElement<T> implements Clickable, Draggable, IGuiSlider<T> {
@@ -156,7 +156,7 @@ public abstract class AbstractGuiSlider<T extends AbstractGuiSlider<T>> extends 
 
     @Override
     public T setI18nText(String text, Object... args) {
-        return setText(I18n.format(text, args));
+        return setText(I18n.translate(text, args));
     }
 
     @Override

@@ -25,7 +25,7 @@
 package de.johni0702.minecraft.gui.element;
 
 //#if MC>=10904
-import net.minecraft.util.SoundEvent;
+import net.minecraft.sound.SoundEvent;
 //#endif
 
 public interface IGuiButton<T extends IGuiButton<T>> extends IGuiClickable<T> {

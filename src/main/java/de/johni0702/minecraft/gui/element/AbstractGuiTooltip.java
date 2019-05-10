@@ -33,8 +33,8 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.resource.language.I18n;
 
 public abstract class AbstractGuiTooltip<T extends AbstractGuiTooltip<T>> extends AbstractGuiElement<T> {
     private static final int LINE_SPACING = 3;
@@ -66,18 +66,18 @@ public abstract class AbstractGuiTooltip<T extends AbstractGuiTooltip<T>> extend
         renderer.drawRect(1, 2, 1, height - 4, BORDER_LIGHT, BORDER_LIGHT, BORDER_DARK, BORDER_DARK); // Left border
         renderer.drawRect(width - 2, 2, 1, height - 4, BORDER_LIGHT, BORDER_LIGHT, BORDER_DARK, BORDER_DARK); // Right border
 
-        FontRenderer fontRenderer = MCVer.getFontRenderer();
+        TextRenderer fontRenderer = MCVer.getFontRenderer();
         int y = LINE_SPACING + 1;
         for (String line : text) {
             renderer.drawString(LINE_SPACING + 1, y, color, line, true);
-            y += fontRenderer.FONT_HEIGHT + LINE_SPACING;
+            y += fontRenderer.fontHeight + LINE_SPACING;
         }
     }
 
     @Override
     public ReadableDimension calcMinSize() {
-        FontRenderer fontRenderer = MCVer.getFontRenderer();
-        int height = 1 + LINE_SPACING + text.length * (fontRenderer.FONT_HEIGHT + LINE_SPACING);
+        TextRenderer fontRenderer = MCVer.getFontRenderer();
+        int height = 1 + LINE_SPACING + text.length * (fontRenderer.fontHeight + LINE_SPACING);
         int width = 0;
         for (String line : text) {
             int w = fontRenderer.getStringWidth(line);
@@ -104,7 +104,7 @@ public abstract class AbstractGuiTooltip<T extends AbstractGuiTooltip<T>> extend
     }
 
     public T setI18nText(String text, Object... args) {
-        return setText(I18n.format(text, args));
+        return setText(I18n.translate(text, args));
     }
 
     public T setColor(ReadableColor color) {

@@ -25,7 +25,7 @@
 package de.johni0702.minecraft.gui.utils;
 
 import de.johni0702.minecraft.gui.versions.MCVer;
-import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.font.TextRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ import java.util.List;
 public class StringUtils {
     public static String[] splitStringInMultipleRows(String string, int maxWidth) {
         if(string == null) return new String[0];
-        FontRenderer fontRenderer = MCVer.getFontRenderer();
+        TextRenderer fontRenderer = MCVer.getFontRenderer();
         List<String> rows = new ArrayList<>();
         String remaining = string;
         while(remaining.length() > 0) {

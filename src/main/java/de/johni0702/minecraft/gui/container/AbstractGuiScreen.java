@@ -39,9 +39,9 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.crash.CrashReport;
-import net.minecraft.crash.CrashReportCategory;
-import net.minecraft.crash.ReportedException;
+import net.minecraft.util.crash.CrashReport;
+import net.minecraft.util.crash.CrashReportSection;
+import net.minecraft.util.crash.CrashException;
 
 //#if MC>=11300
 import de.johni0702.minecraft.gui.versions.MCVer.Keyboard;
@@ -51,7 +51,7 @@ import de.johni0702.minecraft.gui.versions.MCVer.Keyboard;
 //#endif
 
 //#if MC>=10800
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 
 //#if MC<11300
 //$$ import java.io.IOException;
@@ -75,7 +75,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
     @Setter
     private GuiLabel title;
 
-    public net.minecraft.client.gui.GuiScreen toMinecraft() {
+    public net.minecraft.client.gui.Screen toMinecraft() {
         return wrapped;
     }
 
@@ -105,14 +105,14 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                 case NONE:
                     break;
                 case DEFAULT:
-                    wrapped.drawDefaultBackground();
+                    wrapped.renderBackground();
                     break;
                 case TRANSPARENT:
                     int top = 0xc0_10_10_10, bottom = 0xd0_10_10_10;
                     renderer.drawRect(0, 0, size.getWidth(), size.getHeight(), top, top, bottom, bottom);
                     break;
                 case DIRT:
-                    wrapped.drawBackground(0);
+                    wrapped.renderDirtBackground(0);
                     break;
             }
             if (title != null) {
@@ -143,17 +143,17 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                     OffsetGuiRenderer eRenderer = new OffsetGuiRenderer(renderer, position, tooltipSize);
                     tooltip.draw(eRenderer, tooltipSize, renderInfo);
                 } catch (Exception ex) {
-                    CrashReport crashReport = CrashReport.makeCrashReport(ex, "Rendering Gui Tooltip");
+                    CrashReport crashReport = CrashReport.create(ex, "Rendering Gui Tooltip");
                     renderInfo.addTo(crashReport);
-                    CrashReportCategory category = crashReport.makeCategory("Gui container details");
+                    CrashReportSection category = crashReport.addElement("Gui container details");
                     MCVer.addDetail(category, "Container", this::toString);
                     MCVer.addDetail(category, "Width", () -> "" + size.getWidth());
                     MCVer.addDetail(category, "Height", () -> "" + size.getHeight());
-                    category = crashReport.makeCategory("Tooltip details");
+                    category = crashReport.addElement("Tooltip details");
                     MCVer.addDetail(category, "Element", tooltip::toString);
                     MCVer.addDetail(category, "Position", position::toString);
                     MCVer.addDetail(category, "Size", tooltipSize::toString);
-                    throw new ReportedException(crashReport);
+                    throw new CrashException(crashReport);
                 }
             }
         }
@@ -177,22 +177,22 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
     }
 
     public void display() {
-        getMinecraft().displayGuiScreen(toMinecraft());
+        getMinecraft().openScreen(toMinecraft());
     }
 
-    protected class MinecraftGuiScreen extends net.minecraft.client.gui.GuiScreen {
+    protected class MinecraftGuiScreen extends net.minecraft.client.gui.Screen {
         private MinecraftGuiRenderer renderer;
         private boolean active;
 
         //#if MC>=11400
-        //$$ protected MinecraftGuiScreen() {
-        //$$     super(null);
-        //$$ }
-        //$$
-        //$$ @Override
-        //$$ public String getNarrationMessage() {
-        //$$     return title == null ? "" : title.getText();
-        //$$ }
+        protected MinecraftGuiScreen() {
+            super(null);
+        }
+
+        @Override
+        public String getNarrationMessage() {
+            return title == null ? "" : title.getText();
+        }
         //#endif
 
         @Override
@@ -221,7 +221,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         //#if MC>=11300
         @Override
         public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-            if (!forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), keyCode, '\0', isCtrlKeyDown(), isShiftKeyDown())) {
+            if (!forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), keyCode, '\0', hasControlDown(), hasShiftDown())) {
                 return super.keyPressed(keyCode, scanCode, modifiers);
             }
             return true;
@@ -229,7 +229,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
 
         @Override
         public boolean charTyped(char keyChar, int modifiers) {
-            if (!forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), 0, keyChar, isCtrlKeyDown(), isShiftKeyDown())) {
+            if (!forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), 0, keyChar, hasControlDown(), hasShiftDown())) {
                 return super.charTyped(keyChar, modifiers);
             }
             return true;
@@ -299,17 +299,17 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         @Override
         public boolean mouseScrolled(
                 //#if MC>=11400
-                //$$ double mouseX,
-                //$$ double mouseY,
+                double mouseX,
+                double mouseY,
                 //#endif
                 double dWheel
         ) {
             dWheel *= 120;
             return forEach(Scrollable.class).scroll(
                     //#if MC>=11400
-                    //$$ new Point((int) mouseX, (int) mouseY),
+                    new Point((int) mouseX, (int) mouseY),
                     //#else
-                    MouseUtils.getMousePos(),
+                    //$$ MouseUtils.getMousePos(),
                     //#endif
                     (int) dWheel
             );
@@ -330,9 +330,9 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
 
         @Override
         //#if MC>=11400
-        //$$ public void removed() {
+        public void removed() {
         //#else
-        public void onGuiClosed() {
+        //$$ public void onGuiClosed() {
         //#endif
             forEach(Closeable.class).close();
             active = false;
@@ -343,16 +343,16 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
 
         @Override
         //#if MC>=11400
-        //$$ public void init() {
+        public void init() {
         //#else
-        public void initGui() {
+        //$$ public void initGui() {
         //#endif
             active = false;
             if (enabledRepeatedKeyEvents) {
                 Keyboard.enableRepeatEvents(true);
             }
             screenSize = new Dimension(width, height);
-            renderer = new MinecraftGuiRenderer(MCVer.newScaledResolution(this.mc));
+            renderer = new MinecraftGuiRenderer(MCVer.newScaledResolution(this.minecraft));
             forEach(Loadable.class).load();
         }
 

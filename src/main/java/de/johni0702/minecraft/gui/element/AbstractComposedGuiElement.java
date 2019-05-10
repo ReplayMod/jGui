@@ -29,9 +29,9 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.versions.MCVer;
-import net.minecraft.crash.CrashReport;
-import net.minecraft.crash.CrashReportCategory;
-import net.minecraft.crash.ReportedException;
+import net.minecraft.util.crash.CrashReport;
+import net.minecraft.util.crash.CrashReportSection;
+import net.minecraft.util.crash.CrashException;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -82,12 +82,12 @@ public abstract class AbstractComposedGuiElement<T extends AbstractComposedGuiEl
                         if (e instanceof InvocationTargetException) {
                             e = e.getCause();
                         }
-                        CrashReport crash = CrashReport.makeCrashReport(e, "Calling Gui method");
-                        CrashReportCategory category = crash.makeCategory("Gui");
+                        CrashReport crash = CrashReport.create(e, "Calling Gui method");
+                        CrashReportSection category = crash.addElement("Gui");
                         MCVer.addDetail(category, "Method", method::toString);
                         MCVer.addDetail(category, "ComposedElement", AbstractComposedGuiElement.this::toString);
                         MCVer.addDetail(category, "Element", AbstractComposedGuiElement.this::toString);
-                        throw new ReportedException(crash);
+                        throw new CrashException(crash);
                     }
                     if (handled != null) {
                         if (handled instanceof Boolean) {
@@ -121,12 +121,12 @@ public abstract class AbstractComposedGuiElement<T extends AbstractComposedGuiEl
                         if (e instanceof InvocationTargetException) {
                             e = e.getCause();
                         }
-                        CrashReport crash = CrashReport.makeCrashReport(e, "Calling Gui method");
-                        CrashReportCategory category = crash.makeCategory("Gui");
+                        CrashReport crash = CrashReport.create(e, "Calling Gui method");
+                        CrashReportSection category = crash.addElement("Gui");
                         MCVer.addDetail(category, "Method", method::toString);
                         MCVer.addDetail(category, "ComposedElement", self::toString);
                         MCVer.addDetail(category, "Element", self::toString);
-                        throw new ReportedException(crash);
+                        throw new CrashException(crash);
                     }
                     if (handled != null) {
                         if (handled instanceof Boolean) {
@@ -162,12 +162,12 @@ public abstract class AbstractComposedGuiElement<T extends AbstractComposedGuiEl
                         if (e instanceof InvocationTargetException) {
                             e = e.getCause();
                         }
-                        CrashReport crash = CrashReport.makeCrashReport(e, "Calling Gui method");
-                        CrashReportCategory category = crash.makeCategory("Gui");
+                        CrashReport crash = CrashReport.create(e, "Calling Gui method");
+                        CrashReportSection category = crash.addElement("Gui");
                         MCVer.addDetail(category, "Method", method::toString);
                         MCVer.addDetail(category, "ComposedElement", element::toString);
                         MCVer.addDetail(category, "Element", element::toString);
-                        throw new ReportedException(crash);
+                        throw new CrashException(crash);
                     }
                 }
                 return handled;

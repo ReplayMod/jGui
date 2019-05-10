@@ -37,31 +37,31 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.crash.CrashReport;
-import net.minecraft.crash.CrashReportCategory;
-import net.minecraft.crash.ReportedException;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.crash.CrashReport;
+import net.minecraft.util.crash.CrashReportSection;
+import net.minecraft.util.crash.CrashException;
 
 //#if MC>=11300
-import net.minecraft.client.MainWindow;
+import net.minecraft.client.util.Window;
 //#else
 //$$ import org.lwjgl.input.Mouse;
 //$$ import net.minecraft.client.gui.ScaledResolution;
 //#endif
 
 //#if MC>=11400
-//$$ import de.johni0702.minecraft.gui.versions.callbacks.PostRenderHudCallback;
-//$$ import de.johni0702.minecraft.gui.versions.callbacks.PreTickCallback;
-//$$ import net.minecraft.text.StringTextComponent;
+import de.johni0702.minecraft.gui.versions.callbacks.PostRenderHudCallback;
+import de.johni0702.minecraft.gui.versions.callbacks.PreTickCallback;
+import net.minecraft.text.StringTextComponent;
 //#else
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+//$$ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 //#if MC>=10800
 //#if MC>=11300
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+//$$ import net.minecraftforge.eventbus.api.SubscribeEvent;
 //#else
 //$$ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 //#endif
-import net.minecraftforge.fml.common.gameevent.TickEvent;
+//$$ import net.minecraftforge.fml.common.gameevent.TickEvent;
 //#else
 //$$ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 //$$ import cpw.mods.fml.common.gameevent.TickEvent;
@@ -120,7 +120,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
      * @see #setAllowUserInput(boolean)
      */
     public boolean isAllowUserInput() {
-        return userInputGuiScreen.allowUserInput;
+        return userInputGuiScreen.passEvents;
     }
 
     /**
@@ -132,19 +132,19 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
      * @see net.minecraft.client.gui.GuiScreen#allowUserInput
      */
     public void setAllowUserInput(boolean allowUserInput) {
-        userInputGuiScreen.allowUserInput = allowUserInput;
+        userInputGuiScreen.passEvents = allowUserInput;
     }
 
     private void updateUserInputGui() {
-        Minecraft mc = getMinecraft();
+        MinecraftClient mc = getMinecraft();
         if (visible) {
             if (mouseVisible) {
                 if (mc.currentScreen != userInputGuiScreen) {
-                    mc.displayGuiScreen(userInputGuiScreen);
+                    mc.openScreen(userInputGuiScreen);
                 }
             } else {
                 if (mc.currentScreen == userInputGuiScreen) {
-                    mc.displayGuiScreen(null);
+                    mc.openScreen(null);
                 }
             }
         }
@@ -187,17 +187,17 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
                     OffsetGuiRenderer eRenderer = new OffsetGuiRenderer(renderer, position, tooltipSize);
                     tooltip.draw(eRenderer, tooltipSize, renderInfo);
                 } catch (Exception ex) {
-                    CrashReport crashReport = CrashReport.makeCrashReport(ex, "Rendering Gui Tooltip");
+                    CrashReport crashReport = CrashReport.create(ex, "Rendering Gui Tooltip");
                     renderInfo.addTo(crashReport);
-                    CrashReportCategory category = crashReport.makeCategory("Gui container details");
+                    CrashReportSection category = crashReport.addElement("Gui container details");
                     MCVer.addDetail(category, "Container", this::toString);
                     MCVer.addDetail(category, "Width", () -> "" + size.getWidth());
                     MCVer.addDetail(category, "Height", () -> "" + size.getHeight());
-                    category = crashReport.makeCategory("Tooltip details");
+                    category = crashReport.addElement("Tooltip details");
                     MCVer.addDetail(category, "Element", tooltip::toString);
                     MCVer.addDetail(category, "Position", position::toString);
                     MCVer.addDetail(category, "Size", tooltipSize::toString);
-                    throw new ReportedException(crashReport);
+                    throw new CrashException(crashReport);
                 }
             }
         }
@@ -224,13 +224,13 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         private EventHandler() {}
 
         //#if MC>=11400
-        //$$ { on(PostRenderHudCallback.EVENT, this::renderOverlay); }
-        //$$ private void renderOverlay(float partialTicks) {
+        { on(PostRenderHudCallback.EVENT, this::renderOverlay); }
+        private void renderOverlay(float partialTicks) {
         //#else
-        @SubscribeEvent
-        public void renderOverlay(RenderGameOverlayEvent.Post event) {
-            if (MCVer.getType(event) != RenderGameOverlayEvent.ElementType.ALL) return;
-            float partialTicks = MCVer.getPartialTicks(event);
+        //$$ @SubscribeEvent
+        //$$ public void renderOverlay(RenderGameOverlayEvent.Post event) {
+        //$$     if (MCVer.getType(event) != RenderGameOverlayEvent.ElementType.ALL) return;
+        //$$     float partialTicks = MCVer.getPartialTicks(event);
         //#endif
             updateRenderer();
             int layers = getMaxLayer();
@@ -250,20 +250,20 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         }
 
         //#if MC>=11400
-        //$$ { on(PreTickCallback.EVENT, () -> forEach(Tickable.class).tick()); }
+        { on(PreTickCallback.EVENT, () -> forEach(Tickable.class).tick()); }
         //#else
-        @SubscribeEvent
-        public void tickOverlay(TickEvent.ClientTickEvent event) {
-            if (event.phase == TickEvent.Phase.START) {
-                forEach(Tickable.class).tick();
-            }
-        }
+        //$$ @SubscribeEvent
+        //$$ public void tickOverlay(TickEvent.ClientTickEvent event) {
+        //$$     if (event.phase == TickEvent.Phase.START) {
+        //$$         forEach(Tickable.class).tick();
+        //$$     }
+        //$$ }
         //#endif
 
         private void updateRenderer() {
-            Minecraft mc = getMinecraft();
+            MinecraftClient mc = getMinecraft();
             //#if MC>=11300
-            MainWindow
+            Window
             //#else
             //$$ ScaledResolution
             //#endif
@@ -277,22 +277,22 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         }
     }
 
-    protected class UserInputGuiScreen extends net.minecraft.client.gui.GuiScreen {
+    protected class UserInputGuiScreen extends net.minecraft.client.gui.Screen {
 
         //#if MC>=11400
-        //$$ UserInputGuiScreen() {
-        //$$     super(new StringTextComponent(""));
-        //$$ }
+        UserInputGuiScreen() {
+            super(new StringTextComponent(""));
+        }
         //#endif
 
         {
-            this.allowUserInput = true;
+            this.passEvents = true;
         }
 
         //#if MC>=11300
         @Override
         public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-            if (!forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), keyCode, '\0', isCtrlKeyDown(), isShiftKeyDown())) {
+            if (!forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), keyCode, '\0', hasControlDown(), hasShiftDown())) {
                 return super.keyPressed(keyCode, scanCode, modifiers);
             }
             return true;
@@ -300,7 +300,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
 
         @Override
         public boolean charTyped(char keyChar, int modifiers) {
-            if (!forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), 0, keyChar, isCtrlKeyDown(), isShiftKeyDown())) {
+            if (!forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), 0, keyChar, hasControlDown(), hasShiftDown())) {
                 return super.charTyped(keyChar, modifiers);
             }
             return true;
@@ -370,17 +370,17 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         @Override
         public boolean mouseScrolled(
                 //#if MC>=11400
-                //$$ double mouseX,
-                //$$ double mouseY,
+                double mouseX,
+                double mouseY,
                 //#endif
                 double dWheel
         ) {
             dWheel *= 120;
             return forEach(Scrollable.class).scroll(
                     //#if MC>=11400
-                    //$$ new Point((int) mouseX, (int) mouseY),
+                    new Point((int) mouseX, (int) mouseY),
                     //#else
-                    MouseUtils.getMousePos(),
+                    //$$ MouseUtils.getMousePos(),
                     //#endif
                     (int) dWheel
             );
@@ -401,9 +401,9 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
 
         @Override
         //#if MC>=11400
-        //$$ public void removed() {
+        public void removed() {
         //#else
-        public void onGuiClosed() {
+        //$$ public void onGuiClosed() {
         //#endif
             mouseVisible = false;
         }

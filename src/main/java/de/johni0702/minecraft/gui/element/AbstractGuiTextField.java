@@ -42,12 +42,12 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.resource.language.I18n;
 
 //#if MC>=11300
-import net.minecraft.util.SharedConstants;
+import net.minecraft.SharedConstants;
 //#else
 //$$ import net.minecraft.util.ChatAllowedCharacters;
 //$$ import org.lwjgl.input.Keyboard;
@@ -111,7 +111,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
 
     @Override
     public T setI18nText(String text, Object... args) {
-        return setText(I18n.format(text, args));
+        return setText(I18n.translate(text, args));
     }
 
     @Override
@@ -167,10 +167,10 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
     private void updateCurrentOffset() {
         currentOffset = Math.min(currentOffset, cursorPos);
         String line = text.substring(currentOffset, cursorPos);
-        FontRenderer fontRenderer = MCVer.getFontRenderer();
+        TextRenderer fontRenderer = MCVer.getFontRenderer();
         int currentWidth = fontRenderer.getStringWidth(line);
         if (currentWidth > size.getWidth() - 2*BORDER) {
-            currentOffset = cursorPos - fontRenderer.trimStringToWidth(line, size.getWidth() - 2*BORDER, true).length();
+            currentOffset = cursorPos - fontRenderer.trimToWidth(line, size.getWidth() - 2*BORDER, true).length();
         }
     }
 
@@ -185,7 +185,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
     @Override
     public T writeChar(char c) {
         //#if MC>=11300
-        if (!SharedConstants.isAllowedCharacter(c)) {
+        if (!SharedConstants.isValidChar(c)) {
         //#else
         //$$ if (!ChatAllowedCharacters.isAllowedCharacter(c)) {
         //#endif
@@ -312,9 +312,9 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         if (hovering && isFocused() && button == 0) {
             updateCurrentOffset();
             int mouseX = position.getX() - BORDER;
-            FontRenderer fontRenderer = MCVer.getFontRenderer();
+            TextRenderer fontRenderer = MCVer.getFontRenderer();
             String text = this.text.substring(currentOffset);
-            int textX = fontRenderer.trimStringToWidth(text, mouseX).length() + currentOffset;
+            int textX = fontRenderer.trimToWidth(text, mouseX).length() + currentOffset;
             setCursorPosition(textX);
             return true;
         }
@@ -360,8 +360,8 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         super.draw(renderer, size, renderInfo);
 
         int width = size.getWidth(), height = size.getHeight();
-        FontRenderer fontRenderer = MCVer.getFontRenderer();
-        int posY = height / 2 - fontRenderer.FONT_HEIGHT / 2;
+        TextRenderer fontRenderer = MCVer.getFontRenderer();
+        int posY = height / 2 - fontRenderer.fontHeight / 2;
 
         // Draw black rect once pixel smaller than gray rect
         renderer.drawRect(0, 0, width, height, BORDER_COLOR);
@@ -369,14 +369,14 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
 
         if (text.isEmpty() && !isFocused() && !Strings.isNullOrEmpty(hint)) {
             // Draw hint
-            String text = fontRenderer.trimStringToWidth(hint, width - 2*BORDER);
+            String text = fontRenderer.trimToWidth(hint, width - 2*BORDER);
             renderer.drawString(BORDER, posY, textColorDisabled, text);
         } else {
             // Draw text
             String renderText = text.substring(currentOffset);
-            renderText = fontRenderer.trimStringToWidth(renderText, width - 2*BORDER);
+            renderText = fontRenderer.trimToWidth(renderText, width - 2*BORDER);
             ReadableColor color = isEnabled() ? textColorEnabled : textColorDisabled;
-            int lineEnd = renderer.drawString(BORDER, height / 2 - fontRenderer.FONT_HEIGHT / 2, color, renderText);
+            int lineEnd = renderer.drawString(BORDER, height / 2 - fontRenderer.fontHeight / 2, color, renderText);
 
             // Draw selection
             int from = getSelectionFrom();
@@ -394,7 +394,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
                 if (cursorPos == text.length()) {
                     renderer.drawString(posX, posY, CURSOR_COLOR, "_", true);
                 } else {
-                    renderer.drawRect(posX, posY - 1, 1, 1 + fontRenderer.FONT_HEIGHT, CURSOR_COLOR);
+                    renderer.drawRect(posX, posY - 1, 1, 1 + fontRenderer.fontHeight, CURSOR_COLOR);
                 }
             }
         }
@@ -422,7 +422,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
 
         String textBefore = text;
         try {
-            if (GuiScreen.isCtrlKeyDown()) {
+            if (Screen.hasControlDown()) {
                 switch (keyCode) {
                     case Keyboard.KEY_A: // Select all
                         cursorPos = 0;
@@ -444,8 +444,8 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
                 }
             }
 
-            boolean words = GuiScreen.isCtrlKeyDown();
-            boolean select = GuiScreen.isShiftKeyDown();
+            boolean words = Screen.hasControlDown();
+            boolean select = Screen.hasShiftDown();
             switch (keyCode) {
                 case Keyboard.KEY_HOME:
                     cursorPos = 0;
@@ -572,7 +572,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
 
     @Override
     public T setI18nHint(String hint, Object... args) {
-        return setHint(I18n.format(hint));
+        return setHint(I18n.translate(hint));
     }
 
     @Override
