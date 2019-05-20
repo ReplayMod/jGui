@@ -1,13 +1,11 @@
 //#if MC>=11400
 package de.johni0702.minecraft.gui.versions.callbacks;
 
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
+import de.johni0702.minecraft.gui.utils.Event;
 
 public interface MouseCallback {
-    Event<MouseCallback> EVENT = EventFactory.createArrayBacked(
-            MouseCallback.class,
-            (listeners) -> new MouseCallback() {
+    Event<MouseCallback> EVENT = Event.create((listeners) ->
+            new MouseCallback() {
                 @Override
                 public boolean mouseDown(double x, double y, int button) {
                     for (MouseCallback listener : listeners) {

@@ -1,13 +1,11 @@
 //#if MC>=11300
 package de.johni0702.minecraft.gui.versions.callbacks;
 
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
+import de.johni0702.minecraft.gui.utils.Event;
 
 public interface PreTickCallback {
-    Event<PreTickCallback> EVENT = EventFactory.createArrayBacked(
-            PreTickCallback.class,
-            (listeners) -> () -> {
+    Event<PreTickCallback> EVENT = Event.create((listeners) ->
+            () -> {
                 for (PreTickCallback listener : listeners) {
                     listener.preTick();
                 }

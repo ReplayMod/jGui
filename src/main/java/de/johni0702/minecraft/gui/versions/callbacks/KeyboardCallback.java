@@ -1,13 +1,11 @@
 //#if MC>=11400
 package de.johni0702.minecraft.gui.versions.callbacks;
 
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
+import de.johni0702.minecraft.gui.utils.Event;
 
 public interface KeyboardCallback {
-    Event<KeyboardCallback> EVENT = EventFactory.createArrayBacked(
-            KeyboardCallback.class,
-            (listeners) -> new KeyboardCallback() {
+    Event<KeyboardCallback> EVENT = Event.create((listeners) ->
+            new KeyboardCallback() {
                 @Override
                 public boolean keyPressed(int keyCode, int modifiers, int scanCode) {
                     for (KeyboardCallback listener : listeners) {

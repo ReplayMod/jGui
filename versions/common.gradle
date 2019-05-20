@@ -136,13 +136,6 @@ dependencies {
         modCompile 'net.fabricmc:fabric:' + [
                 11400: '0.2.7+build.127'
         ][mcVersion]
-    } else {
-        // For Event, EventFactory, etc.
-        // Not strictly required for jGui itself but we want to expose our utility types (e.g. EventRegistrations)
-        // to consuming mods which may use them on all versions (e.g. ReplayMod uses it for all its internal events).
-        compile('net.fabricmc.fabric-api:fabric-lib:0.1.0') {
-            transitive = false
-        }
     }
     if (FG3) {
         minecraft 'net.minecraftforge:forge:' + [

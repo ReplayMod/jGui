@@ -1,7 +1,5 @@
 package de.johni0702.minecraft.gui.utils;
 
-import net.fabricmc.fabric.api.event.Event;
-
 //#if MC<=11302
 //$$ import net.minecraftforge.common.MinecraftForge;
 //#endif
