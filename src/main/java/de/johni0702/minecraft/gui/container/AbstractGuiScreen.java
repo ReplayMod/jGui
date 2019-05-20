@@ -75,7 +75,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
     @Setter
     private GuiLabel title;
 
-    public net.minecraft.client.gui.Screen toMinecraft() {
+    public net.minecraft.client.gui.screen.Screen toMinecraft() {
         return wrapped;
     }
 
@@ -180,7 +180,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         getMinecraft().openScreen(toMinecraft());
     }
 
-    protected class MinecraftGuiScreen extends net.minecraft.client.gui.Screen {
+    protected class MinecraftGuiScreen extends net.minecraft.client.gui.screen.Screen {
         private MinecraftGuiRenderer renderer;
         private boolean active;
 

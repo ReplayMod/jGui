@@ -39,7 +39,7 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
 
 //#if MC>=11300
-import net.minecraft.client.audio.PositionedSoundInstance;
+import net.minecraft.client.sound.PositionedSoundInstance;
 //#else
 //$$ import net.minecraft.client.audio.PositionedSoundRecord;
 //#endif

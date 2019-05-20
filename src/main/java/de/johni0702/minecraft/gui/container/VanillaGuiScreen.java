@@ -37,16 +37,16 @@ import de.johni0702.minecraft.gui.versions.callbacks.PreTickCallback;
 
 public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, Scrollable {
 
-    public static VanillaGuiScreen setup(net.minecraft.client.gui.Screen originalGuiScreen) {
+    public static VanillaGuiScreen setup(net.minecraft.client.gui.screen.Screen originalGuiScreen) {
         VanillaGuiScreen gui = new VanillaGuiScreen(originalGuiScreen);
         gui.register();
         return gui;
     }
 
-    private final net.minecraft.client.gui.Screen mcScreen;
+    private final net.minecraft.client.gui.screen.Screen mcScreen;
     private final EventHandler eventHandler = new EventHandler();
 
-    public VanillaGuiScreen(net.minecraft.client.gui.Screen mcScreen) {
+    public VanillaGuiScreen(net.minecraft.client.gui.screen.Screen mcScreen) {
         this.mcScreen = mcScreen;
 
         super.setBackground(Background.NONE);
@@ -69,7 +69,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
     }
 
     @Override
-    public net.minecraft.client.gui.Screen toMinecraft() {
+    public net.minecraft.client.gui.screen.Screen toMinecraft() {
         return mcScreen;
     }
 
@@ -78,7 +78,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
         throw new UnsupportedOperationException("Cannot set background of vanilla gui screen.");
     }
 
-    private net.minecraft.client.gui.Screen getSuperMcGui() {
+    private net.minecraft.client.gui.screen.Screen getSuperMcGui() {
         return super.toMinecraft();
     }
 

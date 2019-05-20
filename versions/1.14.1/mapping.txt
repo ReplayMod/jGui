@@ -26,15 +26,15 @@ net.minecraft.util.crash.CrashReport create() makeCrashReport()
 net.minecraft.util.crash.CrashReportSection net.minecraft.crash.CrashReportCategory
 net.minecraft.util.crash.CrashReportSection add() addDetail()
 net.minecraft.util.crash.CrashException net.minecraft.crash.ReportedException
-net.minecraft.client.gui.Screen net.minecraft.client.gui.GuiScreen
-net.minecraft.client.gui.Screen hasControlDown() isCtrlKeyDown()
-net.minecraft.client.gui.Screen hasShiftDown() isShiftKeyDown()
-net.minecraft.client.gui.Screen init() setWorldAndResolution()
-net.minecraft.client.gui.Screen renderBackground() drawDefaultBackground()
-net.minecraft.client.gui.Screen renderDirtBackground() drawBackground()
-net.minecraft.client.gui.Screen removed() onGuiClosed()
-net.minecraft.client.gui.Screen minecraft mc
-net.minecraft.client.gui.Screen passEvents allowUserInput
+net.minecraft.client.gui.screen.Screen net.minecraft.client.gui.GuiScreen
+net.minecraft.client.gui.screen.Screen hasControlDown() isCtrlKeyDown()
+net.minecraft.client.gui.screen.Screen hasShiftDown() isShiftKeyDown()
+net.minecraft.client.gui.screen.Screen init() setWorldAndResolution()
+net.minecraft.client.gui.screen.Screen renderBackground() drawDefaultBackground()
+net.minecraft.client.gui.screen.Screen renderDirtBackground() drawBackground()
+net.minecraft.client.gui.screen.Screen removed() onGuiClosed()
+net.minecraft.client.gui.screen.Screen minecraft mc
+net.minecraft.client.gui.screen.Screen passEvents allowUserInput
 net.minecraft.client.gui.DrawableHelper net.minecraft.client.gui.Gui
 net.minecraft.client.gui.DrawableHelper fill() drawRect()
 com.mojang.blaze3d.platform.GlStateManager net.minecraft.client.renderer.GlStateManager
@@ -57,8 +57,8 @@ net.minecraft.client.texture.NativeImageBackedTexture getImage() getTextureData(
 net.minecraft.client.texture.NativeImageBackedTexture upload() updateDynamicTexture()
 net.minecraft.client.texture.AbstractTexture net.minecraft.client.renderer.texture.AbstractTexture
 net.minecraft.client.texture.AbstractTexture clearGlId() deleteGlTexture()
-net.minecraft.client.audio.PositionedSoundInstance net.minecraft.client.audio.SimpleSound
-net.minecraft.client.audio.PositionedSoundInstance master() getMasterRecord()
+net.minecraft.client.sound.PositionedSoundInstance net.minecraft.client.audio.SimpleSound
+net.minecraft.client.sound.PositionedSoundInstance master() getMasterRecord()
 net.minecraft.sound.SoundEvent net.minecraft.util.SoundEvent
 net.minecraft.sound.SoundEvents net.minecraft.init.SoundEvents
 net.minecraft.SharedConstants net.minecraft.util.SharedConstants

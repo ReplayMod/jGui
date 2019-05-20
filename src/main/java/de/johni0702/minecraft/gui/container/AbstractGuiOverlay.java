@@ -52,7 +52,7 @@ import net.minecraft.client.util.Window;
 //#if MC>=11400
 import de.johni0702.minecraft.gui.versions.callbacks.PostRenderHudCallback;
 import de.johni0702.minecraft.gui.versions.callbacks.PreTickCallback;
-import net.minecraft.text.StringTextComponent;
+import net.minecraft.network.chat.TextComponent;
 //#else
 //$$ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 //#if MC>=10800
@@ -277,11 +277,11 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         }
     }
 
-    protected class UserInputGuiScreen extends net.minecraft.client.gui.Screen {
+    protected class UserInputGuiScreen extends net.minecraft.client.gui.screen.Screen {
 
         //#if MC>=11400
         UserInputGuiScreen() {
-            super(new StringTextComponent(""));
+            super(new TextComponent(""));
         }
         //#endif
 

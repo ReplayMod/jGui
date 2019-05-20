@@ -26,17 +26,17 @@ package de.johni0702.minecraft.gui.container;
 
 public class GuiScreen extends AbstractGuiScreen<GuiScreen> {
     @SuppressWarnings("unchecked")
-    public static AbstractGuiScreen from(net.minecraft.client.gui.Screen minecraft) {
+    public static AbstractGuiScreen from(net.minecraft.client.gui.screen.Screen minecraft) {
         if (!(minecraft instanceof AbstractGuiScreen.MinecraftGuiScreen)) {
             return null;
         }
         return ((AbstractGuiScreen.MinecraftGuiScreen) minecraft).getWrapper();
     }
 
-    public static GuiScreen wrap(final net.minecraft.client.gui.Screen minecraft) {
+    public static GuiScreen wrap(final net.minecraft.client.gui.screen.Screen minecraft) {
         return new GuiScreen() {
             @Override
-            public net.minecraft.client.gui.Screen toMinecraft() {
+            public net.minecraft.client.gui.screen.Screen toMinecraft() {
                 return minecraft;
             }
         };

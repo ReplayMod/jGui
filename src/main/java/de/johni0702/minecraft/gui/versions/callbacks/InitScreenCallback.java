@@ -2,7 +2,7 @@
 package de.johni0702.minecraft.gui.versions.callbacks;
 
 import de.johni0702.minecraft.gui.utils.Event;
-import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
 
 import java.util.List;
