@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "package": "de.johni0702.minecraft.gui.versions.mixin",
+  "mixins": [],
+  "server": [],
+  "client": [
+    //#if MC>=11300
+    //#if MC>=11400
+    "MixinGameRenderer",
+    "MixinScreen",
+    "MixinMouseListener",
+    "MixinKeyboardListener",
+    // Note: MixinMinecraft actually belongs one line down in the 1.13 part but see its source file for why it isn't
+    "MixinMinecraft"
+    //#endif
+    //#endif
+  ],
+  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.6.11",
+  "refmap": "mixins.jgui.refmap.json"
+}

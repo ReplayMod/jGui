@@ -99,6 +99,7 @@ preshadowJar {
 
 if (FABRIC) {
     minecraft {
+        refmapName = 'mixins.jgui.refmap.json'
     }
 } else {
     minecraft {

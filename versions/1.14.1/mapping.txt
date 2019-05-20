@@ -4,6 +4,7 @@ net.minecraft.client.MinecraftClient keyboard keyboardListener
 net.minecraft.client.MinecraftClient mouse mouseHelper
 net.minecraft.client.MinecraftClient window mainWindow
 net.minecraft.client.MinecraftClient openScreen() displayGuiScreen()
+net.minecraft.client.MinecraftClient tick() runTick()
 net.minecraft.client.MinecraftClient getSoundManager() getSoundHandler()
 net.minecraft.client.Keyboard net.minecraft.client.KeyboardListener
 net.minecraft.client.Keyboard setClipboard() setClipboardString()
