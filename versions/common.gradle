@@ -38,16 +38,16 @@ buildscript {
         }
         if (mcVersion >= 11400) {
             classpath 'fabric-loom:fabric-loom.gradle.plugin:0.2.2-SNAPSHOT'
-        } else if (mcVersion >= 10800) {
-            classpath 'net.minecraftforge.gradle:ForgeGradle:' + [
-                    11302: '3.+',
-                    11200: '2.3-SNAPSHOT',
-                    10904: '2.2-SNAPSHOT',
-                    10809: '2.1-SNAPSHOT',
-                    10800: '2.0-SNAPSHOT',
-            ][mcVersion]
+        } else if (mcVersion >= 11300) {
+            classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
         } else {
-            classpath 'com.github.Team-Fruit:ForgeGradle:3be8636'
+            classpath 'com.github.ReplayMod:ForgeGradle:' + [
+                    11200: 'd5c13801', // FG 2.3
+                    10904: 'bf0ea7b8', // FG 2.2
+                    10809: 'ab81684e', // FG 2.1
+                    10800: 'ab81684e', // FG 2.1
+                    10710: 'e93f77b4', // FG 1.2
+            ][mcVersion]
         }
         classpath 'com.github.replaymod:preprocessor:6be682c'
     }
