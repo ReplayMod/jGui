@@ -234,6 +234,14 @@ public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> i
                 }
 
                 @Override
+                public void layout(ReadableDimension size, RenderInfo renderInfo) {
+                    super.layout(size, renderInfo);
+                    if (renderInfo.layer == 0) {
+                        skin.layout(size, renderInfo);
+                    }
+                }
+
+                @Override
                 public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
                     super.draw(renderer, size, renderInfo);
                     if (renderInfo.layer == 0) {
