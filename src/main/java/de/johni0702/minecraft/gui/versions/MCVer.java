@@ -121,16 +121,16 @@ public class MCVer {
         bottom += y;
         top += y;
 
-        color(0, 0, 255, 255);
+        color4f(0, 0, 255, 255);
         disableTexture();
         enableColorLogicOp();
-        colorLogicOp(GL11.GL_OR_REVERSE);
+        logicOp(GL11.GL_OR_REVERSE);
 
         MCVer.drawRect(right, bottom, left, top);
 
         disableColorLogicOp();
         enableTexture();
-        color(255, 255, 255, 255);
+        color4f(255, 255, 255, 255);
     }
 
     public static void drawRect(int x, int y, int width, int height, ReadableColor tl, ReadableColor tr, ReadableColor bl, ReadableColor br) {
@@ -262,12 +262,6 @@ public class MCVer {
     //#endif
 
     //#if MC>=11300
-    public static void color(float r, float g, float b, float a) { color4f(r, g, b, a); }
-    public static void enableAlpha() { enableAlphaTest(); }
-    public static void disableAlpha() { disableAlphaTest(); }
-    public static void tryBlendFuncSeparate(int l, int r, int vl, int vr) { blendFuncSeparate(l, r, vl, vr); }
-    public static void colorLogicOp(int op) { logicOp(op); }
-
     public static abstract class Keyboard {
         public static final int KEY_ESCAPE = GLFW.GLFW_KEY_ESCAPE;
         public static final int KEY_HOME = GLFW.GLFW_KEY_HOME;

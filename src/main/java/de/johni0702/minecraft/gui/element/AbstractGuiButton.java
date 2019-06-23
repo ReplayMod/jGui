@@ -81,7 +81,7 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
         super.draw(renderer, size, renderInfo);
 
         renderer.bindTexture(WIDGETS_TEXTURE);
-        color(1, 1, 1, 1);
+        color4f(1, 1, 1, 1);
 
         byte texture = 1;
         int color = 0xe0e0e0;
@@ -94,7 +94,7 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
         }
 
         enableBlend();
-        tryBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+        blendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         int textureY = 46 + texture * 20;

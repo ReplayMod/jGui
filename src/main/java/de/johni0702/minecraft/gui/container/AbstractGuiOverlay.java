@@ -129,7 +129,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
      * GUI elements such as text fields.
      * Default for overlays is {@code true} whereas for normal GUI screens it is {@code false}.
      * @param allowUserInput {@code true} to allow user input, {@code false} to disallow it
-     * @see net.minecraft.client.gui.GuiScreen#allowUserInput
+     * @see net.minecraft.client.gui.screen.Screen#passEvents
      */
     public void setAllowUserInput(boolean allowUserInput) {
         userInputGuiScreen.passEvents = allowUserInput;

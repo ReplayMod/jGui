@@ -110,12 +110,12 @@ public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedBut
         }
 
         if (texture == null) { // Button is disabled but we have no texture for that
-            color(0.5f, 0.5f, 0.5f, 1);
+            color4f(0.5f, 0.5f, 0.5f, 1);
             texture = textureNormal;
         }
 
         enableBlend();
-        tryBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+        blendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         renderer.drawTexturedRect(0, 0, texture.getX(), texture.getY(), size.getWidth(), size.getHeight(),

@@ -166,12 +166,12 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     public void drawRect(int x, int y, int width, int height, ReadableColor tl, ReadableColor tr, ReadableColor bl, ReadableColor br) {
         disableTexture();
         enableBlend();
-        disableAlpha();
-        tryBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+        disableAlphaTest();
+        blendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         shadeModel(GL_SMOOTH);
         MCVer.drawRect(x, y, width, height, tl, tr, bl, br);
         shadeModel(GL_FLAT);
-        enableAlpha();
+        enableAlphaTest();
         enableTexture();
     }
 
