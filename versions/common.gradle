@@ -131,16 +131,16 @@ if (FABRIC) {
 dependencies {
     if (FABRIC) {
         minecraft 'com.mojang:minecraft:' + [
-                11402: '1.14.2'
+                11403: '1.14.3',
         ][mcVersion]
         mappings 'net.fabricmc:yarn:' + [
-                11402: '1.14.2+build.2'
+                11403: '1.14.3+build.1',
         ][mcVersion]
         modCompile 'net.fabricmc:fabric-loader:' + [
-                11402: '0.4.8+build.154'
+                11403: '0.4.8+build.155',
         ][mcVersion]
         modCompile 'net.fabricmc.fabric-api:fabric-api:' + [
-                11402: '0.3.0+build.170'
+                11403: '0.3.0+build.185',
         ][mcVersion]
     }
     if (FG3) {

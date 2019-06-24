@@ -191,7 +191,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
 
         @Override
         public String getNarrationMessage() {
-            return title == null ? "" : title.getText();
+            return title == null ? "" : title.getString();
         }
         //#endif
 

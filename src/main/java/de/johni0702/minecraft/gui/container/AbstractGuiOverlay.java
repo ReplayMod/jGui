@@ -52,7 +52,7 @@ import net.minecraft.client.util.Window;
 //#if MC>=11400
 import de.johni0702.minecraft.gui.versions.callbacks.PostRenderHudCallback;
 import de.johni0702.minecraft.gui.versions.callbacks.PreTickCallback;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.text.LiteralText;
 //#else
 //$$ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 //#if MC>=10800
@@ -281,7 +281,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
 
         //#if MC>=11400
         UserInputGuiScreen() {
-            super(new TextComponent(""));
+            super(new LiteralText(""));
         }
         //#endif
 
