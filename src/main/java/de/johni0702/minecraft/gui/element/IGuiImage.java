@@ -24,12 +24,11 @@
  */
 package de.johni0702.minecraft.gui.element;
 
+import de.johni0702.minecraft.gui.versions.Image;
 import net.minecraft.util.Identifier;
 
-import java.awt.image.BufferedImage;
-
 public interface IGuiImage<T extends IGuiImage<T>> extends GuiElement<T> {
-    T setTexture(BufferedImage img);
+    T setTexture(Image img);
     T setTexture(Identifier resourceLocation);
     T setTexture(Identifier resourceLocation, int u, int v, int width, int height);
 

@@ -6,7 +6,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.util.crash.CrashReportSection;
 import org.lwjgl.opengl.GL11;
 
@@ -35,7 +34,6 @@ import static com.mojang.blaze3d.platform.GlStateManager.*;
 //$$ import static org.lwjgl.opengl.GL11.*;
 //#endif
 
-import java.awt.image.BufferedImage;
 import java.util.concurrent.Callable;
 
 /**
@@ -220,28 +218,6 @@ public class MCVer {
         return getMinecraft().keyboard.getClipboard();
         //#else
         //$$ return GuiScreen.getClipboardString();
-        //#endif
-    }
-
-    public static NativeImageBackedTexture newDynamicTexture(BufferedImage from) {
-        //#if MC>=11300
-        NativeImageBackedTexture texture = new NativeImageBackedTexture(from.getWidth(), from.getHeight(), false) {
-            @Override
-            protected void finalize() throws Throwable {
-                // Great, now we're using a language with GC but still need to take care of memory management.. thanks MC
-                getImage().close();
-                super.finalize();
-            }
-        };
-        for (int y = from.getHeight() - 1; y >= 0; y--) {
-            for (int x = from.getWidth() - 1; x >= 0; x--) {
-                texture.getImage().setPixelRGBA(x, y, from.getRGB(x, y) | 0xff000000);
-            }
-        }
-        texture.upload();
-        return texture;
-        //#else
-        //$$ return new DynamicTexture(from);
         //#endif
     }
 

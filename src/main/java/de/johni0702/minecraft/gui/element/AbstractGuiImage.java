@@ -30,13 +30,10 @@ import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
+import de.johni0702.minecraft.gui.versions.Image;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.util.Identifier;
-
-import java.awt.image.BufferedImage;
-
-import static de.johni0702.minecraft.gui.versions.MCVer.newDynamicTexture;
 
 public abstract class AbstractGuiImage<T extends AbstractGuiImage<T>>
         extends AbstractGuiElement<T> implements IGuiImage<T> {
@@ -102,13 +99,13 @@ public abstract class AbstractGuiImage<T extends AbstractGuiImage<T>>
     }
 
     @Override
-    public T setTexture(BufferedImage img) {
+    public T setTexture(Image img) {
         Preconditions.checkState(copyOf == null, "Cannot change texture of copy.");
         resourceLocation = null;
         if (texture != null) {
             texture.clearGlId();
         }
-        texture = newDynamicTexture(img);
+        texture = img.toTexture();
         textureWidth = uWidth = img.getWidth();
         textureHeight = vHeight = img.getHeight();
         return getThis();
