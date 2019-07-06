@@ -86,7 +86,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
     public boolean mouseClick(ReadablePoint position, int button) {
         //#if MC>=11300
         //#else
-        //$$ forwardMouseInput();
+        //$$ eventHandler.handled = false;
         //#endif
         return false;
     }
@@ -95,7 +95,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
     public boolean mouseDrag(ReadablePoint position, int button, long timeSinceLastCall) {
         //#if MC>=11300
         //#else
-        //$$ forwardMouseInput();
+        //$$ eventHandler.handled = false;
         //#endif
         return false;
     }
@@ -104,7 +104,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
     public boolean mouseRelease(ReadablePoint position, int button) {
         //#if MC>=11300
         //#else
-        //$$ forwardMouseInput();
+        //$$ eventHandler.handled = false;
         //#endif
         return false;
     }
@@ -113,38 +113,16 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
     public boolean scroll(ReadablePoint mousePosition, int dWheel) {
         //#if MC>=11300
         //#else
-        //$$ forwardMouseInput();
+        //$$ eventHandler.handled = false;
         //#endif
         return false;
     }
-
-    //#if MC<11300
-    //$$ private void forwardMouseInput() {
-        //#if MC>=10800
-        //$$ try {
-        //$$     mcScreen.handleMouseInput();
-        //$$ } catch (IOException e) {
-        //$$     throw new RuntimeException(e);
-        //$$ }
-        //#else
-        //$$ mcScreen.handleMouseInput();
-        //#endif
-    //$$ }
-    //#endif
 
     @Override
     public boolean typeKey(ReadablePoint mousePosition, int keyCode, char keyChar, boolean ctrlDown, boolean shiftDown) {
         //#if MC>=11300
         //#else
-        //#if MC>=10800
-        //$$ try {
-        //$$     mcScreen.handleKeyboardInput();
-        //$$ } catch (IOException e) {
-        //$$     throw new RuntimeException(e);
-        //$$ }
-        //#else
-        //$$ mcScreen.handleKeyboardInput();
-        //#endif
+        //$$ eventHandler.handled = false;
         //#endif
         return false;
     }
@@ -299,6 +277,8 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
         //$$     }
         //$$ }
         //#else
+        //$$ private boolean handled;
+        //$$
         //$$ // Mouse/Keyboard events aren't supported in 1.7.10
         //$$ // so this requires a mixin in any mod making use of it
         //$$ // (see ReplayMod: GuiScreenMixin)
@@ -308,15 +288,11 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
         //#else
         //$$ public void onMouseInput(MouseInputEvent event) throws IOException {
         //#endif
-        //$$     event.setCanceled(true);
-        //$$
+        //$$     handled = true;
         //$$     getSuperMcGui().handleMouseInput();
-        //$$
-            //#if MC>=10800
-            //$$ if (mcScreen.equals(getMinecraft().currentScreen)) {
-            //$$     MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.MouseInputEvent.Post(mcScreen));
-            //$$ }
-            //#endif
+        //$$     if (handled) {
+        //$$         event.setCanceled(true);
+        //$$     }
         //$$ }
         //$$
         //$$ @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -325,15 +301,11 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
         //#else
         //$$ public void onKeyboardInput(KeyboardInputEvent event) throws IOException {
         //#endif
-        //$$     event.setCanceled(true);
-        //$$
+        //$$     handled = true;
         //$$     getSuperMcGui().handleKeyboardInput();
-        //$$
-            //#if MC>=10800
-            //$$ if (mcScreen.equals(getMinecraft().currentScreen)) {
-            //$$     MinecraftForge.EVENT_BUS.post(new GuiScreenEvent.KeyboardInputEvent.Post(mcScreen));
-            //$$ }
-            //#endif
+        //$$     if (handled) {
+        //$$         event.setCanceled(true);
+        //$$     }
         //$$ }
         //#endif
         //#endif
