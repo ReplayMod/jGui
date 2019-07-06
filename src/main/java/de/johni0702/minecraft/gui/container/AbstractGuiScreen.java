@@ -75,6 +75,8 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
     @Setter
     private GuiLabel title;
 
+    protected boolean suppressVanillaKeys;
+
     public net.minecraft.client.gui.screen.Screen toMinecraft() {
         return wrapped;
     }
@@ -222,6 +224,9 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         @Override
         public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
             if (!forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), keyCode, '\0', hasControlDown(), hasShiftDown())) {
+                if (suppressVanillaKeys) {
+                    return false;
+                }
                 return super.keyPressed(keyCode, scanCode, modifiers);
             }
             return true;
@@ -230,6 +235,9 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         @Override
         public boolean charTyped(char keyChar, int modifiers) {
             if (!forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), 0, keyChar, hasControlDown(), hasShiftDown())) {
+                if (suppressVanillaKeys) {
+                    return false;
+                }
                 return super.charTyped(keyChar, modifiers);
             }
             return true;
@@ -243,6 +251,9 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         //$$ {
         //$$     if (!forEach(Typeable.class).typeKey(
         //$$             MouseUtils.getMousePos(), keyCode, typedChar, isCtrlKeyDown(), isShiftKeyDown())) {
+        //$$         if (suppressVanillaKeys) {
+        //$$             return;
+        //$$         }
         //$$         super.keyTyped(typedChar, keyCode);
         //$$     }
         //$$ }

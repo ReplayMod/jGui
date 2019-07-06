@@ -48,6 +48,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
 
     public VanillaGuiScreen(net.minecraft.client.gui.screen.Screen mcScreen) {
         this.mcScreen = mcScreen;
+        this.suppressVanillaKeys = true;
 
         super.setBackground(Background.NONE);
     }
