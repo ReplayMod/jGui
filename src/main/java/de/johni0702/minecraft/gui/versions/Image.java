@@ -104,7 +104,7 @@ public class Image implements AutoCloseable {
     public static Image read(InputStream in) throws IOException {
         return new Image(
                 //#if MC>=11300
-                NativeImage.fromInputStream(in)
+                NativeImage.read(in)
                 //#else
                 //$$ ImageIO.read(in)
                 //#endif

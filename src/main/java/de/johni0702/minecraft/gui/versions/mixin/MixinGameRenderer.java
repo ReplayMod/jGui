@@ -15,7 +15,7 @@ public class MixinGameRenderer {
             method = "render",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/hud/InGameHud;draw(F)V",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;render(F)V",
                     shift = At.Shift.AFTER
             )
     )

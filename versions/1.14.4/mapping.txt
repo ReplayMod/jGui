@@ -1,5 +1,4 @@
 net.minecraft.client.texture.NativeImage net.minecraft.client.renderer.texture.NativeImage
-net.minecraft.client.texture.NativeImage fromInputStream() read()
 net.minecraft.client.texture.NativeImage writeFile() write()
 net.minecraft.client.texture.NativeImage.Format net.minecraft.client.renderer.texture.NativeImage.PixelFormat
 net.minecraft.client.MinecraftClient net.minecraft.client.Minecraft
