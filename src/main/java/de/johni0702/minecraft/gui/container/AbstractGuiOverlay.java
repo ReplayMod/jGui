@@ -42,6 +42,11 @@ import net.minecraft.util.crash.CrashReport;
 import net.minecraft.util.crash.CrashReportSection;
 import net.minecraft.util.crash.CrashException;
 
+//#if MC>=11400
+import de.johni0702.minecraft.gui.versions.callbacks.PreTickCallback;
+import net.minecraft.text.LiteralText;
+//#endif
+
 //#if MC>=11300
 import net.minecraft.client.util.Window;
 //#else
@@ -49,10 +54,8 @@ import net.minecraft.client.util.Window;
 //$$ import net.minecraft.client.gui.ScaledResolution;
 //#endif
 
-//#if MC>=11400
+//#if FABRIC>=1
 import de.johni0702.minecraft.gui.versions.callbacks.PostRenderHudCallback;
-import de.johni0702.minecraft.gui.versions.callbacks.PreTickCallback;
-import net.minecraft.text.LiteralText;
 //#else
 //$$ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 //#if MC>=10800
@@ -61,7 +64,10 @@ import net.minecraft.text.LiteralText;
 //#else
 //$$ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 //#endif
+//#if MC>=11400
+//#else
 //$$ import net.minecraftforge.fml.common.gameevent.TickEvent;
+//#endif
 //#else
 //$$ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 //$$ import cpw.mods.fml.common.gameevent.TickEvent;
@@ -223,7 +229,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
 
         private EventHandler() {}
 
-        //#if MC>=11400
+        //#if FABRIC>=1
         { on(PostRenderHudCallback.EVENT, this::renderOverlay); }
         private void renderOverlay(float partialTicks) {
         //#else

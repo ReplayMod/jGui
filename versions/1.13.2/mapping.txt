@@ -1,3 +1,0 @@
-net.minecraft.crash.ReportedException net.minecraft.util.ReportedException
-net.minecraftforge.eventbus.api.EventPriority net.minecraftforge.fml.common.eventhandler.EventPriority
-net.minecraftforge.eventbus.api.SubscribeEvent net.minecraftforge.fml.common.eventhandler.SubscribeEvent

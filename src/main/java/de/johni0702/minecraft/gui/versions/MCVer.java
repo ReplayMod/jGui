@@ -9,7 +9,7 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.util.crash.CrashReportSection;
 import org.lwjgl.opengl.GL11;
 
-//#if MC>=11400
+//#if FABRIC>=1
 //#else
 //$$ import net.minecraftforge.client.event.GuiScreenEvent;
 //$$ import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -163,7 +163,7 @@ public class MCVer {
         return getMinecraft().textRenderer;
     }
 
-    //#if MC<11400
+    //#if FABRIC<=0
     //$$ public static RenderGameOverlayEvent.ElementType getType(RenderGameOverlayEvent.Post event) {
         //#if MC>=10904
         //$$ return event.getType();

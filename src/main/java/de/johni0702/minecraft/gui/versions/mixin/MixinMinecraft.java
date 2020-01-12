@@ -1,5 +1,5 @@
 // Note: this will also work in 1.13 but we don't really support 1.13 and MixinGradle is yet to be updated
-//#if MC>=11400
+//#if FABRIC>=1
 package de.johni0702.minecraft.gui.versions.mixin;
 
 import de.johni0702.minecraft.gui.versions.callbacks.OpenGuiScreenCallback;

@@ -10,17 +10,20 @@ import de.johni0702.minecraft.gui.versions.MCVer;
 //#if MC>=11400
 import de.johni0702.minecraft.gui.utils.MouseUtils;
 import de.johni0702.minecraft.gui.utils.lwjgl.Point;
+import de.johni0702.minecraft.gui.versions.callbacks.OpenGuiScreenCallback;
+import de.johni0702.minecraft.gui.versions.callbacks.PreTickCallback;
+//#endif
+
+//#if FABRIC>=1
 import de.johni0702.minecraft.gui.versions.callbacks.KeyboardCallback;
 import de.johni0702.minecraft.gui.versions.callbacks.MouseCallback;
-import de.johni0702.minecraft.gui.versions.callbacks.OpenGuiScreenCallback;
 import de.johni0702.minecraft.gui.versions.callbacks.PostRenderScreenCallback;
-import de.johni0702.minecraft.gui.versions.callbacks.PreTickCallback;
 //#else
 //$$ import net.minecraftforge.client.event.GuiOpenEvent;
 //$$ import net.minecraftforge.client.event.GuiScreenEvent;
+//$$ import net.minecraftforge.event.TickEvent;
 //$$ import net.minecraftforge.eventbus.api.EventPriority;
 //$$ import net.minecraftforge.eventbus.api.SubscribeEvent;
-//$$ import net.minecraftforge.fml.common.gameevent.TickEvent;
 //#endif
 
 //#if MC<10800
@@ -135,13 +138,13 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
     //$$ public
     //#endif
     class EventHandler extends EventRegistrations
-        //#if MC>=11400
+        //#if FABRIC>=1
         implements KeyboardCallback, MouseCallback
         //#endif
     {
         private boolean active;
 
-        //#if MC>=11400
+        //#if FABRIC>=1
         { on(OpenGuiScreenCallback.EVENT, screen -> onGuiClosed()); }
         private void onGuiClosed() {
         //#else
@@ -156,7 +159,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
             }
         }
 
-        //#if MC>=11400
+        //#if FABRIC>=1
         { on(PostRenderScreenCallback.EVENT, this::onGuiRender); }
         private void onGuiRender(float partialTicks) {
             Point mousePos = MouseUtils.getMousePos();
@@ -173,7 +176,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
         //$$ }
         //#endif
 
-        //#if MC>=11400
+        //#if FABRIC>=1
         { on(PreTickCallback.EVENT, this::tickOverlay); }
         private void tickOverlay() {
         //#else
@@ -188,7 +191,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
             //#endif
         }
 
-        //#if MC>=11400
+        //#if FABRIC>=1
         { on(MouseCallback.EVENT, this); }
 
         @Override
@@ -252,7 +255,11 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
         //$$
         //$$ @SubscribeEvent(priority = EventPriority.HIGH)
         //$$ public void onMouseScroll(GuiScreenEvent.MouseScrollEvent.Pre event) {
-        //$$     if (getSuperMcGui().mouseScrolled(event.getScrollDelta())) {
+        //$$     if (getSuperMcGui().mouseScrolled(
+                        //#if MC>=11400
+                        //$$ event.getMouseX(), event.getMouseY(),
+                        //#endif
+        //$$             event.getScrollDelta())) {
         //$$         event.setCanceled(true);
         //$$     }
         //$$ }

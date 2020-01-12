@@ -33,7 +33,11 @@ public class Image implements AutoCloseable {
     public Image(int width, int height) {
         this(
                 //#if MC>=11300
+                //#if FABRIC>=1
                 new NativeImage(NativeImage.Format.RGBA, width, height, true)
+                //#else
+                //$$ new NativeImage(NativeImage.PixelFormat.RGBA, width, height, true)
+                //#endif
                 //#else
                 //$$ new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
                 //#endif
