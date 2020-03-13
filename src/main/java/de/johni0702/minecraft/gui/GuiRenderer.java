@@ -27,7 +27,6 @@ package de.johni0702.minecraft.gui;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
-import net.minecraft.client.texture.Texture;
 import net.minecraft.util.Identifier;
 
 public interface GuiRenderer {
@@ -40,7 +39,7 @@ public interface GuiRenderer {
 
     void bindTexture(Identifier location);
 
-    void bindTexture(Texture texture);
+    void bindTexture(int glId);
 
     void drawTexturedRect(int x, int y, int u, int v, int width, int height);
 

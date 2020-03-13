@@ -34,7 +34,6 @@ import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.NonNull;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.texture.Texture;
 import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.GL11;
 
@@ -114,15 +113,19 @@ public class MinecraftGuiRenderer implements GuiRenderer {
 
     @Override
     public void bindTexture(Identifier location) {
+        //#if MC>=11400
+        //$$ MCVer.getMinecraft().getTextureManager().bindTexture(location);
+        //#else
         MCVer.getMinecraft().getTextureManager().bindTexture(location);
+        //#endif
     }
 
     @Override
-    public void bindTexture(Texture texture) {
+    public void bindTexture(int glId) {
         //#if MC>=10800
-        GlStateManager.bindTexture(texture.getGlId());
+        GlStateManager.bindTexture(glId);
         //#else
-        //$$ GL11.glBindTexture(GL_TEXTURE_2D, texture.getGlTextureId());
+        //$$ GL11.glBindTexture(GL_TEXTURE_2D, glId);
         //#endif
     }
 
@@ -234,7 +237,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     private void color(int r, int g, int b) {
         //#if MC>=10800
         //#if MC>=11300
-        GlStateManager.color3f(r, g, b);
+        GlStateManager.color4f(r, g, b, 1);
         //#else
         //$$ GlStateManager.color(r, g, b);
         //#endif

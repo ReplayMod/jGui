@@ -72,7 +72,7 @@ public abstract class AbstractGuiImage<T extends AbstractGuiImage<T>>
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         super.draw(renderer, size, renderInfo);
         if (texture != null) {
-            renderer.bindTexture(texture);
+            renderer.bindTexture(texture.getGlId());
         } else {
             renderer.bindTexture(resourceLocation);
         }

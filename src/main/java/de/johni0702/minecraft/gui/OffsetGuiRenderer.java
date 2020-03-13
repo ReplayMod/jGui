@@ -29,7 +29,6 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import lombok.NonNull;
-import net.minecraft.client.texture.Texture;
 import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.GL11;
 
@@ -132,8 +131,8 @@ public class OffsetGuiRenderer implements GuiRenderer {
     }
 
     @Override
-    public void bindTexture(Texture texture) {
-        renderer.bindTexture(texture);
+    public void bindTexture(int glId) {
+        renderer.bindTexture(glId);
     }
 
     @Override
