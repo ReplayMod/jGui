@@ -40,7 +40,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-//#if MC>=11300
+//#if MC>=11400
 import de.johni0702.minecraft.gui.versions.MCVer.Keyboard;
 //#else
 //$$ import org.lwjgl.input.Keyboard;

@@ -47,7 +47,7 @@ import de.johni0702.minecraft.gui.versions.callbacks.PreTickCallback;
 import net.minecraft.text.LiteralText;
 //#endif
 
-//#if MC>=11300
+//#if MC>=11400
 import net.minecraft.client.util.Window;
 //#else
 //$$ import org.lwjgl.input.Mouse;
@@ -59,7 +59,7 @@ import de.johni0702.minecraft.gui.versions.callbacks.PostRenderHudCallback;
 //#else
 //$$ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 //#if MC>=10800
-//#if MC>=11300
+//#if MC>=11400
 //$$ import net.minecraftforge.eventbus.api.SubscribeEvent;
 //#else
 //$$ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -74,7 +74,7 @@ import de.johni0702.minecraft.gui.versions.callbacks.PostRenderHudCallback;
 //#endif
 //#endif
 
-//#if MC>=10800 && MC<11300
+//#if MC>=10800 && MC<11400
 //$$ import java.io.IOException;
 //#endif
 
@@ -268,7 +268,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
 
         private void updateRenderer() {
             MinecraftClient mc = getMinecraft();
-            //#if MC>=11300
+            //#if MC>=11400
             Window
             //#else
             //$$ ScaledResolution
@@ -295,7 +295,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
             this.passEvents = true;
         }
 
-        //#if MC>=11300
+        //#if MC>=11400
         @Override
         public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
             if (!forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), keyCode, '\0', hasControlDown(), hasShiftDown())) {
@@ -326,7 +326,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         //#endif
 
         @Override
-        //#if MC>=11300
+        //#if MC>=11400
         public boolean mouseClicked(double mouseXD, double mouseYD, int mouseButton) {
             int mouseX = (int) Math.round(mouseXD), mouseY = (int) Math.round(mouseYD);
             return
@@ -341,7 +341,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         }
 
         @Override
-        //#if MC>=11300
+        //#if MC>=11400
         public boolean mouseReleased(double mouseXD, double mouseYD, int mouseButton) {
             int mouseX = (int) Math.round(mouseXD), mouseY = (int) Math.round(mouseYD);
             return
@@ -352,7 +352,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         }
 
         @Override
-        //#if MC>=11300
+        //#if MC>=11400
         public boolean mouseDragged(double mouseXD, double mouseYD, int mouseButton, double deltaX, double deltaY) {
             int mouseX = (int) Math.round(mouseXD), mouseY = (int) Math.round(mouseYD);
             long timeSinceLastClick = 0;
@@ -364,7 +364,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         }
 
         @Override
-        //#if MC>=11300
+        //#if MC>=11400
         public void tick() {
         //#else
         //$$ public void updateScreen() {
@@ -372,7 +372,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
             forEach(Tickable.class).tick();
         }
 
-        //#if MC>=11300
+        //#if MC>=11400
         @Override
         public boolean mouseScrolled(
                 //#if MC>=11400

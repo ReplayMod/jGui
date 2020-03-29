@@ -37,7 +37,7 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.GL11;
 
-//#if MC>=11300
+//#if MC>=11400
 import net.minecraft.client.util.Window;
 //#else
 //$$ import net.minecraft.client.gui.ScaledResolution;
@@ -59,13 +59,13 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     private final DrawableHelper gui = new DrawableHelper(){};
 
     @NonNull
-    //#if MC>=11300
+    //#if MC>=11400
     private final Window size;
     //#else
     //$$ private final ScaledResolution size;
     //#endif
 
-    //#if MC>=11300
+    //#if MC>=11400
     public MinecraftGuiRenderer(Window size) {
     //#else
     //$$ public MinecraftGuiRenderer(ScaledResolution size) {
@@ -103,7 +103,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         // glScissor origin is bottom left corner whereas otherwise it's top left
         y = size.getScaledHeight() - y - height;
 
-        //#if MC>=11300
+        //#if MC>=11400
         int f = (int) size.getScaleFactor();
         //#else
         //$$ int f = size.getScaleFactor();
@@ -236,7 +236,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
 
     private void color(int r, int g, int b) {
         //#if MC>=10800
-        //#if MC>=11300
+        //#if MC>=11400
         GlStateManager.color4f(r, g, b, 1);
         //#else
         //$$ GlStateManager.color(r, g, b);

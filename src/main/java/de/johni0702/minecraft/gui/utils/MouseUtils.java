@@ -28,7 +28,7 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import net.minecraft.client.MinecraftClient;
 
-//#if MC>=11300
+//#if MC>=11400
 import net.minecraft.client.util.Window;
 //#else
 //$$ import net.minecraft.client.gui.ScaledResolution;
@@ -39,7 +39,7 @@ public class MouseUtils {
     private static final MinecraftClient mc = MCVer.getMinecraft();
 
     public static Point getMousePos() {
-        //#if MC>=11300
+        //#if MC>=11400
         int mouseX = (int) mc.mouse.getX();
         int mouseY = (int) mc.mouse.getY();
         Window mainWindow = MCVer.newScaledResolution(mc);
@@ -58,7 +58,7 @@ public class MouseUtils {
     }
 
     public static Point getScaledDimensions() {
-        //#if MC>=11300
+        //#if MC>=11400
         Window
         //#else
         //$$ ScaledResolution

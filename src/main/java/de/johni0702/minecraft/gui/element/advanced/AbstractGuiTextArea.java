@@ -45,7 +45,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resource.language.I18n;
 
-//#if MC>=11300
+//#if MC>=11400
 import net.minecraft.SharedConstants;
 //#else
 //$$ import net.minecraft.util.ChatAllowedCharacters;
@@ -235,7 +235,7 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
 
     @Override
     public void writeChar(char c) {
-        //#if MC>=11300
+        //#if MC>=11400
         if (!SharedConstants.isValidChar(c)) {
         //#else
         //$$ if (!ChatAllowedCharacters.isAllowedCharacter(c)) {

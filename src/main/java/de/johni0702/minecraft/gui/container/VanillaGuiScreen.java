@@ -32,7 +32,7 @@ import de.johni0702.minecraft.gui.versions.callbacks.PostRenderScreenCallback;
 //$$ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 //#endif
 
-//#if MC<11300
+//#if MC<11400
 //$$ import net.minecraftforge.common.MinecraftForge;
 //$$ import java.io.IOException;
 //#endif
@@ -88,7 +88,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
 
     @Override
     public boolean mouseClick(ReadablePoint position, int button) {
-        //#if MC>=11300
+        //#if MC>=11400
         //#else
         //$$ eventHandler.handled = false;
         //#endif
@@ -97,7 +97,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
 
     @Override
     public boolean mouseDrag(ReadablePoint position, int button, long timeSinceLastCall) {
-        //#if MC>=11300
+        //#if MC>=11400
         //#else
         //$$ eventHandler.handled = false;
         //#endif
@@ -106,7 +106,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
 
     @Override
     public boolean mouseRelease(ReadablePoint position, int button) {
-        //#if MC>=11300
+        //#if MC>=11400
         //#else
         //$$ eventHandler.handled = false;
         //#endif
@@ -115,7 +115,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
 
     @Override
     public boolean scroll(ReadablePoint mousePosition, int dWheel) {
-        //#if MC>=11300
+        //#if MC>=11400
         //#else
         //$$ eventHandler.handled = false;
         //#endif
@@ -124,7 +124,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
 
     @Override
     public boolean typeKey(ReadablePoint mousePosition, int keyCode, char keyChar, boolean ctrlDown, boolean shiftDown) {
-        //#if MC>=11300
+        //#if MC>=11400
         //#else
         //$$ eventHandler.handled = false;
         //#endif
@@ -168,7 +168,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
         //#else
         //$$ @SubscribeEvent
         //$$ public void onGuiRender(GuiScreenEvent.DrawScreenEvent.Post event) {
-            //#if MC>=11300
+            //#if MC>=11400
             //$$ getSuperMcGui().render(MCVer.getMouseX(event), MCVer.getMouseY(event), MCVer.getPartialTicks(event));
             //#else
             //$$ getSuperMcGui().drawScreen(MCVer.getMouseX(event), MCVer.getMouseY(event), MCVer.getPartialTicks(event));
@@ -184,7 +184,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
         //$$ public void tickOverlay(TickEvent.ClientTickEvent event) {
         //$$     if (event.phase != TickEvent.Phase.START) return;
         //#endif
-            //#if MC>=11300
+            //#if MC>=11400
             getSuperMcGui().tick();
             //#else
             //$$ getSuperMcGui().updateScreen();
@@ -231,7 +231,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
             return getSuperMcGui().charTyped(keyChar, modifiers);
         }
         //#else
-        //#if MC>=11300
+        //#if MC>=11400
         //$$ @SubscribeEvent(priority = EventPriority.HIGH)
         //$$ public void onMouseClick(GuiScreenEvent.MouseClickedEvent.Pre event) {
         //$$     if (getSuperMcGui().mouseClicked(event.getMouseX(), event.getMouseY(), event.getButton())) {

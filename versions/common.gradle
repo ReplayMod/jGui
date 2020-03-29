@@ -34,7 +34,7 @@ buildscript {
         }
         if (fabric) {
             classpath 'fabric-loom:fabric-loom.gradle.plugin:0.2.2-SNAPSHOT'
-        } else if (mcVersion >= 11300) {
+        } else if (mcVersion >= 11400) {
             classpath('net.minecraftforge.gradle:ForgeGradle:3.+'){
                 exclude group: 'trove', module: 'trove' // preprocessor/idea requires more recent one
             }
@@ -53,7 +53,7 @@ buildscript {
     }
 }
 
-def FG3 = !fabric && mcVersion >= 11300
+def FG3 = !fabric && mcVersion >= 11400
 def FABRIC = fabric
 
 if (FABRIC) {
@@ -79,7 +79,7 @@ version 'git'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-if (mcVersion >= 11300) {
+if (mcVersion >= 11400) {
     sourceSets {
         api
     }

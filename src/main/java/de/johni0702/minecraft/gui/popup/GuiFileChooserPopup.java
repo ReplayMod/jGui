@@ -52,7 +52,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-//#if MC>=11300
+//#if MC>=11400
 import de.johni0702.minecraft.gui.versions.MCVer.Keyboard;
 //#else
 //$$ import org.lwjgl.input.Keyboard;

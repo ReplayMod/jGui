@@ -15,7 +15,7 @@ import org.lwjgl.opengl.GL11;
 //$$ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 //#endif
 
-//#if MC>=11300
+//#if MC>=11400
 import net.minecraft.client.util.Window;
 import org.lwjgl.glfw.GLFW;
 //#else
@@ -44,7 +44,7 @@ public class MCVer {
         return MinecraftClient.getInstance();
     }
 
-    //#if MC>=11300
+    //#if MC>=11400
     public static Window newScaledResolution(MinecraftClient mc) {
         //#if MC>=11500
         //$$ return mc.getWindow();
@@ -210,7 +210,7 @@ public class MCVer {
     //#endif
 
     public static void setClipboardString(String text) {
-        //#if MC>=11300
+        //#if MC>=11400
         getMinecraft().keyboard.setClipboard(text);
         //#else
         //$$ GuiScreen.setClipboardString(text);
@@ -218,7 +218,7 @@ public class MCVer {
     }
 
     public static String getClipboardString() {
-        //#if MC>=11300
+        //#if MC>=11400
         return getMinecraft().keyboard.getClipboard();
         //#else
         //$$ return GuiScreen.getClipboardString();
@@ -241,7 +241,7 @@ public class MCVer {
     //$$ public static void colorLogicOp(int op) { GL11.glLogicOp(op); }
     //#endif
 
-    //#if MC>=11300
+    //#if MC>=11400
     public static abstract class Keyboard {
         public static final int KEY_ESCAPE = GLFW.GLFW_KEY_ESCAPE;
         public static final int KEY_HOME = GLFW.GLFW_KEY_HOME;

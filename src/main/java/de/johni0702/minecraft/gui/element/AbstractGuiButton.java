@@ -38,7 +38,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
 
-//#if MC>=11300
+//#if MC>=11400
 import net.minecraft.client.sound.PositionedSoundInstance;
 //#else
 //$$ import net.minecraft.client.audio.PositionedSoundRecord;
@@ -124,7 +124,7 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
     }
     public static void playClickSound(MinecraftClient mc, SoundEvent sound) {
     //#endif
-        //#if MC>=11300
+        //#if MC>=11400
         mc.getSoundManager().play(PositionedSoundInstance.master(sound, 1.0F));
         //#else
         //#if MC>=10904
