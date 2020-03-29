@@ -46,7 +46,7 @@ public class MCVer {
 
     //#if MC>=11300
     public static Window newScaledResolution(MinecraftClient mc) {
-        //#if MC>=11400
+        //#if MC>=11500
         //$$ return mc.getWindow();
         //#else
         return mc.window;
