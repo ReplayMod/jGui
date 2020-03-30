@@ -81,7 +81,7 @@ public class MCVer {
         //$$ Tessellator tessellator = Tessellator.instance;
         //#endif
         //#if MC>=10904
-        BufferBuilder vertexBuffer = tessellator.getBufferBuilder();
+        BufferBuilder vertexBuffer = tessellator.getBuffer();
         //#else
         //#if MC>=10800
         //$$ WorldRenderer vertexBuffer = tessellator.getWorldRenderer();
@@ -138,7 +138,7 @@ public class MCVer {
     public static void drawRect(int x, int y, int width, int height, ReadableColor tl, ReadableColor tr, ReadableColor bl, ReadableColor br) {
         //#if MC>=10800
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder vertexBuffer = tessellator.getBufferBuilder();
+        BufferBuilder vertexBuffer = tessellator.getBuffer();
         //#else
         //$$ Tessellator tessellator = Tessellator.instance;
         //$$ Tessellator vertexBuffer = tessellator;
