@@ -24,7 +24,7 @@ license {
 configurations.register("compileClasspath")
 
 preprocess {
-    "1.15.1"(11501, "yarn") {
+    "1.15.2"(11502, "yarn") {
         "1.14.4"(11404, "yarn") {
             "1.14.4-forge"(11404, "srg", file("versions/mapping-1.14.4-fabric-forge.txt")) {
                 "1.12"(11200, "srg", file("versions/1.14.4-forge/mapping.txt")) {
