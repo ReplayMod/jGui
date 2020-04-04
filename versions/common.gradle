@@ -37,7 +37,7 @@ buildscript {
             exclude group: 'com.github.jengelman.gradle.plugins', module: 'shadow'
         }
         if (mcVersion >= 11400) {
-            classpath 'fabric-loom:fabric-loom.gradle.plugin:0.2.2-SNAPSHOT'
+            classpath 'fabric-loom:fabric-loom.gradle.plugin:0.2.6-SNAPSHOT'
         } else if (mcVersion >= 11300) {
             classpath('net.minecraftforge.gradle:ForgeGradle:3.+'){
                 exclude group: 'trove', module: 'trove' // preprocessor/idea requires more recent one
@@ -131,16 +131,16 @@ if (FABRIC) {
 dependencies {
     if (FABRIC) {
         minecraft 'com.mojang:minecraft:' + [
-                11502: '1.15.1',
+                11502: '1.15.2',
         ][mcVersion]
         mappings 'net.fabricmc:yarn:' + [
-                11502: '1.15.2+build.15',
+                11502: '1.15.2+build.15:v2',
         ][mcVersion]
         modCompile 'net.fabricmc:fabric-loader:' + [
                 11502: '0.7.10+build.191',
         ][mcVersion]
         modCompile 'net.fabricmc.fabric-api:fabric-api:' + [
-                11502: '0.5.1+build.294',
+                11502: '0.5.1+build.294-1.15',
         ][mcVersion]
     }
     if (FG3) {
