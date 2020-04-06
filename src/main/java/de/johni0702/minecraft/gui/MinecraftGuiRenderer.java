@@ -113,7 +113,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
 
     @Override
     public void bindTexture(Identifier location) {
-        //#if MC>=11400
+        //#if MC>=11500
         //$$ MCVer.getMinecraft().getTextureManager().bindTexture(location);
         //#else
         MCVer.getMinecraft().getTextureManager().bindTexture(location);
