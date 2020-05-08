@@ -168,7 +168,7 @@ public class MCVer {
     }
 
     //#if FABRIC<=0
-    //$$ public static RenderGameOverlayEvent.ElementType getType(RenderGameOverlayEvent.Post event) {
+    //$$ public static RenderGameOverlayEvent.ElementType getType(RenderGameOverlayEvent event) {
         //#if MC>=10904
         //$$ return event.getType();
         //#else
@@ -176,7 +176,7 @@ public class MCVer {
         //#endif
     //$$ }
     //$$
-    //$$ public static float getPartialTicks(RenderGameOverlayEvent.Post event) {
+    //$$ public static float getPartialTicks(RenderGameOverlayEvent event) {
         //#if MC>=10904
         //$$ return event.getPartialTicks();
         //#else

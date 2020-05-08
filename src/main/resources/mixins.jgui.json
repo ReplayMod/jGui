@@ -6,6 +6,7 @@
   "client": [
     //#if MC>=11400
     //#if MC>=11400
+    "Mixin_RenderHudCallback",
     "MixinGameRenderer",
     "MixinScreen",
     "MixinMouseListener",

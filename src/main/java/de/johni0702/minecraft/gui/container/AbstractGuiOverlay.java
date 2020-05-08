@@ -55,7 +55,7 @@ import net.minecraft.client.util.Window;
 //#endif
 
 //#if FABRIC>=1
-import de.johni0702.minecraft.gui.versions.callbacks.PostRenderHudCallback;
+import de.johni0702.minecraft.gui.versions.callbacks.RenderHudCallback;
 //#else
 //$$ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 //#if MC>=10800
@@ -230,12 +230,11 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         private EventHandler() {}
 
         //#if FABRIC>=1
-        { on(PostRenderHudCallback.EVENT, this::renderOverlay); }
+        { on(RenderHudCallback.EVENT, this::renderOverlay); }
         private void renderOverlay(float partialTicks) {
         //#else
         //$$ @SubscribeEvent
-        //$$ public void renderOverlay(RenderGameOverlayEvent.Post event) {
-        //$$     if (MCVer.getType(event) != RenderGameOverlayEvent.ElementType.ALL) return;
+        //$$ public void renderOverlay(RenderGameOverlayEvent.Text event) {
         //$$     float partialTicks = MCVer.getPartialTicks(event);
         //#endif
             updateRenderer();
