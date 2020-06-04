@@ -37,6 +37,12 @@ import net.minecraft.client.resource.language.I18n;
 
 import java.util.List;
 
+//#if MC>=11600
+//$$ import java.util.Optional;
+//$$ import java.util.stream.Collectors;
+//$$ import net.minecraft.text.LiteralText;
+//#endif
+
 public abstract class AbstractGuiLabel<T extends AbstractGuiLabel<T>> extends AbstractGuiElement<T> implements IGuiLabel<T> {
     @Getter
     private String text = "";
@@ -55,8 +61,14 @@ public abstract class AbstractGuiLabel<T extends AbstractGuiLabel<T>> extends Ab
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         super.draw(renderer, size, renderInfo);
         TextRenderer fontRenderer = MCVer.getFontRenderer();
+        //#if MC>=11600
+        //$$ List<String> lines = fontRenderer.wrapLines(new LiteralText(text), size.getWidth()).stream()
+        //$$         .map(it -> it.visit(Optional::of)).filter(Optional::isPresent).map(Optional::get)
+        //$$         .collect(Collectors.toList());
+        //#else
         @SuppressWarnings("unchecked")
         List<String> lines = fontRenderer.wrapStringToWidthAsList(text, size.getWidth());
+        //#endif
         int y = 0;
         for (String line : lines) {
             renderer.drawString(0, y, isEnabled() ? color : disabledColor, line);

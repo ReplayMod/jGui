@@ -29,6 +29,7 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import lombok.NonNull;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.GL11;
 
@@ -87,6 +88,11 @@ public class OffsetGuiRenderer implements GuiRenderer {
     public ReadablePoint getOpenGlOffset() {
         ReadablePoint parentOffset = renderer.getOpenGlOffset();
         return new Point(parentOffset.getX() + position.getX(), parentOffset.getY() + position.getY());
+    }
+
+    @Override
+    public MatrixStack getMatrixStack() {
+        return renderer.getMatrixStack();
     }
 
     @Override

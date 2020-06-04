@@ -39,6 +39,7 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.crash.CrashReport;
 import net.minecraft.util.crash.CrashReportSection;
 import net.minecraft.util.crash.CrashException;
@@ -107,14 +108,22 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                 case NONE:
                     break;
                 case DEFAULT:
+                    //#if MC>=11600
+                    //$$ wrapped.renderBackground(renderer.getMatrixStack());
+                    //#else
                     wrapped.renderBackground();
+                    //#endif
                     break;
                 case TRANSPARENT:
                     int top = 0xc0_10_10_10, bottom = 0xd0_10_10_10;
                     renderer.drawRect(0, 0, size.getWidth(), size.getHeight(), top, top, bottom, bottom);
                     break;
                 case DIRT:
+                    //#if MC>=11600
+                    //$$ wrapped.renderBackgroundTexture(0);
+                    //#else
                     wrapped.renderDirtBackground(0);
+                    //#endif
                     break;
             }
             if (title != null) {
@@ -183,7 +192,6 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
     }
 
     protected class MinecraftGuiScreen extends net.minecraft.client.gui.screen.Screen {
-        private MinecraftGuiRenderer renderer;
         private boolean active;
 
         //#if MC>=11400
@@ -198,10 +206,15 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         //#endif
 
         @Override
+        //#if MC>=11600
+        //$$ public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+        //#else
         //#if MC>=11400
         public void render(int mouseX, int mouseY, float partialTicks) {
         //#else
         //$$ public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        //#endif
+            MatrixStack stack = new MatrixStack();
         //#endif
             // The Forge loading screen apparently leaves one of the textures of the GlStateManager in an
             // incorrect state which can cause the whole screen to just remain white. This is a workaround.
@@ -215,6 +228,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
             for (int layer = 0; layer <= layers; layer++) {
                 layout(screenSize, renderInfo.layer(layer));
             }
+            MinecraftGuiRenderer renderer = new MinecraftGuiRenderer(stack, MCVer.newScaledResolution(getMinecraft()));
             for (int layer = 0; layer <= layers; layer++) {
                 draw(renderer, screenSize, renderInfo.layer(layer));
             }
@@ -363,7 +377,6 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                 Keyboard.enableRepeatEvents(true);
             }
             screenSize = new Dimension(width, height);
-            renderer = new MinecraftGuiRenderer(MCVer.newScaledResolution(this.minecraft));
             forEach(Loadable.class).load();
         }
 

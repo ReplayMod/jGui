@@ -38,6 +38,7 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.crash.CrashReport;
 import net.minecraft.util.crash.CrashReportSection;
 import net.minecraft.util.crash.CrashException;
@@ -225,16 +226,15 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
     //$$ public
     //#endif
     class EventHandler extends EventRegistrations {
-        private MinecraftGuiRenderer renderer;
-
         private EventHandler() {}
 
         //#if FABRIC>=1
         { on(RenderHudCallback.EVENT, this::renderOverlay); }
-        private void renderOverlay(float partialTicks) {
+        private void renderOverlay(MatrixStack stack, float partialTicks) {
         //#else
         //$$ @SubscribeEvent
         //$$ public void renderOverlay(RenderGameOverlayEvent.Text event) {
+        //$$     MatrixStack stack = new MatrixStack();
         //$$     float partialTicks = MCVer.getPartialTicks(event);
         //#endif
             updateRenderer();
@@ -249,6 +249,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
             for (int layer = 0; layer <= layers; layer++) {
                 layout(screenSize, renderInfo.layer(layer));
             }
+            MinecraftGuiRenderer renderer = new MinecraftGuiRenderer(stack, MCVer.newScaledResolution(getMinecraft()));
             for (int layer = 0; layer <= layers; layer++) {
                 draw(renderer, screenSize, renderInfo.layer(layer));
             }
@@ -277,7 +278,6 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
                     || screenSize.getWidth() != res.getScaledWidth()
                     || screenSize.getHeight() != res.getScaledHeight()) {
                 screenSize = new Dimension(res.getScaledWidth(), res.getScaledHeight());
-                renderer = new MinecraftGuiRenderer(res);
             }
         }
     }

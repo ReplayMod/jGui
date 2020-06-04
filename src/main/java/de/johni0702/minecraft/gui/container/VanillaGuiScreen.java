@@ -18,6 +18,7 @@ import de.johni0702.minecraft.gui.versions.callbacks.PreTickCallback;
 import de.johni0702.minecraft.gui.versions.callbacks.KeyboardCallback;
 import de.johni0702.minecraft.gui.versions.callbacks.MouseCallback;
 import de.johni0702.minecraft.gui.versions.callbacks.PostRenderScreenCallback;
+import net.minecraft.client.util.math.MatrixStack;
 //#else
 //$$ import net.minecraftforge.client.event.GuiOpenEvent;
 //$$ import net.minecraftforge.client.event.GuiScreenEvent;
@@ -161,9 +162,13 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
 
         //#if FABRIC>=1
         { on(PostRenderScreenCallback.EVENT, this::onGuiRender); }
-        private void onGuiRender(float partialTicks) {
+        private void onGuiRender(MatrixStack stack, float partialTicks) {
             Point mousePos = MouseUtils.getMousePos();
-            getSuperMcGui().render(mousePos.getX(), mousePos.getY(), partialTicks);
+            getSuperMcGui().render(
+                    //#if MC>=11600
+                    //$$ stack,
+                    //#endif
+                    mousePos.getX(), mousePos.getY(), partialTicks);
         }
         //#else
         //$$ @SubscribeEvent

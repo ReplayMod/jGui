@@ -4,6 +4,7 @@ package de.johni0702.minecraft.gui.versions.mixin;
 import de.johni0702.minecraft.gui.versions.callbacks.RenderHudCallback;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.util.math.MatrixStack;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,8 +21,13 @@ public class Mixin_RenderHudCallback {
                     target = "Lnet/minecraft/client/options/GameOptions;debugEnabled:Z"
             )
     )
+    //#if MC>=11600
+    //$$ private void renderOverlay(MatrixStack stack, float partialTicks, CallbackInfo ci) {
+    //#else
     private void renderOverlay(float partialTicks, CallbackInfo ci) {
-        RenderHudCallback.EVENT.invoker().renderHud(partialTicks);
+        MatrixStack stack = new MatrixStack();
+    //#endif
+        RenderHudCallback.EVENT.invoker().renderHud(stack, partialTicks);
     }
 }
 //#endif
