@@ -136,12 +136,12 @@ dependencies {
         minecraft 'com.mojang:minecraft:' + [
                 11404: '1.14.4',
                 11502: '1.15.2',
-                11600: '1.16-pre5',
+                11600: '1.16-pre6',
         ][mcVersion]
         mappings 'net.fabricmc:yarn:' + [
                 11404: '1.14.4+build.16',
                 11502: '1.15.2+build.14',
-                11600: '1.16-pre5+build.2:v2',
+                11600: '1.16-pre6+build.1:v2',
         ][mcVersion]
         modCompile 'net.fabricmc:fabric-loader:' + [
                 11404: '0.4.8+build.155',
@@ -151,7 +151,7 @@ dependencies {
         modCompile 'net.fabricmc.fabric-api:fabric-api:' + [
                 11404: '0.3.0+build.200',
                 11502: '0.5.1+build.294-1.15',
-                11600: '0.12.1+build.361-1.16',
+                11600: '0.12.2+build.362-1.16',
         ][mcVersion]
     }
     if (FG3) {
