@@ -106,13 +106,15 @@ public class Image implements AutoCloseable {
     }
 
     public static Image read(InputStream in) throws IOException {
-        return new Image(
-                //#if MC>=11400
-                NativeImage.read(in)
-                //#else
-                //$$ ImageIO.read(in)
-                //#endif
-        );
+        //#if MC>=11400
+        return new Image(NativeImage.read(in));
+        //#else
+        //$$ BufferedImage image = ImageIO.read(in);
+        //$$ if (image == null) {
+        //$$     throw new IOException("Cannot read image: ImageIO.read returned null");
+        //$$ }
+        //$$ return new Image(image);
+        //#endif
     }
 
     public void writePNG(File file) throws IOException {

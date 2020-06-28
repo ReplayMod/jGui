@@ -232,7 +232,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         { on(RenderHudCallback.EVENT, this::renderOverlay); }
         private void renderOverlay(MatrixStack stack, float partialTicks) {
         //#else
-        //$$ @SubscribeEvent
+        //$$ @SubscribeEvent(receiveCanceled = true)
         //$$ public void renderOverlay(RenderGameOverlayEvent.Text event) {
         //$$     MatrixStack stack = new MatrixStack();
         //$$     float partialTicks = MCVer.getPartialTicks(event);
