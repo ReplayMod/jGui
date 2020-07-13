@@ -96,7 +96,7 @@ public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> i
         public void consume(String oldName) {
             updateButton();
         }
-    });
+    }).setMaxLength(Integer.MAX_VALUE);
 
     @Getter
     private final GuiButton acceptButton = new GuiButton(popup).onClick(new Runnable() {
