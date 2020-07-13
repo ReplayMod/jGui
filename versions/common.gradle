@@ -28,10 +28,6 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.2'
-        classpath('ch.raffael.gradlePlugins.preshadow:gradle-preshadow-plugin:1.0'){
-            exclude group: 'com.github.jengelman.gradle.plugins', module: 'shadow'
-        }
         if (fabric) {
             classpath 'fabric-loom:fabric-loom.gradle.plugin:0.4-SNAPSHOT'
         } else if (mcVersion >= 11400) {
@@ -62,7 +58,6 @@ if (FABRIC) {
 } else {
     apply plugin: 'forge'
 }
-apply plugin: 'ch.raffael.preshadow'
 apply plugin: 'com.replaymod.preprocess'
 
 preprocess {
@@ -95,14 +90,7 @@ repositories {
 dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     compile 'org.projectlombok:lombok:1.18.12'
-
-    preshadow('org.lwjgl.lwjgl:lwjgl_util:2.9.3') {
-        transitive = false // only want col, dim, point, vec, mat, quat, etc.
-    }
-}
-
-preshadowJar {
-    relocate 'org.lwjgl.util', 'de.johni0702.minecraft.gui.utils.lwjgl'
+    compile('com.github.ReplayMod:lwjgl-utils:27dcd66')
 }
 
 if (FABRIC) {
