@@ -50,6 +50,7 @@ import lombok.Getter;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.InvalidPathException;
 import java.util.*;
 
 //#if MC>=11400
@@ -158,9 +159,26 @@ public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> i
     }
 
     protected void updateButton() {
-        if (load) {
-            acceptButton.setEnabled(new File(folder, nameField.getText()).exists());
+        String name = nameField.getText();
+        File file = new File(folder, name);
+
+        // File name must not contain
+        boolean valid = !name.contains(File.separator);
+
+        // Name must not contain any illegal characters (depends on OS)
+        try {
+            //noinspection ResultOfMethodCallIgnored
+            file.toPath();
+        } catch (InvalidPathException ignored) {
+            valid = false;
         }
+
+        // If we're loading, the file must exist
+        if (load) {
+            valid &= file.exists();
+        }
+
+        acceptButton.setEnabled(valid);
     }
 
     public void setFolder(File folder) {
