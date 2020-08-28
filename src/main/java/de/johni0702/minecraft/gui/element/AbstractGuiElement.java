@@ -31,8 +31,6 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
-import lombok.AccessLevel;
-import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 
@@ -40,15 +38,12 @@ public abstract class AbstractGuiElement<T extends AbstractGuiElement<T>> implem
     protected static final Identifier TEXTURE = new Identifier("jgui", "gui.png");
 
 
-    @Getter
     private final MinecraftClient minecraft = MCVer.getMinecraft();
 
-    @Getter
     private GuiContainer container;
 
     private GuiElement tooltip;
 
-    @Getter
     private boolean enabled = true;
 
     protected Dimension minSize, maxSize;
@@ -57,7 +52,6 @@ public abstract class AbstractGuiElement<T extends AbstractGuiElement<T>> implem
      * The last size this element was render at layer 0.
      * May be {@code null} when this element has not yet been rendered.
      */
-    @Getter(AccessLevel.PROTECTED)
     private ReadableDimension lastSize;
 
     public AbstractGuiElement() {
@@ -205,5 +199,21 @@ public abstract class AbstractGuiElement<T extends AbstractGuiElement<T>> implem
     @Override
     public ReadableDimension getMaxSize() {
         return maxSize == null ? new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE) : maxSize;
+    }
+
+    public MinecraftClient getMinecraft() {
+        return this.minecraft;
+    }
+
+    public GuiContainer getContainer() {
+        return this.container;
+    }
+
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
+    protected ReadableDimension getLastSize() {
+        return this.lastSize;
     }
 }

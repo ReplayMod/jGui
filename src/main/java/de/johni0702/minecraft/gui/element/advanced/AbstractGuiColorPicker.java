@@ -40,7 +40,6 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
-import lombok.Getter;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -50,10 +49,8 @@ public abstract class AbstractGuiColorPicker<T extends AbstractGuiColorPicker<T>
     protected static final int PICKER_SIZE = 100;
     private static final ReadableColor OUTLINE_COLOR = new Color(255, 255, 255);
 
-    @Getter
     private Color color = new Color();
 
-    @Getter
     private boolean opened;
 
     private Consumer<ReadableColor> onSelection;
@@ -175,6 +172,14 @@ public abstract class AbstractGuiColorPicker<T extends AbstractGuiColorPicker<T>
     protected boolean isMouseHovering(ReadablePoint pos) {
         return pos.getX() > 0 && pos.getY() > 0
                 && pos.getX() < getLastSize().getWidth() && pos.getY() < getLastSize().getHeight();
+    }
+
+    public Color getColor() {
+        return this.color;
+    }
+
+    public boolean isOpened() {
+        return this.opened;
     }
 
     protected class GuiPicker extends AbstractGuiElement<GuiPicker> implements Clickable, Draggable {

@@ -32,17 +32,14 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
-import lombok.Getter;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.resource.language.I18n;
 
 public abstract class AbstractGuiProgressBar<T extends AbstractGuiProgressBar<T>> extends AbstractGuiElement<T> implements IGuiProgressBar<T> {
     private static final int BORDER = 2;
 
-    @Getter
     private float progress;
 
-    @Getter
     private String label = "%d%%";
 
     public AbstractGuiProgressBar() {
@@ -90,5 +87,13 @@ public abstract class AbstractGuiProgressBar<T extends AbstractGuiProgressBar<T>
     @Override
     public ReadableDimension calcMinSize() {
         return new Dimension(0, 0);
+    }
+
+    public float getProgress() {
+        return this.progress;
+    }
+
+    public String getLabel() {
+        return this.label;
     }
 }

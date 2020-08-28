@@ -46,7 +46,6 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
-import lombok.Getter;
 
 import java.io.File;
 import java.io.IOException;
@@ -99,7 +98,6 @@ public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> i
         }
     }).setMaxLength(Integer.MAX_VALUE);
 
-    @Getter
     private final GuiButton acceptButton = new GuiButton(popup).onClick(new Runnable() {
         @Override
         public void run() {
@@ -114,7 +112,6 @@ public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> i
         }
     }).setSize(50, 20);
 
-    @Getter
     private final GuiButton cancelButton = new GuiButton(popup).onClick(new Runnable() {
         @Override
         public void run() {
@@ -337,5 +334,13 @@ public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> i
             return true;
         }
         return false;
+    }
+
+    public GuiButton getAcceptButton() {
+        return this.acceptButton;
+    }
+
+    public GuiButton getCancelButton() {
+        return this.cancelButton;
     }
 }

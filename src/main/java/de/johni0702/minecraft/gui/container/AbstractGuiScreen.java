@@ -37,8 +37,6 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
-import lombok.Getter;
-import lombok.Setter;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.crash.CrashReport;
 import net.minecraft.util.crash.CrashReportSection;
@@ -65,15 +63,10 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
 
     private Dimension screenSize;
 
-    @Getter
-    @Setter
     private Background background = Background.DEFAULT;
 
-    @Getter
     private boolean enabledRepeatedKeyEvents = true;
 
-    @Getter
-    @Setter
     private GuiLabel title;
 
     protected boolean suppressVanillaKeys;
@@ -189,6 +182,26 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
 
     public void display() {
         getMinecraft().openScreen(toMinecraft());
+    }
+
+    public Background getBackground() {
+        return this.background;
+    }
+
+    public boolean isEnabledRepeatedKeyEvents() {
+        return this.enabledRepeatedKeyEvents;
+    }
+
+    public GuiLabel getTitle() {
+        return this.title;
+    }
+
+    public void setBackground(Background background) {
+        this.background = background;
+    }
+
+    public void setTitle(GuiLabel title) {
+        this.title = title;
     }
 
     protected class MinecraftGuiScreen extends net.minecraft.client.gui.screen.Screen {

@@ -24,11 +24,11 @@
  */
 package de.johni0702.minecraft.gui;
 
+import de.johni0702.minecraft.gui.utils.NonNull;
 import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
-import lombok.NonNull;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.GL11;

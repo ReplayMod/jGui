@@ -24,6 +24,7 @@
  */
 package de.johni0702.minecraft.gui;
 
+import de.johni0702.minecraft.gui.utils.NonNull;
 import de.johni0702.minecraft.gui.utils.lwjgl.Color;
 import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
@@ -31,7 +32,6 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.utils.lwjgl.WritableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
-import lombok.NonNull;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;

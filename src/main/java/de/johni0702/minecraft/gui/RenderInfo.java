@@ -25,16 +25,23 @@
 package de.johni0702.minecraft.gui;
 
 import de.johni0702.minecraft.gui.versions.MCVer;
-import lombok.Data;
 import net.minecraft.util.crash.CrashReport;
 import net.minecraft.util.crash.CrashReportSection;
 
-@Data
+import java.util.Objects;
+
 public class RenderInfo {
     public final float partialTick;
     public final int mouseX;
     public final int mouseY;
     public final int layer;
+
+    public RenderInfo(float partialTick, int mouseX, int mouseY, int layer) {
+        this.partialTick = partialTick;
+        this.mouseX = mouseX;
+        this.mouseY = mouseY;
+        this.layer = layer;
+    }
 
     public RenderInfo offsetMouse(int minusX, int minusY) {
         return new RenderInfo(partialTick, mouseX - minusX, mouseY - minusY, layer);
@@ -50,5 +57,47 @@ public class RenderInfo {
         MCVer.addDetail(category, "Mouse X", () -> "" + mouseX);
         MCVer.addDetail(category, "Mouse Y", () -> "" + mouseY);
         MCVer.addDetail(category, "Layer", () -> "" + layer);
+    }
+
+    public float getPartialTick() {
+        return this.partialTick;
+    }
+
+    public int getMouseX() {
+        return this.mouseX;
+    }
+
+    public int getMouseY() {
+        return this.mouseY;
+    }
+
+    public int getLayer() {
+        return this.layer;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RenderInfo that = (RenderInfo) o;
+        return Float.compare(that.partialTick, partialTick) == 0 &&
+                mouseX == that.mouseX &&
+                mouseY == that.mouseY &&
+                layer == that.layer;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(partialTick, mouseX, mouseY, layer);
+    }
+
+    @Override
+    public String toString() {
+        return "RenderInfo{" +
+                "partialTick=" + partialTick +
+                ", mouseX=" + mouseX +
+                ", mouseY=" + mouseY +
+                ", layer=" + layer +
+                '}';
     }
 }

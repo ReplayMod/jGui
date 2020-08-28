@@ -31,33 +31,21 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class GridLayout implements Layout {
     private static final Data DEFAULT_DATA = new Data();
 
-    @Accessors(chain = true)
-    @Getter
-    @Setter
     private int columns;
 
-    @Accessors(chain = true)
-    @Getter
-    @Setter
     private int spacingX, spacingY;
 
-    @Accessors(chain = true)
-    @Getter
-    @Setter
     private boolean cellsEqualSize = true;
 
     @Override
@@ -199,13 +187,90 @@ public class GridLayout implements Layout {
         return Pair.of(columnMaxWidth, rowMaxHeight);
     }
 
-    @lombok.Data
-    @AllArgsConstructor
+    public int getColumns() {
+        return this.columns;
+    }
+
+    public int getSpacingX() {
+        return this.spacingX;
+    }
+
+    public int getSpacingY() {
+        return this.spacingY;
+    }
+
+    public boolean isCellsEqualSize() {
+        return this.cellsEqualSize;
+    }
+
+    public GridLayout setColumns(int columns) {
+        this.columns = columns;
+        return this;
+    }
+
+    public GridLayout setSpacingX(int spacingX) {
+        this.spacingX = spacingX;
+        return this;
+    }
+
+    public GridLayout setSpacingY(int spacingY) {
+        this.spacingY = spacingY;
+        return this;
+    }
+
+    public GridLayout setCellsEqualSize(boolean cellsEqualSize) {
+        this.cellsEqualSize = cellsEqualSize;
+        return this;
+    }
+
     public static class Data implements LayoutData {
         private double alignmentX, alignmentY;
 
         public Data() {
             this(0, 0);
+        }
+
+        public Data(double alignmentX, double alignmentY) {
+            this.alignmentX = alignmentX;
+            this.alignmentY = alignmentY;
+        }
+
+        public double getAlignmentX() {
+            return this.alignmentX;
+        }
+
+        public double getAlignmentY() {
+            return this.alignmentY;
+        }
+
+        public void setAlignmentX(double alignmentX) {
+            this.alignmentX = alignmentX;
+        }
+
+        public void setAlignmentY(double alignmentY) {
+            this.alignmentY = alignmentY;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Data data = (Data) o;
+            return Double.compare(data.alignmentX, alignmentX) == 0 &&
+                    Double.compare(data.alignmentY, alignmentY) == 0;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(alignmentX, alignmentY);
+        }
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "alignmentX=" + alignmentX +
+                    ", alignmentY=" + alignmentY +
+                    '}';
         }
     }
 }

@@ -32,7 +32,6 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
-import lombok.Getter;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
@@ -42,10 +41,8 @@ public abstract class AbstractGuiCheckbox<T extends AbstractGuiCheckbox<T>>
     protected static final Identifier BUTTON_SOUND = new Identifier("gui.button.press");
     protected static final ReadableColor BOX_BACKGROUND_COLOR = new Color(46, 46, 46);
 
-    @Getter
     private String label;
 
-    @Getter
     private boolean checked;
 
     public AbstractGuiCheckbox() {
@@ -110,5 +107,13 @@ public abstract class AbstractGuiCheckbox<T extends AbstractGuiCheckbox<T>>
     public T setChecked(boolean checked) {
         this.checked = checked;
         return getThis();
+    }
+
+    public String getLabel() {
+        return this.label;
+    }
+
+    public boolean isChecked() {
+        return this.checked;
     }
 }

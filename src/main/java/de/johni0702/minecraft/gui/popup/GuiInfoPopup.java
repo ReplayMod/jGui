@@ -36,9 +36,6 @@ import de.johni0702.minecraft.gui.layout.VerticalLayout;
 import de.johni0702.minecraft.gui.utils.Colors;
 import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 //#if MC>=11400
 import de.johni0702.minecraft.gui.versions.MCVer.Keyboard;
@@ -64,13 +61,11 @@ public class GuiInfoPopup extends AbstractGuiPopup<GuiInfoPopup> implements Type
 
     private final SettableFuture<Void> future = SettableFuture.create();
 
-    @Getter
     private final GuiButton closeButton = new GuiButton().setSize(150, 20).onClick(() -> {
         close();
         future.set(null);
     }).setI18nLabel("gui.back");
 
-    @Getter
     private final GuiPanel info = new GuiPanel().setMinSize(new Dimension(320, 50))
             .setLayout(new VerticalLayout(VerticalLayout.Alignment.TOP).setSpacing(2));
 
@@ -79,9 +74,6 @@ public class GuiInfoPopup extends AbstractGuiPopup<GuiInfoPopup> implements Type
                 .addElements(new VerticalLayout.Data(0.5), info, closeButton);
     }
 
-    @Getter
-    @Setter
-    @Accessors(chain = true)
     private int layer;
 
     public GuiInfoPopup(GuiContainer container) {
@@ -114,5 +106,22 @@ public class GuiInfoPopup extends AbstractGuiPopup<GuiInfoPopup> implements Type
             return true;
         }
         return false;
+    }
+
+    public GuiButton getCloseButton() {
+        return this.closeButton;
+    }
+
+    public GuiPanel getInfo() {
+        return this.info;
+    }
+
+    public int getLayer() {
+        return this.layer;
+    }
+
+    public GuiInfoPopup setLayer(int layer) {
+        this.layer = layer;
+        return this;
     }
 }

@@ -88,8 +88,6 @@ repositories {
 }
 
 dependencies {
-    annotationProcessor 'org.projectlombok:lombok:1.18.12'
-    compile 'org.projectlombok:lombok:1.18.12'
     compile('com.github.ReplayMod:lwjgl-utils:27dcd66')
 }
 

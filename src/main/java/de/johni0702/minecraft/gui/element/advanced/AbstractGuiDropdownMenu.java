@@ -43,8 +43,6 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import net.minecraft.client.font.TextRenderer;
 
 import java.util.Collection;
@@ -57,13 +55,10 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
         extends AbstractComposedGuiElement<T> implements IGuiDropdownMenu<V,T>, Clickable {
     private static final ReadableColor OUTLINE_COLOR = new Color(160, 160, 160);
 
-    @Getter
     private int selected;
 
-    @Getter
     private V[] values;
 
-    @Getter
     private boolean opened;
 
     private Consumer<Integer> onSelection;
@@ -247,9 +242,24 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
         return getThis();
     }
 
-    @RequiredArgsConstructor
+    public int getSelected() {
+        return this.selected;
+    }
+
+    public V[] getValues() {
+        return this.values;
+    }
+
+    public boolean isOpened() {
+        return this.opened;
+    }
+
     private class DropdownEntry extends AbstractGuiClickable<DropdownEntry> {
         private final V value;
+
+        public DropdownEntry(V value) {
+            this.value = value;
+        }
 
         @Override
         protected DropdownEntry getThis() {

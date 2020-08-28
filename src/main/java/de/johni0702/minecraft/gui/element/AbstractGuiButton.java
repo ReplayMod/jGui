@@ -32,7 +32,6 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
-import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.resource.language.I18n;
@@ -62,11 +61,9 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
     protected static final Identifier WIDGETS_TEXTURE = new Identifier("textures/gui/widgets.png");
 
     //#if MC>=10904
-    @Getter
     private SoundEvent sound = SoundEvents.UI_BUTTON_CLICK;
     //#endif
 
-    @Getter
     private String label;
 
     public AbstractGuiButton() {
@@ -151,10 +148,18 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
         this.sound = sound;
         return getThis();
     }
+
+    public SoundEvent getSound() {
+        return this.sound;
+    }
     //#endif
 
     @Override
     public T setI18nLabel(String label, Object... args) {
         return setLabel(I18n.translate(label, args));
+    }
+
+    public String getLabel() {
+        return this.label;
     }
 }

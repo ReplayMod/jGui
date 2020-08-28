@@ -28,15 +28,12 @@ import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
-import lombok.Getter;
 
 public abstract class AbstractGuiToggleButton<V, T extends AbstractGuiToggleButton<V, T>>
         extends AbstractGuiButton<T> implements IGuiToggleButton<V,T> {
 
-    @Getter
     private int selected;
 
-    @Getter
     private V[] values;
 
     public AbstractGuiToggleButton() {
@@ -75,5 +72,13 @@ public abstract class AbstractGuiToggleButton<V, T extends AbstractGuiToggleButt
     @Override
     public V getSelectedValue() {
         return values[selected];
+    }
+
+    public int getSelected() {
+        return this.selected;
+    }
+
+    public V[] getValues() {
+        return this.values;
     }
 }

@@ -36,9 +36,6 @@ import de.johni0702.minecraft.gui.layout.VerticalLayout;
 import de.johni0702.minecraft.gui.utils.Colors;
 import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 //#if MC>=11400
 import de.johni0702.minecraft.gui.versions.MCVer.Keyboard;
@@ -56,7 +53,6 @@ public class GuiYesNoPopup extends AbstractGuiPopup<GuiYesNoPopup> implements Ty
 
     private final SettableFuture<Boolean> future = SettableFuture.create();
 
-    @Getter
     private final GuiButton yesButton = new GuiButton().setSize(150, 20).onClick(new Runnable() {
         @Override
         public void run() {
@@ -65,7 +61,6 @@ public class GuiYesNoPopup extends AbstractGuiPopup<GuiYesNoPopup> implements Ty
         }
     });
 
-    @Getter
     private final GuiButton noButton = new GuiButton().setSize(150, 20).onClick(new Runnable() {
         @Override
         public void run() {
@@ -74,11 +69,9 @@ public class GuiYesNoPopup extends AbstractGuiPopup<GuiYesNoPopup> implements Ty
         }
     });
 
-    @Getter
     private final GuiPanel info = new GuiPanel().setMinSize(new Dimension(320, 50))
             .setLayout(new VerticalLayout(VerticalLayout.Alignment.TOP).setSpacing(2));
 
-    @Getter
     private final GuiPanel buttons = new GuiPanel()
             .setLayout(new HorizontalLayout(HorizontalLayout.Alignment.CENTER).setSpacing(5))
             .addElements(new HorizontalLayout.Data(0.5), yesButton, noButton);
@@ -88,9 +81,6 @@ public class GuiYesNoPopup extends AbstractGuiPopup<GuiYesNoPopup> implements Ty
                 .addElements(new VerticalLayout.Data(0.5), info, buttons);
     }
 
-    @Getter
-    @Setter
-    @Accessors(chain = true)
     private int layer;
 
     public GuiYesNoPopup(GuiContainer container) {
@@ -133,5 +123,30 @@ public class GuiYesNoPopup extends AbstractGuiPopup<GuiYesNoPopup> implements Ty
             return true;
         }
         return false;
+    }
+
+    public GuiButton getYesButton() {
+        return this.yesButton;
+    }
+
+    public GuiButton getNoButton() {
+        return this.noButton;
+    }
+
+    public GuiPanel getInfo() {
+        return this.info;
+    }
+
+    public GuiPanel getButtons() {
+        return this.buttons;
+    }
+
+    public int getLayer() {
+        return this.layer;
+    }
+
+    public GuiYesNoPopup setLayer(int layer) {
+        this.layer = layer;
+        return this;
     }
 }

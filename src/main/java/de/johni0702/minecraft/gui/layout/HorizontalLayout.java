@@ -30,23 +30,17 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class HorizontalLayout implements Layout {
     private static final Data DEFAULT_DATA = new Data(0);
 
     private final Alignment alignment;
 
-    @Accessors(chain = true)
-    @Getter
-    @Setter
     private int spacing;
 
     public HorizontalLayout() {
@@ -109,13 +103,52 @@ public class HorizontalLayout implements Layout {
         return new Dimension(width, maxHeight);
     }
 
-    @lombok.Data
-    @AllArgsConstructor
+    public int getSpacing() {
+        return this.spacing;
+    }
+
+    public HorizontalLayout setSpacing(int spacing) {
+        this.spacing = spacing;
+        return this;
+    }
+
     public static class Data implements LayoutData {
         private double alignment;
 
         public Data() {
             this(0);
+        }
+
+        public Data(double alignment) {
+            this.alignment = alignment;
+        }
+
+        public double getAlignment() {
+            return this.alignment;
+        }
+
+        public void setAlignment(double alignment) {
+            this.alignment = alignment;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Data data = (Data) o;
+            return Double.compare(data.alignment, alignment) == 0;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(alignment);
+        }
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "alignment=" + alignment +
+                    '}';
         }
     }
 

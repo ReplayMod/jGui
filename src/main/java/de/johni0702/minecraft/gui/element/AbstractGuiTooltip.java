@@ -32,7 +32,6 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
-import lombok.Getter;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.resource.language.I18n;
 
@@ -42,10 +41,8 @@ public abstract class AbstractGuiTooltip<T extends AbstractGuiTooltip<T>> extend
     private static final ReadableColor BORDER_LIGHT = new Color(80, 0, 255, 80);
     private static final ReadableColor BORDER_DARK = new Color(40, 0, 127, 80);
 
-    @Getter
     private String[] text = {};
 
-    @Getter
     private ReadableColor color = ReadableColor.WHITE;
 
     @Override
@@ -110,5 +107,13 @@ public abstract class AbstractGuiTooltip<T extends AbstractGuiTooltip<T>> extend
     public T setColor(ReadableColor color) {
         this.color = color;
         return getThis();
+    }
+
+    public String[] getText() {
+        return this.text;
+    }
+
+    public ReadableColor getColor() {
+        return this.color;
     }
 }

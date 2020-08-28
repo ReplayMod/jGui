@@ -24,10 +24,9 @@
  */
 package de.johni0702.minecraft.gui.layout;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VoidLayoutData implements LayoutData {
     public static final VoidLayoutData INSTANCE = new VoidLayoutData();
+
+    private VoidLayoutData() {
+    }
 }

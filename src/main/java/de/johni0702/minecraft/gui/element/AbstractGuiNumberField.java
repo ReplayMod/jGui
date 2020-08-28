@@ -26,7 +26,6 @@ package de.johni0702.minecraft.gui.element;
 
 import com.google.common.base.Preconditions;
 import de.johni0702.minecraft.gui.container.GuiContainer;
-import lombok.Getter;
 
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -38,10 +37,8 @@ public abstract class AbstractGuiNumberField<T extends AbstractGuiNumberField<T>
     private int precision;
     private volatile Pattern precisionPattern;
 
-    @Getter
     private Double minValue;
 
-    @Getter
     private Double maxValue;
 
     private boolean validateOnFocusChange = false;
@@ -212,5 +209,13 @@ public abstract class AbstractGuiNumberField<T extends AbstractGuiNumberField<T>
     protected void onFocusChanged(boolean focused) {
         setValue(clampToBounds());
         super.onFocusChanged(focused);
+    }
+
+    public Double getMinValue() {
+        return this.minValue;
+    }
+
+    public Double getMaxValue() {
+        return this.maxValue;
     }
 }

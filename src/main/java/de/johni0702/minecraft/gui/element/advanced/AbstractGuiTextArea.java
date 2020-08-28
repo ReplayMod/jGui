@@ -40,7 +40,6 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
-import lombok.Getter;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resource.language.I18n;
@@ -64,19 +63,14 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
     private static final int BORDER = 4;
     private static final int LINE_SPACING = 2;
 
-    @Getter
     private boolean focused;
-    @Getter
     private Focusable next, previous;
 
     private Consumer<Boolean> focusChanged;
 
     // Content
-    @Getter
     private int maxTextWidth = -1;
-    @Getter
     private int maxTextHeight = -1;
-    @Getter
     private int maxCharCount = -1;
 
     private String[] text = {""};
@@ -704,5 +698,29 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
     public T setI18nHint(String hint, Object... args) {
         setHint(I18n.translate(hint, args).split("/n"));
         return getThis();
+    }
+
+    public boolean isFocused() {
+        return this.focused;
+    }
+
+    public Focusable getNext() {
+        return this.next;
+    }
+
+    public Focusable getPrevious() {
+        return this.previous;
+    }
+
+    public int getMaxTextWidth() {
+        return this.maxTextWidth;
+    }
+
+    public int getMaxTextHeight() {
+        return this.maxTextHeight;
+    }
+
+    public int getMaxCharCount() {
+        return this.maxCharCount;
     }
 }

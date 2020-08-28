@@ -31,7 +31,6 @@ import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.versions.Image;
-import lombok.RequiredArgsConstructor;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.util.Identifier;
 
@@ -171,9 +170,12 @@ public abstract class AbstractGuiImage<T extends AbstractGuiImage<T>>
      * We use a static class here in order to prevent the inner class from keeping the outer class
      * alive after finalization when still unloading the texture.
      */
-    @RequiredArgsConstructor
     private static final class Finalizer implements Runnable {
         private final NativeImageBackedTexture texture;
+
+        public Finalizer(NativeImageBackedTexture texture) {
+            this.texture = texture;
+        }
 
         @Override
         public void run() {

@@ -41,7 +41,6 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
-import lombok.Getter;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resource.language.I18n;
@@ -63,22 +62,17 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
     private static final int BORDER = 4;
 
     // Focus
-    @Getter
     private boolean focused;
-    @Getter
     private Focusable next, previous;
 
     // Content
-    @Getter
     private int maxLength = 32;
 
-    @Getter
     private String text = "";
 
     private int cursorPos;
     private int selectionPos;
 
-    @Getter
     private String hint;
 
     // Rendering
@@ -595,5 +589,29 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
     public T setTextColorDisabled(ReadableColor textColorDisabled) {
         this.textColorDisabled = textColorDisabled;
         return getThis();
+    }
+
+    public boolean isFocused() {
+        return this.focused;
+    }
+
+    public Focusable getNext() {
+        return this.next;
+    }
+
+    public Focusable getPrevious() {
+        return this.previous;
+    }
+
+    public int getMaxLength() {
+        return this.maxLength;
+    }
+
+    public String getText() {
+        return this.text;
+    }
+
+    public String getHint() {
+        return this.hint;
     }
 }

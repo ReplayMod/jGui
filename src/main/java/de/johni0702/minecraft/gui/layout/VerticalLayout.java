@@ -30,23 +30,17 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class VerticalLayout implements Layout {
     private static final Data DEFAULT_DATA = new Data(0);
 
     private final Alignment alignment;
 
-    @Accessors(chain = true)
-    @Getter
-    @Setter
     private int spacing;
 
     public VerticalLayout() {
@@ -109,8 +103,15 @@ public class VerticalLayout implements Layout {
         return new Dimension(maxWidth, height);
     }
 
-    @lombok.Data
-    @AllArgsConstructor
+    public int getSpacing() {
+        return this.spacing;
+    }
+
+    public VerticalLayout setSpacing(int spacing) {
+        this.spacing = spacing;
+        return this;
+    }
+
     public static class Data implements LayoutData {
         private double alignment;
         private boolean maximizeWidth;
@@ -121,6 +122,49 @@ public class VerticalLayout implements Layout {
 
         public Data(double alignment) {
             this(alignment, true);
+        }
+
+        public Data(double alignment, boolean maximizeWidth) {
+            this.alignment = alignment;
+            this.maximizeWidth = maximizeWidth;
+        }
+
+        public double getAlignment() {
+            return this.alignment;
+        }
+
+        public boolean isMaximizeWidth() {
+            return this.maximizeWidth;
+        }
+
+        public void setAlignment(double alignment) {
+            this.alignment = alignment;
+        }
+
+        public void setMaximizeWidth(boolean maximizeWidth) {
+            this.maximizeWidth = maximizeWidth;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Data data = (Data) o;
+            return Double.compare(data.alignment, alignment) == 0 &&
+                    maximizeWidth == data.maximizeWidth;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(alignment, maximizeWidth);
+        }
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "alignment=" + alignment +
+                    ", maximizeWidth=" + maximizeWidth +
+                    '}';
         }
     }
 

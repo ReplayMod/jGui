@@ -34,7 +34,6 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.utils.lwjgl.WritableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.WritablePoint;
-import lombok.Getter;
 import net.minecraft.util.Identifier;
 
 //#if MC>=10904
@@ -51,15 +50,12 @@ import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 
 public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedButton<T>> extends AbstractGuiClickable<T> implements Clickable, IGuiTexturedButton<T> {
-    @Getter
     private Identifier texture;
 
     //#if MC>=10904
-    @Getter
     private SoundEvent sound = SoundEvents.UI_BUTTON_CLICK;
     //#endif
 
-    @Getter
     private ReadableDimension textureSize = new ReadableDimension() {
         @Override
         public int getWidth() {
@@ -77,16 +73,12 @@ public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedBut
         }
     };
 
-    @Getter
     private ReadableDimension textureTotalSize;
 
-    @Getter
     private ReadablePoint textureNormal;
 
-    @Getter
     private ReadablePoint textureHover;
 
-    @Getter
     private ReadablePoint textureDisabled;
 
     public AbstractGuiTexturedButton() {
@@ -244,5 +236,33 @@ public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedBut
         this.sound = sound;
         return getThis();
     }
+
+    public SoundEvent getSound() {
+        return this.sound;
+    }
     //#endif
+
+    public Identifier getTexture() {
+        return this.texture;
+    }
+
+    public ReadableDimension getTextureSize() {
+        return this.textureSize;
+    }
+
+    public ReadableDimension getTextureTotalSize() {
+        return this.textureTotalSize;
+    }
+
+    public ReadablePoint getTextureNormal() {
+        return this.textureNormal;
+    }
+
+    public ReadablePoint getTextureHover() {
+        return this.textureHover;
+    }
+
+    public ReadablePoint getTextureDisabled() {
+        return this.textureDisabled;
+    }
 }

@@ -31,7 +31,6 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
-import lombok.Getter;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.resource.language.I18n;
 
@@ -45,10 +44,8 @@ import java.util.List;
 //#endif
 
 public abstract class AbstractGuiLabel<T extends AbstractGuiLabel<T>> extends AbstractGuiElement<T> implements IGuiLabel<T> {
-    @Getter
     private String text = "";
 
-    @Getter
     private ReadableColor color = ReadableColor.WHITE, disabledColor = ReadableColor.GREY;
 
     public AbstractGuiLabel() {
@@ -109,5 +106,17 @@ public abstract class AbstractGuiLabel<T extends AbstractGuiLabel<T>> extends Ab
     public T setDisabledColor(ReadableColor disabledColor) {
         this.disabledColor = disabledColor;
         return getThis();
+    }
+
+    public String getText() {
+        return this.text;
+    }
+
+    public ReadableColor getColor() {
+        return this.color;
+    }
+
+    public ReadableColor getDisabledColor() {
+        return this.disabledColor;
     }
 }

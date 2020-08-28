@@ -35,7 +35,6 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.utils.lwjgl.WritableDimension;
-import lombok.Getter;
 
 import static de.johni0702.minecraft.gui.utils.Colors.TRANSPARENT;
 import static de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor.BLACK;
@@ -44,10 +43,8 @@ public abstract class AbstractGuiVerticalList<T extends AbstractGuiVerticalList<
         implements Draggable {
     public static final ReadableColor BACKGROUND = new Color(0, 0, 0, 150);
 
-    @Getter
     private final VerticalLayout listLayout = new VerticalLayout().setSpacing(3);
 
-    @Getter
     private final GuiPanel listPanel = new GuiPanel(this).setLayout(listLayout);
 
     {
@@ -208,5 +205,13 @@ public abstract class AbstractGuiVerticalList<T extends AbstractGuiVerticalList<
     public T setDrawShadow(boolean drawShadow) {
         this.drawShadow = drawShadow;
         return getThis();
+    }
+
+    public VerticalLayout getListLayout() {
+        return this.listLayout;
+    }
+
+    public GuiPanel getListPanel() {
+        return this.listPanel;
     }
 }
