@@ -7,9 +7,9 @@ public interface KeyboardCallback {
     Event<KeyboardCallback> EVENT = Event.create((listeners) ->
             new KeyboardCallback() {
                 @Override
-                public boolean keyPressed(int keyCode, int modifiers, int scanCode) {
+                public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
                     for (KeyboardCallback listener : listeners) {
-                        if (listener.keyPressed(keyCode, modifiers, scanCode)) {
+                        if (listener.keyPressed(keyCode, scanCode, modifiers)) {
                             return true;
                         }
                     }
@@ -17,9 +17,9 @@ public interface KeyboardCallback {
                 }
 
                 @Override
-                public boolean keyReleased(int keyCode, int modifiers, int scanCode) {
+                public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
                     for (KeyboardCallback listener : listeners) {
-                        if (listener.keyReleased(keyCode, modifiers, scanCode)) {
+                        if (listener.keyReleased(keyCode, scanCode, modifiers)) {
                             return true;
                         }
                     }
@@ -27,9 +27,9 @@ public interface KeyboardCallback {
                 }
 
                 @Override
-                public boolean charTyped(char charCode, int modifiers) {
+                public boolean charTyped(char charCode, int scanCode) {
                     for (KeyboardCallback listener : listeners) {
-                        if (listener.charTyped(charCode, modifiers)) {
+                        if (listener.charTyped(charCode, scanCode)) {
                             return true;
                         }
                     }
@@ -38,8 +38,8 @@ public interface KeyboardCallback {
             }
     );
 
-    boolean keyPressed(int keyCode, int modifiers, int scanCode);
-    boolean keyReleased(int keyCode, int modifiers, int scanCode);
-    boolean charTyped(char keyChar, int modifiers);
+    boolean keyPressed(int keyCode, int scanCode, int modifiers);
+    boolean keyReleased(int keyCode, int scanCode, int modifiers);
+    boolean charTyped(char keyChar, int scanCode);
 }
 //#endif

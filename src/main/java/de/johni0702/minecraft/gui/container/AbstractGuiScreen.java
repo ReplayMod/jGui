@@ -260,12 +260,12 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         }
 
         @Override
-        public boolean charTyped(char keyChar, int modifiers) {
+        public boolean charTyped(char keyChar, int scanCode) {
             if (!forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), 0, keyChar, hasControlDown(), hasShiftDown())) {
                 if (suppressVanillaKeys) {
                     return false;
                 }
-                return super.charTyped(keyChar, modifiers);
+                return super.charTyped(keyChar, scanCode);
             }
             return true;
         }

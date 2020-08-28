@@ -222,18 +222,18 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
         { on(KeyboardCallback.EVENT, this); }
 
         @Override
-        public boolean keyPressed(int keyCode, int modifiers, int scanCode) {
-            return getSuperMcGui().keyPressed(keyCode, modifiers, scanCode);
+        public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+            return getSuperMcGui().keyPressed(keyCode, scanCode, modifiers);
         }
 
         @Override
-        public boolean keyReleased(int keyCode, int modifiers, int scanCode) {
-            return getSuperMcGui().keyReleased(keyCode, modifiers, scanCode);
+        public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+            return getSuperMcGui().keyReleased(keyCode, scanCode, modifiers);
         }
 
         @Override
-        public boolean charTyped(char keyChar, int modifiers) {
-            return getSuperMcGui().charTyped(keyChar, modifiers);
+        public boolean charTyped(char keyChar, int scanCode) {
+            return getSuperMcGui().charTyped(keyChar, scanCode);
         }
         //#else
         //#if MC>=11400
