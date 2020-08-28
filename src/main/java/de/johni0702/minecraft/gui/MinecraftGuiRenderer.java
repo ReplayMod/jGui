@@ -60,7 +60,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     private final DrawableHelper gui = new DrawableHelper(){};
 
     //#if MC<11600
-    @SuppressWarnings("FieldCanBeLocal")
+    //$$ @SuppressWarnings("FieldCanBeLocal")
     //#endif
     private final MatrixStack matrixStack;
 
@@ -144,10 +144,10 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     @Override
     public void drawTexturedRect(int x, int y, int u, int v, int width, int height) {
         //#if MC>=11600
-        //$$ gui.drawTexture(matrixStack, x, y, u, v, width, height);
+        gui.drawTexture(matrixStack, x, y, u, v, width, height);
         //#else
         //#if MC>=11400
-        gui.blit(x, y, u, v, width, height);
+        //$$ gui.blit(x, y, u, v, width, height);
         //#else
         //$$ gui.drawTexturedModalRect(x, y, u, v, width, height);
         //#endif
@@ -158,10 +158,10 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     public void drawTexturedRect(int x, int y, int u, int v, int width, int height, int uWidth, int vHeight, int textureWidth, int textureHeight) {
         color(1, 1, 1);
         //#if MC>=11600
-        //$$ DrawableHelper.drawTexture(matrixStack, x, y, width, height, u, v, uWidth, vHeight, textureWidth, textureHeight);
+        DrawableHelper.drawTexture(matrixStack, x, y, width, height, u, v, uWidth, vHeight, textureWidth, textureHeight);
         //#else
         //#if MC>=11400
-        DrawableHelper.blit(x, y, width, height, u, v, uWidth, vHeight, textureWidth, textureHeight);
+        //$$ DrawableHelper.blit(x, y, width, height, u, v, uWidth, vHeight, textureWidth, textureHeight);
         //#else
         //$$ Gui.drawScaledCustomSizeModalRect(x, y, u, v, uWidth, vHeight, width, height, textureWidth, textureHeight);
         //#endif
@@ -172,7 +172,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     public void drawRect(int x, int y, int width, int height, int color) {
         DrawableHelper.fill(
                 //#if MC>=11600
-                //$$ matrixStack,
+                matrixStack,
                 //#endif
                 x, y, x + width, y + height, color);
         color(1, 1, 1);
@@ -229,13 +229,13 @@ public class MinecraftGuiRenderer implements GuiRenderer {
             if (shadow) {
                 return fontRenderer.drawWithShadow(
                         //#if MC>=11600
-                        //$$ matrixStack,
+                        matrixStack,
                         //#endif
                         text, x, y, color);
             } else {
                 return fontRenderer.draw(
                         //#if MC>=11600
-                        //$$ matrixStack,
+                        matrixStack,
                         //#endif
                         text, x, y, color);
             }
@@ -252,7 +252,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     @Override
     public int drawCenteredString(int x, int y, int color, String text, boolean shadow) {
         TextRenderer fontRenderer = MCVer.getFontRenderer();
-        x-=fontRenderer.getStringWidth(text) / 2;
+        x-=fontRenderer.getWidth(text) / 2;
         return drawString(x, y, color, text, shadow);
     }
 

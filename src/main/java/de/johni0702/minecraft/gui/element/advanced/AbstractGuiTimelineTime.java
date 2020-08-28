@@ -71,7 +71,7 @@ public abstract class AbstractGuiTimelineTime<T extends AbstractGuiTimelineTime<
         double fractionOfVisible = positionInVisible / visibleLength;
         int positionX = (int) (BORDER_LEFT + fractionOfVisible * (size.getWidth() - BORDER_LEFT - BORDER_RIGHT)) + offset;
         String str = String.format("%02d:%02d", time / 1000 / 60, time / 1000 % 60);
-        int stringWidth = MCVer.getFontRenderer().getStringWidth(str);
+        int stringWidth = MCVer.getFontRenderer().getWidth(str);
         positionX = Math.max(stringWidth / 2, Math.min(size.getWidth() - stringWidth / 2, positionX));
         renderer.drawCenteredString(positionX, 0, Colors.WHITE, str, true);
     }

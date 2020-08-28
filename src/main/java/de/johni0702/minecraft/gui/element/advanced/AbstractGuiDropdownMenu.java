@@ -86,7 +86,7 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
         TextRenderer fontRenderer = MCVer.getFontRenderer();
         int maxWidth = 0;
         for (V value : values) {
-            int width = fontRenderer.getStringWidth(toString.apply(value));
+            int width = fontRenderer.getWidth(toString.apply(value));
             if (width > maxWidth) {
                 maxWidth = width;
             }

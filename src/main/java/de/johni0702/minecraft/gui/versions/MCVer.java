@@ -260,7 +260,7 @@ public class MCVer {
         public static final int KEY_X = GLFW.GLFW_KEY_X;
 
         public static void enableRepeatEvents(boolean enabled) {
-            getMinecraft().keyboard.enableRepeatEvents(enabled);
+            getMinecraft().keyboard.setRepeatEvents(enabled);
         }
     }
     //#endif

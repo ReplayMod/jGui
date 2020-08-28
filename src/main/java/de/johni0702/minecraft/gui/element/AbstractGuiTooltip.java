@@ -77,7 +77,7 @@ public abstract class AbstractGuiTooltip<T extends AbstractGuiTooltip<T>> extend
         int height = 1 + LINE_SPACING + text.length * (fontRenderer.fontHeight + LINE_SPACING);
         int width = 0;
         for (String line : text) {
-            int w = fontRenderer.getStringWidth(line);
+            int w = fontRenderer.getWidth(line);
             if (w > width) {
                 width = w;
             }

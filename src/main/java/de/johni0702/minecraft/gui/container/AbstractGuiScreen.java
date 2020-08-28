@@ -102,9 +102,9 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                     break;
                 case DEFAULT:
                     //#if MC>=11600
-                    //$$ wrapped.renderBackground(renderer.getMatrixStack());
+                    wrapped.renderBackground(renderer.getMatrixStack());
                     //#else
-                    wrapped.renderBackground();
+                    //$$ wrapped.renderBackground();
                     //#endif
                     break;
                 case TRANSPARENT:
@@ -113,9 +113,9 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                     break;
                 case DIRT:
                     //#if MC>=11600
-                    //$$ wrapped.renderBackgroundTexture(0);
+                    wrapped.renderBackgroundTexture(0);
                     //#else
-                    wrapped.renderDirtBackground(0);
+                    //$$ wrapped.renderDirtBackground(0);
                     //#endif
                     break;
             }
@@ -220,14 +220,14 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
 
         @Override
         //#if MC>=11600
-        //$$ public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+        public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
         //#else
         //#if MC>=11400
-        public void render(int mouseX, int mouseY, float partialTicks) {
+        //$$ public void render(int mouseX, int mouseY, float partialTicks) {
         //#else
         //$$ public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         //#endif
-            MatrixStack stack = new MatrixStack();
+        //$$     MatrixStack stack = new MatrixStack();
         //#endif
             // The Forge loading screen apparently leaves one of the textures of the GlStateManager in an
             // incorrect state which can cause the whole screen to just remain white. This is a workaround.

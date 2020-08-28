@@ -34,7 +34,7 @@ public class Image implements AutoCloseable {
         this(
                 //#if MC>=11400
                 //#if FABRIC>=1
-                new NativeImage(NativeImage.Format.RGBA, width, height, true)
+                new NativeImage(NativeImage.Format.ABGR, width, height, true)
                 //#else
                 //$$ new NativeImage(NativeImage.PixelFormat.RGBA, width, height, true)
                 //#endif
@@ -95,7 +95,7 @@ public class Image implements AutoCloseable {
     public void setRGBA(int x, int y, int r, int g, int b, int a) {
         //#if MC>=11400
         // actually takes ABGR, not RGBA
-        inner.setPixelRgba(x, y, ((a & 0xff) << 24) | ((b & 0xff) << 16) | ((g & 0xff) << 8) | (r & 0xff));
+        inner.setPixelColor(x, y, ((a & 0xff) << 24) | ((b & 0xff) << 16) | ((g & 0xff) << 8) | (r & 0xff));
         //#else
         //$$ inner.setRGB(x, y, ((a & 0xff) << 24) | ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff));
         //#endif

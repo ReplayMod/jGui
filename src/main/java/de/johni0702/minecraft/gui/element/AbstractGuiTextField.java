@@ -162,7 +162,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         currentOffset = Math.min(currentOffset, cursorPos);
         String line = text.substring(currentOffset, cursorPos);
         TextRenderer fontRenderer = MCVer.getFontRenderer();
-        int currentWidth = fontRenderer.getStringWidth(line);
+        int currentWidth = fontRenderer.getWidth(line);
         if (currentWidth > size.getWidth() - 2*BORDER) {
             currentOffset = cursorPos - fontRenderer.trimToWidth(line, size.getWidth() - 2*BORDER, true).length();
         }
@@ -377,14 +377,14 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
             int to = getSelectionTo();
             String leftStr = renderText.substring(0, clamp(from - currentOffset, 0, renderText.length()));
             String rightStr = renderText.substring(clamp(to - currentOffset, 0, renderText.length()));
-            int left = BORDER + fontRenderer.getStringWidth(leftStr);
-            int right = lineEnd - fontRenderer.getStringWidth(rightStr) - 1;
+            int left = BORDER + fontRenderer.getWidth(leftStr);
+            int right = lineEnd - fontRenderer.getWidth(rightStr) - 1;
             invertColors(renderer, right, height - 2, left, 2);
 
             // Draw cursor
             if (blinkCursorTick / 6 % 2 == 0 && focused) {
                 String beforeCursor = renderText.substring(0, cursorPos - currentOffset);
-                int posX = BORDER + fontRenderer.getStringWidth(beforeCursor);
+                int posX = BORDER + fontRenderer.getWidth(beforeCursor);
                 if (cursorPos == text.length()) {
                     renderer.drawString(posX, posY, CURSOR_COLOR, "_", true);
                 } else {

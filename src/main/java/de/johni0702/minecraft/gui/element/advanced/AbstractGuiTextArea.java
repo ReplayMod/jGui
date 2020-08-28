@@ -199,7 +199,7 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
         currentXOffset = Math.min(currentXOffset, cursorX);
         String line = text[cursorY].substring(currentXOffset, cursorX);
         TextRenderer fontRenderer = MCVer.getFontRenderer();
-        int currentWidth = fontRenderer.getStringWidth(line);
+        int currentWidth = fontRenderer.getWidth(line);
         if (currentWidth > size.getWidth() - BORDER * 2) {
             currentXOffset = cursorX - fontRenderer.trimToWidth(line, size.getWidth() - BORDER * 2, true).length();
         }
@@ -482,22 +482,22 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
             } else if (lineY == fromY && lineY == toY) { // Part of line selected
                 String leftStr = line.substring(0, clamp(fromX - leftTrimmed, 0, line.length()));
                 String rightStr = line.substring(clamp(toX - leftTrimmed, 0, line.length()));
-                int left = BORDER + fontRenderer.getStringWidth(leftStr);
-                int right = lineEnd - fontRenderer.getStringWidth(rightStr) - 1;
+                int left = BORDER + fontRenderer.getWidth(leftStr);
+                int right = lineEnd - fontRenderer.getWidth(rightStr) - 1;
                 invertColors(renderer, right, posY - 1 + lineHeight, left, posY - 1);
             } else if (lineY == fromY) { // End of line selected
                 String rightStr = line.substring(clamp(fromX - leftTrimmed, 0, line.length()));
-                invertColors(renderer, lineEnd, posY - 1 + lineHeight, lineEnd - fontRenderer.getStringWidth(rightStr), posY - 1);
+                invertColors(renderer, lineEnd, posY - 1 + lineHeight, lineEnd - fontRenderer.getWidth(rightStr), posY - 1);
             } else if (lineY == toY) { // Beginning of line selected
                 String leftStr = line.substring(0, clamp(toX - leftTrimmed, 0, line.length()));
-                int right = BORDER + fontRenderer.getStringWidth(leftStr);
+                int right = BORDER + fontRenderer.getWidth(leftStr);
                 invertColors(renderer, right, posY - 1 + lineHeight, BORDER, posY - 1);
             }
 
             // Draw cursor
             if (lineY == cursorY && blinkCursorTick / 6 % 2 == 0 && focused) {
                 String beforeCursor = line.substring(0, cursorX - leftTrimmed);
-                int posX = BORDER + fontRenderer.getStringWidth(beforeCursor);
+                int posX = BORDER + fontRenderer.getWidth(beforeCursor);
                 if (cursorX == text[lineY].length()) {
                     renderer.drawString(posX, posY, CURSOR_COLOR, "_", true);
                 } else {

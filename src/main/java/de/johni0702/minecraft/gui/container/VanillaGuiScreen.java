@@ -166,7 +166,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
             Point mousePos = MouseUtils.getMousePos();
             getSuperMcGui().render(
                     //#if MC>=11600
-                    //$$ stack,
+                    stack,
                     //#endif
                     mousePos.getX(), mousePos.getY(), partialTicks);
         }

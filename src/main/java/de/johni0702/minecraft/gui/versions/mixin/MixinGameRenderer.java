@@ -16,9 +16,9 @@ public class MixinGameRenderer {
             at = @At(
                     value = "INVOKE",
                     //#if MC>=11600
-                    //$$ target = "Lnet/minecraft/client/gui/screen/Screen;render(Lnet/minecraft/client/util/math/MatrixStack;IIF)V",
+                    target = "Lnet/minecraft/client/gui/screen/Screen;render(Lnet/minecraft/client/util/math/MatrixStack;IIF)V",
                     //#else
-                    target = "Lnet/minecraft/client/gui/screen/Screen;render(IIF)V",
+                    //$$ target = "Lnet/minecraft/client/gui/screen/Screen;render(IIF)V",
                     //#endif
                     shift = At.Shift.AFTER
             )

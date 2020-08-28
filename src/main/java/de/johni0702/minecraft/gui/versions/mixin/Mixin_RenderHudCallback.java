@@ -22,10 +22,10 @@ public class Mixin_RenderHudCallback {
             )
     )
     //#if MC>=11600
-    //$$ private void renderOverlay(MatrixStack stack, float partialTicks, CallbackInfo ci) {
+    private void renderOverlay(MatrixStack stack, float partialTicks, CallbackInfo ci) {
     //#else
-    private void renderOverlay(float partialTicks, CallbackInfo ci) {
-        MatrixStack stack = new MatrixStack();
+    //$$ private void renderOverlay(float partialTicks, CallbackInfo ci) {
+    //$$     MatrixStack stack = new MatrixStack();
     //#endif
         RenderHudCallback.EVENT.invoker().renderHud(stack, partialTicks);
     }

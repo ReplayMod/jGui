@@ -37,10 +37,10 @@ import net.minecraft.client.resource.language.I18n;
 import java.util.List;
 
 //#if MC>=11600
-//$$ import java.util.Optional;
-//$$ import java.util.stream.Collectors;
-//$$ import net.minecraft.text.LiteralText;
-//$$ import net.minecraft.text.Style;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Style;
 //#endif
 
 public abstract class AbstractGuiLabel<T extends AbstractGuiLabel<T>> extends AbstractGuiElement<T> implements IGuiLabel<T> {
@@ -60,12 +60,12 @@ public abstract class AbstractGuiLabel<T extends AbstractGuiLabel<T>> extends Ab
         super.draw(renderer, size, renderInfo);
         TextRenderer fontRenderer = MCVer.getFontRenderer();
         //#if MC>=11600
-        //$$ List<String> lines = fontRenderer.getTextHandler().wrapLines(new LiteralText(text), size.getWidth(), Style.EMPTY).stream()
-        //$$         .map(it -> it.visit(Optional::of)).filter(Optional::isPresent).map(Optional::get)
-        //$$         .collect(Collectors.toList());
+        List<String> lines = fontRenderer.getTextHandler().wrapLines(new LiteralText(text), size.getWidth(), Style.EMPTY).stream()
+                .map(it -> it.visit(Optional::of)).filter(Optional::isPresent).map(Optional::get)
+                .collect(Collectors.toList());
         //#else
-        @SuppressWarnings("unchecked")
-        List<String> lines = fontRenderer.wrapStringToWidthAsList(text, size.getWidth());
+        //$$ @SuppressWarnings("unchecked")
+        //$$ List<String> lines = fontRenderer.wrapStringToWidthAsList(text, size.getWidth());
         //#endif
         int y = 0;
         for (String line : lines) {
@@ -77,7 +77,7 @@ public abstract class AbstractGuiLabel<T extends AbstractGuiLabel<T>> extends Ab
     @Override
     public ReadableDimension calcMinSize() {
         TextRenderer fontRenderer = MCVer.getFontRenderer();
-        return new Dimension(fontRenderer.getStringWidth(text), fontRenderer.fontHeight);
+        return new Dimension(fontRenderer.getWidth(text), fontRenderer.fontHeight);
     }
 
     @Override

@@ -76,7 +76,7 @@ public abstract class AbstractGuiCheckbox<T extends AbstractGuiCheckbox<T>>
     public ReadableDimension calcMinSize() {
         TextRenderer fontRenderer = MCVer.getFontRenderer();
         int height = fontRenderer.fontHeight + 2;
-        int width = height + 2 + fontRenderer.getStringWidth(label);
+        int width = height + 2 + fontRenderer.getWidth(label);
         return new Dimension(width, height);
     }
 

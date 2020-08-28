@@ -106,7 +106,7 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
     @Override
     public ReadableDimension calcMinSize() {
         TextRenderer fontRenderer = MCVer.getFontRenderer();
-        return new Dimension(fontRenderer.getStringWidth(label), 20);
+        return new Dimension(fontRenderer.getWidth(label), 20);
     }
 
     @Override
