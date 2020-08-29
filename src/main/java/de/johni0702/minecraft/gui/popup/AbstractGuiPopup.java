@@ -53,7 +53,7 @@ public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends Ab
 
         @Override
         public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
-            if (renderInfo.getLayer() == 0) {
+            if (renderInfo.getLayer() == 0 && renderBackground) {
                 renderer.bindTexture(TEXTURE);
                 int w = size.getWidth();
                 int h = size.getHeight();
@@ -118,6 +118,7 @@ public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends Ab
     private Layout originalLayout;
     private boolean wasAllowUserInput;
     private boolean wasMouseVisible;
+    private boolean renderBackground = true;
 
     private final GuiContainer container;
 
@@ -126,6 +127,10 @@ public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends Ab
             container = container.getContainer();
         }
         this.container = container;
+    }
+
+    protected void disablePopupBackground() {
+        this.renderBackground = false;
     }
 
     protected void open() {
