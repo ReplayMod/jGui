@@ -78,4 +78,9 @@ public abstract class AbstractGuiClickableContainer<T extends AbstractGuiClickab
         this.onClick = onClick;
         return getThis();
     }
+
+    @Override
+    public Runnable getOnClick() {
+        return onClick;
+    }
 }

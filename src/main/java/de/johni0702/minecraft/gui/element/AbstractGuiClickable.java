@@ -77,4 +77,9 @@ public abstract class AbstractGuiClickable<T extends AbstractGuiClickable<T>> ex
         this.onClick = onClick;
         return getThis();
     }
+
+    @Override
+    public Runnable getOnClick() {
+        return onClick;
+    }
 }
