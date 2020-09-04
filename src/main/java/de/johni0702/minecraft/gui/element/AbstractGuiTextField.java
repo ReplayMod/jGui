@@ -358,7 +358,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         int posY = height / 2 - fontRenderer.fontHeight / 2;
 
         // Draw black rect once pixel smaller than gray rect
-        renderer.drawRect(0, 0, width, height, BORDER_COLOR);
+        renderer.drawRect(0, 0, width, height, isFocused() ? ReadableColor.WHITE : BORDER_COLOR);
         renderer.drawRect(1, 1, width - 2, height - 2, ReadableColor.BLACK);
 
         if (text.isEmpty() && !isFocused() && !Strings.isNullOrEmpty(hint)) {
