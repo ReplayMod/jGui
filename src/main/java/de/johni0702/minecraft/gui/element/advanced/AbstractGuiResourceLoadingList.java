@@ -36,6 +36,7 @@ import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.function.Closeable;
 import de.johni0702.minecraft.gui.function.Loadable;
 import de.johni0702.minecraft.gui.function.Tickable;
+import de.johni0702.minecraft.gui.function.Typeable;
 import de.johni0702.minecraft.gui.layout.CustomLayout;
 import de.johni0702.minecraft.gui.layout.VerticalLayout;
 import de.johni0702.minecraft.gui.utils.Colors;
@@ -44,16 +45,25 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
+import de.johni0702.minecraft.gui.versions.MCVer;
+import net.minecraft.client.gui.screen.Screen;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static de.johni0702.minecraft.gui.utils.Utils.DOUBLE_CLICK_INTERVAL;
 
+//#if MC>=11400
+import de.johni0702.minecraft.gui.versions.MCVer.Keyboard;
+//#else
+//$$ import org.lwjgl.input.Keyboard;
+//#endif
+
 public abstract class AbstractGuiResourceLoadingList
         <T extends AbstractGuiResourceLoadingList<T, U>, U extends GuiElement<U> & Comparable<U>>
-        extends AbstractGuiVerticalList<T> implements Tickable, Loadable, Closeable {
+        extends AbstractGuiVerticalList<T> implements Tickable, Loadable, Closeable, Typeable {
     private static final String[] LOADING_TEXT = {"Ooo", "oOo", "ooO", "oOo"};
     private final GuiLabel loadingElement = new GuiLabel();
     private final GuiPanel resourcesPanel = new GuiPanel(getListPanel()).setLayout(new VerticalLayout());
@@ -66,7 +76,7 @@ public abstract class AbstractGuiResourceLoadingList
     private Thread loaderThread;
     private int tick;
 
-    private Element selected;
+    private final List<Element> selected = new ArrayList<>();
     private long selectedLastClickTime;
 
     public AbstractGuiResourceLoadingList() {
@@ -103,7 +113,7 @@ public abstract class AbstractGuiResourceLoadingList
         for (GuiElement element : new ArrayList<>(resourcesPanel.getChildren())) {
             resourcesPanel.removeElement(element);
         }
-        selected = null;
+        selected.clear();
         onSelectionChanged();
 
         // Load new data
@@ -169,8 +179,35 @@ public abstract class AbstractGuiResourceLoadingList
         return getThis();
     }
 
-    public U getSelected() {
-        return selected == null ? null : selected.resource;
+    public List<U> getSelected() {
+        List<U> selectedResources = new ArrayList<>(selected.size());
+        for (Element element : selected) {
+            selectedResources.add(element.resource);
+        }
+        return selectedResources;
+    }
+
+    @Override
+    public boolean typeKey(ReadablePoint mousePosition, int keyCode, char keyChar, boolean ctrlDown, boolean shiftDown) {
+        if (Screen.hasControlDown() && keyCode == Keyboard.KEY_A) {
+            List<Element> all = new ArrayList<>();
+            for (GuiElement<?> child : getListPanel().getChildren()) {
+                if (child instanceof AbstractGuiResourceLoadingList.Element) {
+                    //noinspection unchecked
+                    all.add((Element) child);
+                }
+            }
+            if (selected.size() < all.size()) {
+                selected.clear();
+                selected.addAll(all);
+            } else {
+                selected.clear();
+            }
+            onSelectionChanged();
+            return true;
+        }
+
+        return false;
     }
 
     private class Element extends GuiPanel implements Clickable, Comparable<Element> {
@@ -195,7 +232,7 @@ public abstract class AbstractGuiResourceLoadingList
 
         @Override
         public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
-            if (renderInfo.layer == 0 && selected == this) {
+            if (renderInfo.layer == 0 && selected.contains(this)) {
                 // Draw selection
                 int w = size.getWidth();
                 int h = size.getHeight();
@@ -216,11 +253,19 @@ public abstract class AbstractGuiResourceLoadingList
             getContainer().convertFor(this, point);
             if (point.getX() > 0 && point.getX() < getLastSize().getWidth()
                     && point.getY() > 0 && point.getY() < getLastSize().getHeight()) {
-                if (selected != this) {
-                    selected = this;
+                if (Screen.hasControlDown()) {
+                    if (selected.contains(this)) {
+                        selected.remove(this);
+                    } else {
+                        selected.add(this);
+                    }
                     onSelectionChanged();
-                } else if (System.currentTimeMillis() - selectedLastClickTime < DOUBLE_CLICK_INTERVAL) {
+                } else if (selected.contains(this) && System.currentTimeMillis() - selectedLastClickTime < DOUBLE_CLICK_INTERVAL) {
                     onSelectionDoubleClicked();
+                } else {
+                    selected.clear();
+                    selected.add(this);
+                    onSelectionChanged();
                 }
                 selectedLastClickTime = System.currentTimeMillis();
                 return true;
