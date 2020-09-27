@@ -10,8 +10,10 @@ import de.johni0702.minecraft.gui.versions.MCVer;
 //#if MC>=11400
 import de.johni0702.minecraft.gui.utils.MouseUtils;
 import de.johni0702.minecraft.gui.utils.lwjgl.Point;
+import de.johni0702.minecraft.gui.versions.callbacks.InitScreenCallback;
 import de.johni0702.minecraft.gui.versions.callbacks.OpenGuiScreenCallback;
 import de.johni0702.minecraft.gui.versions.callbacks.PreTickCallback;
+import net.minecraft.client.gui.screen.Screen;
 //#endif
 
 //#if FABRIC>=1
@@ -156,6 +158,25 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
 
             if (active) {
                 active = false;
+                getSuperMcGui().removed();
+            }
+        }
+
+        //#if FABRIC>=1
+        { on(InitScreenCallback.EVENT, (screen, buttons) -> onGuiInit(screen)); }
+        private void onGuiInit(Screen screen) {
+        //#else
+        //$$ @SubscribeEvent
+        //$$ public void onGuiInit(GuiScreenEvent.InitGuiEvent.Post event) {
+            //#if MC>=10904
+            //$$ net.minecraft.client.gui.screen.Screen screen = event.getGui();
+            //#else
+            //$$ net.minecraft.client.gui.GuiScreen screen = event.gui;
+            //#endif
+        //#endif
+            if (screen == mcScreen && active) {
+                active = false;
+                unregister();
                 getSuperMcGui().removed();
             }
         }

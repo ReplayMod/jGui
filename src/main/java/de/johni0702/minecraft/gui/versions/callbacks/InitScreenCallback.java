@@ -1,4 +1,4 @@
-//#if FABRIC>=1
+//#if MC>=11400
 package de.johni0702.minecraft.gui.versions.callbacks;
 
 import de.johni0702.minecraft.gui.utils.Event;
