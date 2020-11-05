@@ -405,6 +405,12 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
             if (other != null) {
                 setFocused(false);
                 other.setFocused(true);
+                // If the other field is a text field, by default select all its text (saves a Ctrl+A)
+                if (other instanceof AbstractGuiTextField) {
+                    AbstractGuiTextField<?> field = (AbstractGuiTextField<?>) other;
+                    field.cursorPos = 0;
+                    field.selectionPos = field.text.length();
+                }
             }
             return true;
         }
