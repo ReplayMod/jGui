@@ -40,9 +40,28 @@ import net.minecraft.client.util.math.MatrixStack;
 //$$ import java.io.IOException;
 //#endif
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.WeakHashMap;
+
 
 public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, Scrollable {
 
+    private static final Map<net.minecraft.client.gui.screen.Screen, VanillaGuiScreen> WRAPPERS =
+            Collections.synchronizedMap(new WeakHashMap<>());
+
+    public static VanillaGuiScreen wrap(net.minecraft.client.gui.screen.Screen originalGuiScreen) {
+        VanillaGuiScreen gui = WRAPPERS.get(originalGuiScreen);
+        if (gui == null) {
+            WRAPPERS.put(originalGuiScreen, gui = new VanillaGuiScreen(originalGuiScreen));
+            gui.register();
+        }
+        return gui;
+    }
+
+    // Use wrap instead and make sure to preserve the existing layout.
+    // (or if you really want your own, inline this code)
+    @Deprecated
     public static VanillaGuiScreen setup(net.minecraft.client.gui.screen.Screen originalGuiScreen) {
         VanillaGuiScreen gui = new VanillaGuiScreen(originalGuiScreen);
         gui.register();
@@ -159,15 +178,16 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
             if (active) {
                 active = false;
                 getSuperMcGui().removed();
+                WRAPPERS.remove(mcScreen, VanillaGuiScreen.this);
             }
         }
 
         //#if FABRIC>=1
-        { on(InitScreenCallback.EVENT, (screen, buttons) -> onGuiInit(screen)); }
-        private void onGuiInit(Screen screen) {
+        { on(InitScreenCallback.Pre.EVENT, this::preGuiInit); }
+        private void preGuiInit(Screen screen) {
         //#else
         //$$ @SubscribeEvent
-        //$$ public void onGuiInit(GuiScreenEvent.InitGuiEvent.Post event) {
+        //$$ public void preGuiInit(GuiScreenEvent.InitGuiEvent.Pre event) {
             //#if MC>=10904
             //$$ net.minecraft.client.gui.screen.Screen screen = event.getGui();
             //#else
@@ -178,6 +198,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
                 active = false;
                 unregister();
                 getSuperMcGui().removed();
+                WRAPPERS.remove(mcScreen, VanillaGuiScreen.this);
             }
         }
 

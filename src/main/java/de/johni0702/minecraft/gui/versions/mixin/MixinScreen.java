@@ -19,6 +19,11 @@ public class MixinScreen {
     @Shadow
     protected @Final List<AbstractButtonWidget> buttons;
 
+    @Inject(method = "init(Lnet/minecraft/client/MinecraftClient;II)V", at = @At("HEAD"))
+    private void preInit(MinecraftClient minecraftClient_1, int int_1, int int_2, CallbackInfo ci) {
+        InitScreenCallback.Pre.EVENT.invoker().preInitScreen((Screen) (Object) this);
+    }
+
     @Inject(method = "init(Lnet/minecraft/client/MinecraftClient;II)V", at = @At("RETURN"))
     private void init(MinecraftClient minecraftClient_1, int int_1, int int_2, CallbackInfo ci) {
         InitScreenCallback.EVENT.invoker().initScreen((Screen) (Object) this, buttons);

@@ -17,5 +17,17 @@ public interface InitScreenCallback {
     );
 
     void initScreen(Screen screen, List<AbstractButtonWidget> buttons);
+
+    interface Pre {
+        Event<InitScreenCallback.Pre> EVENT = Event.create((listeners) ->
+                (screen) -> {
+                    for (InitScreenCallback.Pre listener : listeners) {
+                        listener.preInitScreen(screen);
+                    }
+                }
+        );
+
+        void preInitScreen(Screen screen);
+    }
 }
 //#endif
