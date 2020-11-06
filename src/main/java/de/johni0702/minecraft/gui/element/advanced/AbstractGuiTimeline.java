@@ -225,6 +225,24 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
         return cursorPosition;
     }
 
+    public T ensureCursorVisible() {
+        return ensureCursorVisible(0);
+    }
+
+    public T ensureCursorVisibleWithPadding() {
+        return ensureCursorVisible(Math.max((int) (length * zoom) / 10, 10));
+    }
+
+    public T ensureCursorVisible(int padding) {
+        int visibleLength = (int) (length * zoom);
+        if (cursorPosition - padding < offset) {
+            setOffset(cursorPosition - padding);
+        } else if (cursorPosition + padding > offset + visibleLength) {
+            setOffset(cursorPosition + padding - visibleLength);
+        }
+        return getThis();
+    }
+
     @Override
     public T setZoom(double zoom) {
         this.zoom = Math.min(zoom, 1);
@@ -239,7 +257,7 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
 
     @Override
     public T setOffset(int offset) {
-        this.offset = offset;
+        this.offset = Math.max(offset, 0);
         checkOffset();
         return getThis();
     }
