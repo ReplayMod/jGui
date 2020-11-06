@@ -65,6 +65,7 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
     private SoundEvent sound = SoundEvents.UI_BUTTON_CLICK;
     //#endif
 
+    private int labelColor = 0xe0e0e0;
     private String label;
 
     private Identifier texture;
@@ -86,7 +87,7 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
         color4f(1, 1, 1, 1);
 
         byte texture = 1;
-        int color = 0xe0e0e0;
+        int color = labelColor;
         if (!isEnabled()) {
             texture = 0;
             color = 0xa0a0a0;
@@ -190,6 +191,10 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
 
     public String getLabel() {
         return this.label;
+    }
+
+    public void setLabelColor(int labelColor) {
+        this.labelColor = labelColor;
     }
 
     @Override
