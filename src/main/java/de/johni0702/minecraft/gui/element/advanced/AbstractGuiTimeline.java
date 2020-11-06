@@ -216,7 +216,7 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
 
     @Override
     public T setCursorPosition(int position) {
-        this.cursorPosition = position;
+        this.cursorPosition = Math.min(Math.max(position, 0), length);
         return getThis();
     }
 
