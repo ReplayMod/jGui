@@ -6,7 +6,7 @@ plugins {
 
 project.extensions.create("preprocess", RootPreprocessExtension::class)
 configure<RootPreprocessExtension> {
-    "1.16.3"(11603, "yarn") {
+    "1.16.4"(11604, "yarn") {
         "1.16.1"(11601, "yarn") {
             "1.15.2"(11502, "yarn") {
                 "1.14.4"(11404, "yarn", file("versions/mapping-fabric-1.15.2-1.14.4.txt")) {
