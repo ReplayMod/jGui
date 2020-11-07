@@ -34,17 +34,8 @@ import de.johni0702.minecraft.gui.layout.CustomLayout;
 import de.johni0702.minecraft.gui.layout.Layout;
 import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
-import de.johni0702.minecraft.gui.versions.MCVer;
-import net.minecraft.util.crash.CrashReport;
-import net.minecraft.util.crash.CrashReportSection;
-import net.minecraft.util.crash.CrashException;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.function.Function;
 
 public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends AbstractGuiContainer<T> {
     private final GuiPanel popupContainer = new GuiPanel(this){
@@ -176,72 +167,8 @@ public abstract class AbstractGuiPopup<T extends AbstractGuiPopup<T>> extends Ab
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <C> C forEach(int layer, final Class<C> ofType) {
-        final C realProxy = super.forEach(layer, ofType);
-        if (layer >= 0) {
-            return (C) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{ofType}, (proxy, method, args) -> {
-                try {
-                    if (method.getReturnType().equals(boolean.class)) {
-                        method.invoke(forEachChild(ofType), args);
-                        return true;
-                    }
-                    return method.invoke(realProxy, args);
-                } catch (Throwable e) {
-                    if (e instanceof InvocationTargetException) {
-                        e = e.getCause();
-                    }
-                    CrashReport crash = CrashReport.create(e, "Calling Gui method");
-                    CrashReportSection category = crash.addElement("Gui");
-                    MCVer.addDetail(category, "Method", method::toString);
-                    MCVer.addDetail(category, "Layer", () -> "" + layer);
-                    MCVer.addDetail(category, "ComposedElement", this::toString);
-                    throw new CrashException(crash);
-                }
-            });
-        } else {
-            return realProxy;
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private <C> C forEachChild(final Class<C> ofType) {
-        int maxLayer = getMaxLayer();
-        final List<C> layers = new ArrayList<>(maxLayer + 1);
-        for (int i = maxLayer; i >= 0; i--) {
-            layers.add(super.forEach(i, ofType));
-        }
-        return (C) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{ofType}, new InvocationHandler() {
-            @Override
-            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                boolean isGetter = method.getName().startsWith("get");
-                Object handled = method.getReturnType().equals(boolean.class) ? false : null;
-                for (final C layer : layers) {
-                    try {
-                        handled = method.invoke(layer, args);
-                    } catch (Throwable e) {
-                        if (e instanceof InvocationTargetException) {
-                            e = e.getCause();
-                        }
-                        CrashReport crash = CrashReport.create(e, "Calling Gui method");
-                        CrashReportSection category = crash.addElement("Gui");
-                        MCVer.addDetail(category, "Method", method::toString);
-                        MCVer.addDetail(category, "Layer", () -> "" + layer);
-                        MCVer.addDetail(category, "ComposedElement", this::toString);
-                        throw new CrashException(crash);
-                    }
-                    if (handled != null) {
-                        if (handled instanceof Boolean) {
-                            if (Boolean.TRUE.equals(handled)) {
-                                break;
-                            }
-                        } else if (isGetter) {
-                            return handled;
-                        }
-                    }
-                }
-                return handled;
-            }
-        });
+    public <C> boolean invokeHandlers(int layer, Class<C> ofType, Function<C, Boolean> handle) {
+        // Consume any event which could otherwise reach elements below our popup
+        return super.invokeHandlers(layer, ofType, handle) || layer <= 0;
     }
 }

@@ -87,7 +87,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         }
         super.layout(size, renderInfo);
         if (renderInfo.layer == getMaxLayer()) {
-            final GuiElement tooltip = forEach(GuiElement.class).getTooltip(renderInfo);
+            final GuiElement tooltip = forEach(GuiElement.class, e -> e.getTooltip(renderInfo));
             if (tooltip != null) {
                 tooltip.layout(tooltip.getMinSize(), renderInfo);
             }
@@ -128,7 +128,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         }
         super.draw(renderer, size, renderInfo);
         if (renderInfo.layer == getMaxLayer()) {
-            final GuiElement tooltip = forEach(GuiElement.class).getTooltip(renderInfo);
+            final GuiElement tooltip = forEach(GuiElement.class, e -> e.getTooltip(renderInfo));
             if (tooltip != null) {
                 final ReadableDimension tooltipSize = tooltip.getMinSize();
                 int x, y;
@@ -250,7 +250,10 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         //#if MC>=11400
         @Override
         public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-            if (!forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), keyCode, '\0', hasControlDown(), hasShiftDown())) {
+            Point mouse = MouseUtils.getMousePos();
+            boolean ctrlDown = hasControlDown();
+            boolean shiftDown = hasShiftDown();
+            if (!invokeHandlers(Typeable.class, e -> e.typeKey(mouse, keyCode, '\0', ctrlDown, shiftDown))) {
                 if (suppressVanillaKeys) {
                     return false;
                 }
@@ -261,7 +264,10 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
 
         @Override
         public boolean charTyped(char keyChar, int scanCode) {
-            if (!forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), 0, keyChar, hasControlDown(), hasShiftDown())) {
+            Point mouse = MouseUtils.getMousePos();
+            boolean ctrlDown = hasControlDown();
+            boolean shiftDown = hasShiftDown();
+            if (!invokeHandlers(Typeable.class, e -> e.typeKey(mouse, 0, keyChar, ctrlDown, shiftDown))) {
                 if (suppressVanillaKeys) {
                     return false;
                 }
@@ -276,8 +282,10 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                 //$$ throws IOException
                 //#endif
         //$$ {
-        //$$     if (!forEach(Typeable.class).typeKey(
-        //$$             MouseUtils.getMousePos(), keyCode, typedChar, isCtrlKeyDown(), isShiftKeyDown())) {
+        //$$     Point mouse = MouseUtils.getMousePos();
+        //$$     boolean ctrlDown = isCtrlKeyDown();
+        //$$     boolean shiftDown = isShiftKeyDown();
+        //$$     if (!invokeHandlers(Typeable.class, e -> e.typeKey(mouse, keyCode, typedChar, ctrlDown, shiftDown))) {
         //$$         if (suppressVanillaKeys) {
         //$$             return;
         //$$         }
@@ -298,7 +306,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                 //#endif
         //$$ {
         //#endif
-            forEach(Clickable.class).mouseClick(new Point(mouseX, mouseY), mouseButton);
+            invokeHandlers(Clickable.class, e -> e.mouseClick(new Point(mouseX, mouseY), mouseButton));
         }
 
         @Override
@@ -309,7 +317,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         //#else
         //$$ protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
         //#endif
-            forEach(Draggable.class).mouseRelease(new Point(mouseX, mouseY), mouseButton);
+            invokeHandlers(Draggable.class, e -> e.mouseRelease(new Point(mouseX, mouseY), mouseButton));
         }
 
         @Override
@@ -321,7 +329,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         //#else
         //$$ protected void mouseClickMove(int mouseX, int mouseY, int mouseButton, long timeSinceLastClick) {
         //#endif
-            forEach(Draggable.class).mouseDrag(new Point(mouseX, mouseY), mouseButton, timeSinceLastClick);
+            invokeHandlers(Draggable.class, e -> e.mouseDrag(new Point(mouseX, mouseY), mouseButton, timeSinceLastClick));
         }
 
         @Override
@@ -330,7 +338,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         //#else
         //$$ public void updateScreen() {
         //#endif
-            forEach(Tickable.class).tick();
+            invokeAll(Tickable.class, Tickable::tick);
         }
 
         //#if MC>=11400
@@ -342,15 +350,13 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                 //#endif
                 double dWheel
         ) {
-            dWheel *= 120;
-            return forEach(Scrollable.class).scroll(
-                    //#if MC>=11400
-                    new Point((int) mouseX, (int) mouseY),
-                    //#else
-                    //$$ MouseUtils.getMousePos(),
-                    //#endif
-                    (int) dWheel
-            );
+            //#if MC>=11400
+            Point mouse = new Point((int) mouseX, (int) mouseY);
+            //#else
+            //$$ Point mouse = MouseUtils.getMousePos();
+            //#endif
+            int wheel = (int) (dWheel * 120);
+            return invokeHandlers(Scrollable.class, e -> e.scroll(mouse, wheel));
         }
         //#else
         //$$ @Override
@@ -361,7 +367,9 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         //$$ {
         //$$     super.handleMouseInput();
         //$$     if (Mouse.hasWheel() && Mouse.getEventDWheel() != 0) {
-        //$$         forEach(Scrollable.class).scroll(MouseUtils.getMousePos(), Mouse.getEventDWheel());
+        //$$         Point mouse = MouseUtils.getMousePos();
+        //$$         int wheel = Mouse.getEventDWheel();
+        //$$         invokeHandlers(Scrollable.class, e -> e.scroll(mouse, wheel));
         //$$     }
         //$$ }
         //#endif
@@ -372,7 +380,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         //#else
         //$$ public void onGuiClosed() {
         //#endif
-            forEach(Closeable.class).close();
+            invokeAll(Closeable.class, Closeable::close);
             active = false;
             if (enabledRepeatedKeyEvents) {
                 Keyboard.enableRepeatEvents(false);
@@ -390,7 +398,7 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                 Keyboard.enableRepeatEvents(true);
             }
             screenSize = new Dimension(width, height);
-            forEach(Loadable.class).load();
+            invokeAll(Loadable.class, Loadable::load);
         }
 
         public T getWrapper() {

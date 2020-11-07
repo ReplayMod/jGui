@@ -95,10 +95,10 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
     public void setVisible(boolean visible) {
         if (this.visible != visible) {
             if (visible) {
-                forEach(Loadable.class).load();
+                invokeAll(Loadable.class, Loadable::load);
                 eventHandler.register();
             } else {
-                forEach(Closeable.class).close();
+                invokeAll(Closeable.class, Closeable::close);
                 eventHandler.unregister();
             }
             updateUserInputGui();
@@ -164,7 +164,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         }
         super.layout(size, renderInfo);
         if (mouseVisible && renderInfo.layer == getMaxLayer()) {
-            final GuiElement tooltip = forEach(GuiElement.class).getTooltip(renderInfo);
+            final GuiElement tooltip = forEach(GuiElement.class, e -> e.getTooltip(renderInfo));
             if (tooltip != null) {
                 tooltip.layout(tooltip.getMinSize(), renderInfo);
             }
@@ -175,7 +175,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         super.draw(renderer, size, renderInfo);
         if (mouseVisible && renderInfo.layer == getMaxLayer()) {
-            final GuiElement tooltip = forEach(GuiElement.class).getTooltip(renderInfo);
+            final GuiElement tooltip = forEach(GuiElement.class, e -> e.getTooltip(renderInfo));
             if (tooltip != null) {
                 final ReadableDimension tooltipSize = tooltip.getMinSize();
                 int x, y;
@@ -256,12 +256,12 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         }
 
         //#if MC>=11400
-        { on(PreTickCallback.EVENT, () -> forEach(Tickable.class).tick()); }
+        { on(PreTickCallback.EVENT, () -> invokeAll(Tickable.class, Tickable::tick)); }
         //#else
         //$$ @SubscribeEvent
         //$$ public void tickOverlay(TickEvent.ClientTickEvent event) {
         //$$     if (event.phase == TickEvent.Phase.START) {
-        //$$         forEach(Tickable.class).tick();
+        //$$         invokeAll(Tickable.class, Tickable::tick);
         //$$     }
         //$$ }
         //#endif
@@ -297,7 +297,10 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         //#if MC>=11400
         @Override
         public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-            if (!forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), keyCode, '\0', hasControlDown(), hasShiftDown())) {
+            Point mousePos = MouseUtils.getMousePos();
+            boolean controlDown = hasControlDown();
+            boolean shiftDown = hasShiftDown();
+            if (!invokeHandlers(Typeable.class, e -> e.typeKey(mousePos, keyCode, '\0', controlDown, shiftDown))) {
                 return super.keyPressed(keyCode, scanCode, modifiers);
             }
             return true;
@@ -305,7 +308,10 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
 
         @Override
         public boolean charTyped(char keyChar, int modifiers) {
-            if (!forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), 0, keyChar, hasControlDown(), hasShiftDown())) {
+            Point mousePos = MouseUtils.getMousePos();
+            boolean controlDown = hasControlDown();
+            boolean shiftDown = hasShiftDown();
+            if (!invokeHandlers(Typeable.class, e -> e.typeKey(mousePos, 0, keyChar, controlDown, shiftDown))) {
                 return super.charTyped(keyChar, modifiers);
             }
             return true;
@@ -317,7 +323,10 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
                 //$$ throws IOException
                 //#endif
         //$$ {
-        //$$     forEach(Typeable.class).typeKey(MouseUtils.getMousePos(), keyCode, typedChar, isCtrlKeyDown(), isShiftKeyDown());
+        //$$     Point mousePos = MouseUtils.getMousePos();
+        //$$     boolean controlDown = isCtrlKeyDown();
+        //$$     boolean shiftDown = isShiftKeyDown();
+        //$$     invokeHandlers(Typeable.class, e -> e.typeKey(mousePos, keyCode, typedChar, controlDown, shiftDown));
         //$$     if (closeable) {
         //$$         super.keyTyped(typedChar, keyCode);
         //$$     }
@@ -336,7 +345,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
                 //#endif
         //$$ {
         //#endif
-            forEach(Clickable.class).mouseClick(new Point(mouseX, mouseY), mouseButton);
+            invokeHandlers(Clickable.class, e -> e.mouseClick(new Point(mouseX, mouseY), mouseButton));
         }
 
         @Override
@@ -347,7 +356,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         //#else
         //$$ protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
         //#endif
-            forEach(Draggable.class).mouseRelease(new Point(mouseX, mouseY), mouseButton);
+            invokeHandlers(Draggable.class, e -> e.mouseRelease(new Point(mouseX, mouseY), mouseButton));
         }
 
         @Override
@@ -359,7 +368,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         //#else
         //$$ protected void mouseClickMove(int mouseX, int mouseY, int mouseButton, long timeSinceLastClick) {
         //#endif
-            forEach(Draggable.class).mouseDrag(new Point(mouseX, mouseY), mouseButton, timeSinceLastClick);
+            invokeHandlers(Draggable.class, e -> e.mouseDrag(new Point(mouseX, mouseY), mouseButton, timeSinceLastClick));
         }
 
         @Override
@@ -368,7 +377,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         //#else
         //$$ public void updateScreen() {
         //#endif
-            forEach(Tickable.class).tick();
+            invokeAll(Tickable.class, Tickable::tick);
         }
 
         //#if MC>=11400
@@ -380,15 +389,13 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
                 //#endif
                 double dWheel
         ) {
-            dWheel *= 120;
-            return forEach(Scrollable.class).scroll(
-                    //#if MC>=11400
-                    new Point((int) mouseX, (int) mouseY),
-                    //#else
-                    //$$ MouseUtils.getMousePos(),
-                    //#endif
-                    (int) dWheel
-            );
+            //#if MC>=11400
+            Point mouse = new Point((int) mouseX, (int) mouseY);
+            //#else
+            //$$ Point mouse = MouseUtils.getMousePos();
+            //#endif
+            int wheel = (int) (dWheel * 120);
+            return invokeHandlers(Scrollable.class, e -> e.scroll(mouse, wheel));
         }
         //#else
         //$$ @Override
@@ -399,7 +406,9 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         //$$ {
         //$$     super.handleMouseInput();
         //$$     if (Mouse.hasWheel() && Mouse.getEventDWheel() != 0) {
-        //$$         forEach(Scrollable.class).scroll(MouseUtils.getMousePos(), Mouse.getEventDWheel());
+        //$$         Point mouse = MouseUtils.getMousePos();
+        //$$         int wheel = Mouse.getEventDWheel();
+        //$$         invokeHandlers(Scrollable.class, e -> e.scroll(mouse, wheel));
         //$$     }
         //$$ }
         //#endif
