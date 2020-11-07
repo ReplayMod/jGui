@@ -24,8 +24,6 @@
  */
 package de.johni0702.minecraft.gui.container;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Ordering;
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.OffsetGuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
@@ -46,6 +44,7 @@ import net.minecraft.util.crash.CrashException;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkState;
 
@@ -54,7 +53,7 @@ public abstract class AbstractGuiContainer<T extends AbstractGuiContainer<T>>
 
     private static final Layout DEFAULT_LAYOUT = new HorizontalLayout();
 
-    private final Map<GuiElement, LayoutData> elements = new LinkedHashMap<>();
+    private Map<GuiElement, LayoutData> elements = new LinkedHashMap<>();
 
     private Map<GuiElement, Pair<ReadablePoint, ReadableDimension>> layedOutElements;
 
@@ -235,19 +234,10 @@ public abstract class AbstractGuiContainer<T extends AbstractGuiContainer<T>>
 
     @Override
     public T sortElements(final Comparator<GuiElement> comparator) {
-        Ordering<Map.Entry<GuiElement, LayoutData>> ordering = new Ordering<Map.Entry<GuiElement, LayoutData>>() {
-            @Override
-            public int compare(Map.Entry<GuiElement, LayoutData> left, Map.Entry<GuiElement, LayoutData> right) {
-                return comparator.compare(left.getKey(), right.getKey());
-            }
-        };
-        if (!ordering.isOrdered(elements.entrySet())) {
-            ImmutableList<Map.Entry<GuiElement, LayoutData>> sorted = ordering.immutableSortedCopy(elements.entrySet());
-            elements.clear();
-            for (Map.Entry<GuiElement, LayoutData> entry : sorted) {
-                elements.put(entry.getKey(), entry.getValue());
-            }
-        }
+        elements = elements.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey(comparator))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, LinkedHashMap::new));
         return getThis();
     }
 

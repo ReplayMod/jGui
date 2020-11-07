@@ -24,8 +24,6 @@
  */
 package de.johni0702.minecraft.gui.popup;
 
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.SettableFuture;
 import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.container.GuiPanel;
 import de.johni0702.minecraft.gui.element.GuiButton;
@@ -59,11 +57,11 @@ public class GuiInfoPopup extends AbstractGuiPopup<GuiInfoPopup> implements Type
         return popup;
     }
 
-    private final SettableFuture<Void> future = SettableFuture.create();
+    private Runnable onClosed = () -> {};
 
     private final GuiButton closeButton = new GuiButton().setSize(150, 20).onClick(() -> {
         close();
-        future.set(null);
+        onClosed.run();
     }).setI18nLabel("gui.back");
 
     private final GuiPanel info = new GuiPanel().setMinSize(new Dimension(320, 50))
@@ -90,8 +88,9 @@ public class GuiInfoPopup extends AbstractGuiPopup<GuiInfoPopup> implements Type
         return this;
     }
 
-    public ListenableFuture<Void> getFuture() {
-        return future;
+    public GuiInfoPopup onClosed(Runnable onClosed) {
+        this.onClosed = onClosed;
+        return this;
     }
 
     @Override

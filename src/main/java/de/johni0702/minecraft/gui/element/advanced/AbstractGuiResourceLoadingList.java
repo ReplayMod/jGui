@@ -24,7 +24,6 @@
  */
 package de.johni0702.minecraft.gui.element.advanced;
 
-import com.google.common.base.Supplier;
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.AbstractGuiVerticalList;
@@ -52,6 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Supplier;
 
 import static de.johni0702.minecraft.gui.utils.Utils.DOUBLE_CLICK_INTERVAL;
 

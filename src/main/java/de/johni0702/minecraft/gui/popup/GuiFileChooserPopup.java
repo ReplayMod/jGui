@@ -24,8 +24,6 @@
  */
 package de.johni0702.minecraft.gui.popup;
 
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.SettableFuture;
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
@@ -51,6 +49,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.InvalidPathException;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 //#if MC>=11400
 import de.johni0702.minecraft.gui.versions.MCVer.Keyboard;
@@ -73,7 +72,8 @@ public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> i
         return popup;
     }
 
-    private final SettableFuture<File> future = SettableFuture.create();
+    private Consumer<File> onAccept = (file) -> {};
+    private Runnable onCancel = () -> {};
 
     private final GuiScrollable pathScrollable = new GuiScrollable(popup) {
         @Override
@@ -107,7 +107,7 @@ public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> i
                     fileName = fileName + "." + fileExtensions[0];
                 }
             }
-            future.set(new File(folder, fileName));
+            onAccept.consume(new File(folder, fileName));
             close();
         }
     }).setSize(50, 20);
@@ -115,7 +115,7 @@ public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> i
     private final GuiButton cancelButton = new GuiButton(popup).onClick(new Runnable() {
         @Override
         public void run() {
-            future.set(null);
+            onCancel.run();
             close();
         }
     }).setI18nLabel("gui.cancel").setSize(50, 20);
@@ -185,9 +185,8 @@ public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> i
         try {
             this.folder = folder = folder.getCanonicalFile();
         } catch (IOException e) {
-            future.setException(e);
             close();
-            return;
+            throw new RuntimeException(e);
         }
 
         updateButton();
@@ -323,8 +322,14 @@ public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> i
         return this;
     }
 
-    public ListenableFuture<File> getFuture() {
-        return future;
+    public GuiFileChooserPopup onAccept(Consumer<File> onAccept) {
+        this.onAccept = onAccept;
+        return this;
+    }
+
+    public GuiFileChooserPopup onCancel(Runnable onCancel) {
+        this.onCancel = onCancel;
+        return this;
     }
 
     @Override

@@ -24,9 +24,6 @@
  */
 package de.johni0702.minecraft.gui.element;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Ordering;
 import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import net.minecraft.util.crash.CrashReport;
@@ -38,7 +35,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public abstract class AbstractComposedGuiElement<T extends AbstractComposedGuiElement<T>>
@@ -52,14 +48,11 @@ public abstract class AbstractComposedGuiElement<T extends AbstractComposedGuiEl
 
     @Override
     public int getMaxLayer() {
-        return getLayer() + Ordering.natural().max(Iterables.concat(Collections.singleton(0),
-                Iterables.transform(getChildren(), new Function<GuiElement, Integer>() {
-
-                    @Override
-                    public Integer apply(GuiElement e) {
-                        return e instanceof ComposedGuiElement ? ((ComposedGuiElement) e).getMaxLayer() : e.getLayer();
-                    }
-                })));
+        return getLayer() + getChildren()
+                .stream()
+                .mapToInt(e -> e instanceof ComposedGuiElement ? ((ComposedGuiElement<?>) e).getMaxLayer() : e.getLayer())
+                .max()
+                .orElse(0);
     }
 
     @Override

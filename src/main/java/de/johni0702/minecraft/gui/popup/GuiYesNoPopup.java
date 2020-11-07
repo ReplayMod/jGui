@@ -24,8 +24,6 @@
  */
 package de.johni0702.minecraft.gui.popup;
 
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.SettableFuture;
 import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.container.GuiPanel;
 import de.johni0702.minecraft.gui.element.GuiButton;
@@ -43,6 +41,8 @@ import de.johni0702.minecraft.gui.versions.MCVer.Keyboard;
 //$$ import org.lwjgl.input.Keyboard;
 //#endif
 
+import java.util.function.Consumer;
+
 public class GuiYesNoPopup extends AbstractGuiPopup<GuiYesNoPopup> implements Typeable {
     public static GuiYesNoPopup open(GuiContainer container, GuiElement... info) {
         GuiYesNoPopup popup = new GuiYesNoPopup(container).setBackgroundColor(Colors.DARK_TRANSPARENT);
@@ -51,13 +51,16 @@ public class GuiYesNoPopup extends AbstractGuiPopup<GuiYesNoPopup> implements Ty
         return popup;
     }
 
-    private final SettableFuture<Boolean> future = SettableFuture.create();
+    private Consumer<Boolean> onClosed = (accepted) -> {};
+    private Runnable onAccept = () -> {};
+    private Runnable onReject = () -> {};
 
     private final GuiButton yesButton = new GuiButton().setSize(150, 20).onClick(new Runnable() {
         @Override
         public void run() {
             close();
-            future.set(true);
+            onAccept.run();
+            onClosed.accept(true);
         }
     });
 
@@ -65,7 +68,8 @@ public class GuiYesNoPopup extends AbstractGuiPopup<GuiYesNoPopup> implements Ty
         @Override
         public void run() {
             close();
-            future.set(false);
+            onReject.run();
+            onClosed.accept(false);
         }
     });
 
@@ -107,8 +111,19 @@ public class GuiYesNoPopup extends AbstractGuiPopup<GuiYesNoPopup> implements Ty
         return this;
     }
 
-    public ListenableFuture<Boolean> getFuture() {
-        return future;
+    public GuiYesNoPopup onClosed(Consumer<Boolean> onClosed) {
+        this.onClosed = onClosed;
+        return this;
+    }
+
+    public GuiYesNoPopup onAccept(Runnable onAccept) {
+        this.onAccept = onAccept;
+        return this;
+    }
+
+    public GuiYesNoPopup onReject(Runnable onReject) {
+        this.onReject = onReject;
+        return this;
     }
 
     @Override
