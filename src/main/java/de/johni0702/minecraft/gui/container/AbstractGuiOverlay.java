@@ -404,6 +404,15 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         //$$ }
         //#endif
 
+        //#if MC>=11400
+        @Override
+        public void onClose() {
+            if (closeable) {
+                super.onClose();
+            }
+        }
+        //#endif
+
         @Override
         //#if MC>=11400
         public void removed() {
