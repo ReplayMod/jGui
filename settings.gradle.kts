@@ -19,6 +19,7 @@ pluginManagement {
 }
 
 rootProject.name = "jGui"
+rootProject.buildFileName = "root.gradle.kts"
 
 listOf(
         "1.7.10",
@@ -35,7 +36,7 @@ listOf(
     include(":$version")
     project(":$version").apply {
         projectDir = file("versions/$version")
-        buildFileName = "../common.gradle"
+        buildFileName = "../../build.gradle"
     }
 }
 
