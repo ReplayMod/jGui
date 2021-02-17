@@ -306,11 +306,13 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
         }
         int width = size.getWidth() - BORDER_LEFT - BORDER_RIGHT; // Width of the drawn timeline
         double segmentLength = length * zoom; // Length of the drawn timeline
-        int maxMarkers = width / MARKER_MIN_DISTANCE; // Max. amount of markers that can fit in the timeline
+        int markerMinDistance = (int) (MARKER_MIN_DISTANCE * (length > 60 * 60 * 1000 ? 1.2 : 1));
+        int maxMarkers = width / markerMinDistance; // Max. amount of markers that can fit in the timeline
         int minInterval = (int) (segmentLength / maxMarkers); // Min. interval between those markers
         final int S = 1000;
         final int M = 60*S;
-        final int[] snapTo = {S, 2*S, 5*S, 10*S, 15*S, 20*S, 30*S, M, 2*M, 5*M, 10*M, 15*M, 30*M};
+        final int H = 60*M;
+        final int[] snapTo = {S, 2*S, 5*S, 10*S, 15*S, 20*S, 30*S, M, 2*M, 5*M, 10*M, 15*M, 30*M, H, 2*H, 5*H, 10*H};
         // Find next greater snap
         for (int snap : snapTo) {
             if (snap > minInterval) {
