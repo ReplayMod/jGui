@@ -146,7 +146,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         MinecraftClient mc = getMinecraft();
         if (visible) {
             if (mouseVisible) {
-                if (mc.currentScreen != userInputGuiScreen) {
+                if (mc.currentScreen == null) {
                     mc.openScreen(userInputGuiScreen);
                 }
             } else {
@@ -237,6 +237,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         //$$     MatrixStack stack = new MatrixStack();
         //$$     float partialTicks = MCVer.getPartialTicks(event);
         //#endif
+            updateUserInputGui();
             updateRenderer();
             int layers = getMaxLayer();
             int mouseX = -1, mouseY = -1;
@@ -413,13 +414,24 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         //$$ }
         //#endif
 
+        //#if MC>=11400
+        @Override
+        public void onClose() {
+            if (closeable) {
+                super.onClose();
+            }
+        }
+        //#endif
+
         @Override
         //#if MC>=11400
         public void removed() {
         //#else
         //$$ public void onGuiClosed() {
         //#endif
-            mouseVisible = false;
+            if (closeable) {
+                mouseVisible = false;
+            }
         }
 
         public AbstractGuiOverlay<T> getOverlay() {
