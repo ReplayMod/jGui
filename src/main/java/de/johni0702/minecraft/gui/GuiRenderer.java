@@ -72,4 +72,13 @@ public interface GuiRenderer {
 
     int drawCenteredString(int x, int y, ReadableColor color, String text, boolean shadow);
 
+    /**
+     * Inverts all colors on the screen.
+     * @param right Right border of the inverted rectangle
+     * @param bottom Bottom border of the inverted rectangle
+     * @param left Left border of the inverted rectangle
+     * @param top Top border of the inverted rectangle
+     */
+    void invertColors(int right, int bottom, int left, int top);
+
 }

@@ -210,4 +210,11 @@ public class OffsetGuiRenderer implements GuiRenderer {
     public int drawCenteredString(int x, int y, ReadableColor color, String text, boolean shadow) {
         return renderer.drawCenteredString(x + position.getX(), y + position.getY(), color, text, shadow) - position.getX();
     }
+
+    @Override
+    public void invertColors(int right, int bottom, int left, int top) {
+        int x = position.getX();
+        int y = position.getY();
+        renderer.invertColors(right + x, bottom + y, left + x, top + y);
+    }
 }

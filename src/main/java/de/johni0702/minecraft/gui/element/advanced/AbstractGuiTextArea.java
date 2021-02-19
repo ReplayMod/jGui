@@ -478,20 +478,20 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
             int toX = getSelectionToX();
             int toY = getSelectionToY();
             if (lineY > fromY && lineY < toY) { // Whole line selected
-                invertColors(renderer, lineEnd, posY - 1 + lineHeight, BORDER, posY - 1);
+                renderer.invertColors(lineEnd, posY - 1 + lineHeight, BORDER, posY - 1);
             } else if (lineY == fromY && lineY == toY) { // Part of line selected
                 String leftStr = line.substring(0, clamp(fromX - leftTrimmed, 0, line.length()));
                 String rightStr = line.substring(clamp(toX - leftTrimmed, 0, line.length()));
                 int left = BORDER + fontRenderer.getWidth(leftStr);
                 int right = lineEnd - fontRenderer.getWidth(rightStr) - 1;
-                invertColors(renderer, right, posY - 1 + lineHeight, left, posY - 1);
+                renderer.invertColors(right, posY - 1 + lineHeight, left, posY - 1);
             } else if (lineY == fromY) { // End of line selected
                 String rightStr = line.substring(clamp(fromX - leftTrimmed, 0, line.length()));
-                invertColors(renderer, lineEnd, posY - 1 + lineHeight, lineEnd - fontRenderer.getWidth(rightStr), posY - 1);
+                renderer.invertColors(lineEnd, posY - 1 + lineHeight, lineEnd - fontRenderer.getWidth(rightStr), posY - 1);
             } else if (lineY == toY) { // Beginning of line selected
                 String leftStr = line.substring(0, clamp(toX - leftTrimmed, 0, line.length()));
                 int right = BORDER + fontRenderer.getWidth(leftStr);
-                invertColors(renderer, right, posY - 1 + lineHeight, BORDER, posY - 1);
+                renderer.invertColors(right, posY - 1 + lineHeight, BORDER, posY - 1);
             }
 
             // Draw cursor

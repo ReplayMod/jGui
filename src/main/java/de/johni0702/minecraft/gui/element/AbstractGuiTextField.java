@@ -379,7 +379,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
             String rightStr = renderText.substring(clamp(to - currentOffset, 0, renderText.length()));
             int left = BORDER + fontRenderer.getWidth(leftStr);
             int right = lineEnd - fontRenderer.getWidth(rightStr) - 1;
-            invertColors(renderer, right, height - 2, left, 2);
+            renderer.invertColors(right, height - 2, left, 2);
 
             // Draw cursor
             if (blinkCursorTick / 6 % 2 == 0 && focused) {

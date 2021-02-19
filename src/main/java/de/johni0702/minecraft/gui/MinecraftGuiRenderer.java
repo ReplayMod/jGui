@@ -271,4 +271,20 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         //$$ MCVer.color(r, g, b);
         //#endif
     }
+
+    @Override
+    public void invertColors(int right, int bottom, int left, int top) {
+        if (left >= right || top >= bottom) return;
+
+        color(0, 0, 1);
+        disableTexture();
+        enableColorLogicOp();
+        logicOp(GL11.GL_OR_REVERSE);
+
+        MCVer.drawRect(right, bottom, left, top);
+
+        disableColorLogicOp();
+        enableTexture();
+        color(1, 1, 1);
+    }
 }

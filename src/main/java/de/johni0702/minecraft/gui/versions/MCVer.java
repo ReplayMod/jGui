@@ -1,6 +1,5 @@
 package de.johni0702.minecraft.gui.versions;
 
-import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -27,9 +26,7 @@ import org.lwjgl.glfw.GLFW;
 import net.minecraft.client.render.VertexFormats;
 //#endif
 
-//#if MC>=10800
-import static com.mojang.blaze3d.platform.GlStateManager.*;
-//#else
+//#if MC<10800
 //$$ import net.minecraft.client.renderer.OpenGlHelper;
 //$$ import static org.lwjgl.opengl.GL11.*;
 //#endif
@@ -103,36 +100,6 @@ public class MCVer {
         //$$ vertexBuffer.addVertex(right, bottom, 0);
         //#endif
         tessellator.draw();
-    }
-
-    /**
-     * Inverts all colors on the screen.
-     * @param guiRenderer The GUI Renderer
-     * @param right Right border of the inverted rectangle
-     * @param bottom Bottom border of the inverted rectangle
-     * @param left Left border of the inverted rectangle
-     * @param top Top border of the inverted rectangle
-     */
-    public static void invertColors(GuiRenderer guiRenderer, int right, int bottom, int left, int top) {
-        if (left >= right || top >= bottom) return;
-
-        int x = guiRenderer.getOpenGlOffset().getX();
-        int y = guiRenderer.getOpenGlOffset().getY();
-        right += x;
-        left += x;
-        bottom += y;
-        top += y;
-
-        color4f(0, 0, 255, 255);
-        disableTexture();
-        enableColorLogicOp();
-        logicOp(GL11.GL_OR_REVERSE);
-
-        MCVer.drawRect(right, bottom, left, top);
-
-        disableColorLogicOp();
-        enableTexture();
-        color4f(255, 255, 255, 255);
     }
 
     public static void drawRect(int x, int y, int width, int height, ReadableColor tl, ReadableColor tr, ReadableColor bl, ReadableColor br) {
