@@ -250,7 +250,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
             for (int layer = 0; layer <= layers; layer++) {
                 layout(screenSize, renderInfo.layer(layer));
             }
-            MinecraftGuiRenderer renderer = new MinecraftGuiRenderer(stack, MCVer.newScaledResolution(getMinecraft()));
+            MinecraftGuiRenderer renderer = new MinecraftGuiRenderer(stack);
             for (int layer = 0; layer <= layers; layer++) {
                 draw(renderer, screenSize, renderInfo.layer(layer));
             }

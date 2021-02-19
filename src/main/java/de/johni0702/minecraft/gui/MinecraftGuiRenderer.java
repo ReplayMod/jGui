@@ -32,17 +32,12 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.utils.lwjgl.WritableDimension;
 import de.johni0702.minecraft.gui.versions.MCVer;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.GL11;
-
-//#if MC>=11400
-import net.minecraft.client.util.Window;
-//#else
-//$$ import net.minecraft.client.gui.ScaledResolution;
-//#endif
 
 //#if MC>=10800
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -58,26 +53,23 @@ import static org.lwjgl.opengl.GL11.*;
 public class MinecraftGuiRenderer implements GuiRenderer {
 
     private final DrawableHelper gui = new DrawableHelper(){};
+    private final MinecraftClient mc = getMinecraft();
 
-    //#if MC<11600
-    //$$ @SuppressWarnings("FieldCanBeLocal")
-    //#endif
     private final MatrixStack matrixStack;
 
     @NonNull
     //#if MC>=11400
-    private final Window size;
+    private final int scaledWidth = newScaledResolution(mc).getScaledWidth();
+    private final int scaledHeight = newScaledResolution(mc).getScaledHeight();
+    private final double scaleFactor = newScaledResolution(mc).getScaleFactor();
     //#else
-    //$$ private final ScaledResolution size;
+    //$$ private final int scaledWidth = newScaledResolution(mc).getScaledWidth();
+    //$$ private final int scaledHeight = newScaledResolution(mc).getScaledHeight();
+    //$$ private final double scaleFactor = newScaledResolution(mc).getScaleFactor();
     //#endif
 
-    //#if MC>=11400
-    public MinecraftGuiRenderer(MatrixStack matrixStack, Window size) {
-    //#else
-    //$$ public MinecraftGuiRenderer(MatrixStack matrixStack, ScaledResolution size) {
-    //#endif
+    public MinecraftGuiRenderer(MatrixStack matrixStack) {
         this.matrixStack = matrixStack;
-        this.size = size;
     }
 
     @Override
@@ -95,12 +87,12 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         return new ReadableDimension() {
             @Override
             public int getWidth() {
-                return size.getScaledWidth();
+                return scaledWidth;
             }
 
             @Override
             public int getHeight() {
-                return size.getScaledHeight();
+                return scaledHeight;
             }
 
             @Override
@@ -113,13 +105,9 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     @Override
     public void setDrawingArea(int x, int y, int width, int height) {
         // glScissor origin is bottom left corner whereas otherwise it's top left
-        y = size.getScaledHeight() - y - height;
+        y = scaledHeight - y - height;
 
-        //#if MC>=11400
-        int f = (int) size.getScaleFactor();
-        //#else
-        //$$ int f = size.getScaleFactor();
-        //#endif
+        int f = (int) scaleFactor;
         GL11.glScissor(x * f, y * f, width * f, height * f);
     }
 
