@@ -1,6 +1,7 @@
 package de.johni0702.minecraft.gui.utils;
 
 //#if MC<=11302
+//$$ import de.johni0702.minecraft.gui.versions.forge.EventsAdapter;
 //$$ import net.minecraftforge.common.MinecraftForge;
 //#endif
 
@@ -12,6 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventRegistrations {
+    //#if MC<=11302
+    //$$ static { new EventsAdapter().register(); }
+    //#endif
+
     private List<EventRegistration<?>> registrations = new ArrayList<>();
 
     public <T> EventRegistrations on(EventRegistration<T> registration) {

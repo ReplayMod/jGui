@@ -20,7 +20,11 @@ net.minecraft.client.gui.screen.Screen init() setWorldAndResolution()
 net.minecraft.client.gui.screen.Screen renderBackground() drawDefaultBackground()
 net.minecraft.client.gui.screen.Screen renderDirtBackground() drawBackground()
 net.minecraft.client.gui.screen.Screen removed() onGuiClosed()
+net.minecraft.client.gui.screen.Screen render() drawScreen()
 net.minecraft.client.gui.screen.Screen minecraft mc
 net.minecraft.client.gui.screen.Screen passEvents allowUserInput
 net.minecraft.client.gui.AbstractGui net.minecraft.client.gui.Gui
 net.minecraft.client.gui.AbstractGui fill() drawRect()
+# Note: GuiButton has been split into Button and Widget (now shared with e.g. checkboxes),
+#       most members are actually on the latter (there's also AbstractButton in the middle, but it isn't interesting)
+net.minecraft.client.gui.widget.Widget net.minecraft.client.gui.GuiButton

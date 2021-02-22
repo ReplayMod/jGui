@@ -143,22 +143,6 @@ public class MCVer {
         //#endif
     //$$ }
     //$$
-    //$$ public static float getPartialTicks(RenderGameOverlayEvent event) {
-        //#if MC>=10904
-        //$$ return event.getPartialTicks();
-        //#else
-        //$$ return event.partialTicks;
-        //#endif
-    //$$ }
-    //$$
-    //$$ public static float getPartialTicks(GuiScreenEvent.DrawScreenEvent.Post event) {
-        //#if MC>=10904
-        //$$ return event.getRenderPartialTicks();
-        //#else
-        //$$ return event.renderPartialTicks;
-        //#endif
-    //$$ }
-    //$$
     //$$ public static int getMouseX(GuiScreenEvent.DrawScreenEvent.Post event) {
         //#if MC>=10904
         //$$ return event.getMouseX();

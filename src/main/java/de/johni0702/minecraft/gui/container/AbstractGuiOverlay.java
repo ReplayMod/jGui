@@ -37,6 +37,8 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
+import de.johni0702.minecraft.gui.versions.callbacks.PreTickCallback;
+import de.johni0702.minecraft.gui.versions.callbacks.RenderHudCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.crash.CrashReport;
@@ -44,7 +46,6 @@ import net.minecraft.util.crash.CrashReportSection;
 import net.minecraft.util.crash.CrashException;
 
 //#if MC>=11400
-import de.johni0702.minecraft.gui.versions.callbacks.PreTickCallback;
 import net.minecraft.text.LiteralText;
 //#endif
 
@@ -53,26 +54,6 @@ import net.minecraft.client.util.Window;
 //#else
 //$$ import org.lwjgl.input.Mouse;
 //$$ import net.minecraft.client.gui.ScaledResolution;
-//#endif
-
-//#if FABRIC>=1
-import de.johni0702.minecraft.gui.versions.callbacks.RenderHudCallback;
-//#else
-//$$ import net.minecraftforge.client.event.RenderGameOverlayEvent;
-//#if MC>=10800
-//#if MC>=11400
-//$$ import net.minecraftforge.eventbus.api.SubscribeEvent;
-//#else
-//$$ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-//#endif
-//#if MC>=11400
-//#else
-//$$ import net.minecraftforge.fml.common.gameevent.TickEvent;
-//#endif
-//#else
-//$$ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-//$$ import cpw.mods.fml.common.gameevent.TickEvent;
-//#endif
 //#endif
 
 //#if MC>=10800 && MC<11400
@@ -220,23 +201,11 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         return screenSize;
     }
 
-    //#if MC>=10800
-    private
-    //#else
-    //$$ public
-    //#endif
-    class EventHandler extends EventRegistrations {
+    private class EventHandler extends EventRegistrations {
         private EventHandler() {}
 
-        //#if FABRIC>=1
         { on(RenderHudCallback.EVENT, this::renderOverlay); }
         private void renderOverlay(MatrixStack stack, float partialTicks) {
-        //#else
-        //$$ @SubscribeEvent(receiveCanceled = true)
-        //$$ public void renderOverlay(RenderGameOverlayEvent.Text event) {
-        //$$     MatrixStack stack = new MatrixStack();
-        //$$     float partialTicks = MCVer.getPartialTicks(event);
-        //#endif
             updateUserInputGui();
             updateRenderer();
             int layers = getMaxLayer();
@@ -256,16 +225,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
             }
         }
 
-        //#if MC>=11400
         { on(PreTickCallback.EVENT, () -> invokeAll(Tickable.class, Tickable::tick)); }
-        //#else
-        //$$ @SubscribeEvent
-        //$$ public void tickOverlay(TickEvent.ClientTickEvent event) {
-        //$$     if (event.phase == TickEvent.Phase.START) {
-        //$$         invokeAll(Tickable.class, Tickable::tick);
-        //$$     }
-        //$$ }
-        //#endif
 
         private void updateRenderer() {
             MinecraftClient mc = getMinecraft();
