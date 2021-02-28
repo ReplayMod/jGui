@@ -1,5 +1,5 @@
 plugins {
-    id("fabric-loom") version "0.5-SNAPSHOT" apply false
+    id("fabric-loom") version "0.6-SNAPSHOT" apply false
     id("com.replaymod.preprocess") version "7c4f90e"
     id("com.github.hierynomus.license") version "0.15.0"
 }
@@ -17,11 +17,6 @@ license {
     strictCheck = true
     mapping("java", "SLASHSTAR_STYLE")
 }
-
-// Loom tries to find the active mixin version by recursing up to the root project and checking each project's
-// compileClasspath and build script classpath (in that order). Since we've loom in our root project's classpath,
-// loom will only find it after checking the root project's compileClasspath (which doesn't exist by default).
-configurations.register("compileClasspath")
 
 preprocess {
     "1.16.4"(11604, "yarn") {
