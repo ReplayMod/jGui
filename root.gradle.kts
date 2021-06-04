@@ -1,6 +1,6 @@
 plugins {
-    id("fabric-loom") version "0.6-SNAPSHOT" apply false
-    id("com.replaymod.preprocess") version "7c4f90e"
+    id("fabric-loom") version "0.8-SNAPSHOT" apply false
+    id("com.replaymod.preprocess") version "4b4dfe5"
     id("com.github.hierynomus.license") version "0.15.0"
 }
 
