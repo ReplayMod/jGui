@@ -22,7 +22,7 @@ rootProject.name = "jGui"
 rootProject.buildFileName = "root.gradle.kts"
 
 listOf(
-        "1.7.10",
+        // "1.7.10",
         "1.8",
         "1.8.9",
         "1.9.4",
