@@ -68,8 +68,7 @@ preprocess {
 group 'de.johni0702.minecraft.jgui'
 version 'git'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = targetCompatibility = mcVersion >= 11700 ? 16 : 1.8
 
 if (mcVersion >= 11400) {
     sourceSets {
@@ -124,18 +123,21 @@ dependencies {
                 11502: '1.15.2',
                 11601: '1.16.1',
                 11604: '1.16.4',
+                11700: '1.17-rc1',
         ][mcVersion]
         mappings 'net.fabricmc:yarn:' + [
                 11404: '1.14.4+build.16',
                 11502: '1.15.2+build.14',
                 11601: '1.16.1+build.17:v2',
                 11604: '1.16.4+build.6:v2',
+                11700: '1.17-rc1+build.1:v2',
         ][mcVersion]
         modImplementation 'net.fabricmc:fabric-loader:' + [
                 11404: '0.4.8+build.155',
                 11502: '0.7.8+build.189',
                 11601: '0.8.8+build.202',
                 11604: '0.10.6+build.214',
+                11700: '0.11.3',
         ][mcVersion]
     }
     if (FG3) {

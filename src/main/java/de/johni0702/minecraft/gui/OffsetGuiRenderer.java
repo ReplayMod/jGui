@@ -31,7 +31,10 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-import org.lwjgl.opengl.GL11;
+
+import static de.johni0702.minecraft.gui.versions.MCVer.popScissorState;
+import static de.johni0702.minecraft.gui.versions.MCVer.pushScissorState;
+import static de.johni0702.minecraft.gui.versions.MCVer.setScissorState;
 
 public class OffsetGuiRenderer implements GuiRenderer {
 
@@ -122,13 +125,13 @@ public class OffsetGuiRenderer implements GuiRenderer {
     }
 
     public void startUsing() {
-        GL11.glPushAttrib(GL11.GL_SCISSOR_BIT);
-        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        pushScissorState();
+        setScissorState(true);
         setDrawingArea(0, 0, size.getWidth(), size.getHeight());
     }
 
     public void stopUsing() {
-        GL11.glPopAttrib();
+        popScissorState();
     }
 
     @Override

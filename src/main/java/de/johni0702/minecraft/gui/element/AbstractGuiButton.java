@@ -84,7 +84,9 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
     public void draw(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo) {
         super.draw(renderer, size, renderInfo);
 
+        //#if MC<11700
         color4f(1, 1, 1, 1);
+        //#endif
 
         byte texture = 1;
         int color = labelColor;

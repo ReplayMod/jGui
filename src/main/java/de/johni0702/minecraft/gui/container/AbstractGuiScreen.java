@@ -44,6 +44,8 @@ import net.minecraft.util.crash.CrashException;
 
 //#if MC>=11400
 import de.johni0702.minecraft.gui.versions.MCVer.Keyboard;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 //#else
 //$$ import org.lwjgl.input.Keyboard;
 //$$ import org.lwjgl.input.Mouse;
@@ -213,8 +215,9 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         }
 
         @Override
-        public String getNarrationMessage() {
-            return title == null ? "" : title.getString();
+        public Text getTitle() {
+            GuiLabel title = AbstractGuiScreen.this.title;
+            return new LiteralText(title == null ? "" : title.getText());
         }
         //#endif
 

@@ -102,7 +102,11 @@ public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedBut
         }
 
         if (texture == null) { // Button is disabled but we have no texture for that
+            //#if MC>=11700
+            //$$ // TODO anything reasonable we can do here? do we even care?
+            //#else
             color4f(0.5f, 0.5f, 0.5f, 1);
+            //#endif
             texture = textureNormal;
         }
 

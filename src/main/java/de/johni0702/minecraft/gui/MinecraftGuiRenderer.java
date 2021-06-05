@@ -39,6 +39,13 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.GL11;
 
+//#if MC>=11700
+//$$ import com.mojang.blaze3d.platform.GlStateManager;
+//$$ import net.minecraft.client.render.GameRenderer;
+//$$ import org.lwjgl.opengl.GL13;
+//#else
+//#endif
+
 //#if MC>=10800
 import com.mojang.blaze3d.platform.GlStateManager;
 import static com.mojang.blaze3d.platform.GlStateManager.*;
@@ -113,7 +120,9 @@ public class MinecraftGuiRenderer implements GuiRenderer {
 
     @Override
     public void bindTexture(Identifier location) {
-        //#if MC>=11500
+        //#if MC>=11700
+        //$$ RenderSystem.setShaderTexture(GlStateManager._getActiveTexture() - GL13.GL_TEXTURE0, location);
+        //#elseif MC>=11500
         MCVer.getMinecraft().getTextureManager().bindTexture(location);
         //#else
         //$$ MCVer.getMinecraft().getTextureManager().bindTexture(location);
@@ -122,7 +131,9 @@ public class MinecraftGuiRenderer implements GuiRenderer {
 
     @Override
     public void bindTexture(int glId) {
-        //#if MC>=10800
+        //#if MC>=11700
+        //$$ RenderSystem.setShaderTexture(GlStateManager._getActiveTexture() - GL13.GL_TEXTURE0, glId);
+        //#elseif MC>=10800
         GlStateManager.bindTexture(glId);
         //#else
         //$$ GL11.glBindTexture(GL_TEXTURE_2D, glId);
@@ -181,12 +192,19 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     public void drawRect(int x, int y, int width, int height, ReadableColor tl, ReadableColor tr, ReadableColor bl, ReadableColor br) {
         disableTexture();
         enableBlend();
-        disableAlphaTest();
         blendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+        //#if MC>=11700
+        //$$ setShader(GameRenderer::getPositionColorShader);
+        //#else
+        disableAlphaTest();
         shadeModel(GL_SMOOTH);
+        //#endif
         MCVer.drawRect(x, y, width, height, tl, tr, bl, br);
+        //#if MC>=11700
+        //#else
         shadeModel(GL_FLAT);
         enableAlphaTest();
+        //#endif
         enableTexture();
     }
 
@@ -260,7 +278,10 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         return new Color((color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff, (color >> 24) & 0xff);
     }
 
-    private void color(int r, int g, int b) {
+    private void color(float r, float g, float b) {
+        //#if MC>=11700
+        //$$ RenderSystem.setShaderColor(r, g, b, 1);
+        //#else
         //#if MC>=10800
         //#if MC>=11400
         GlStateManager.color4f(r, g, b, 1);
@@ -269,6 +290,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         //#endif
         //#else
         //$$ MCVer.color(r, g, b);
+        //#endif
         //#endif
     }
 
@@ -279,7 +301,11 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         color(0, 0, 1);
         disableTexture();
         enableColorLogicOp();
+        //#if MC>=11700
+        //$$ logicOp(GlStateManager.LogicOp.OR_REVERSE);
+        //#else
         logicOp(GL11.GL_OR_REVERSE);
+        //#endif
 
         MCVer.drawRect(right, bottom, left, top);
 

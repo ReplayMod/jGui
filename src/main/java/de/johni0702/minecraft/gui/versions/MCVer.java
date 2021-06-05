@@ -8,6 +8,11 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.util.crash.CrashReportSection;
 import org.lwjgl.opengl.GL11;
 
+//#if MC>=11700
+//$$ import net.minecraft.client.render.VertexFormat;
+//#else
+//#endif
+
 //#if FABRIC>=1
 //#else
 //$$ import net.minecraftforge.client.event.GuiScreenEvent;
@@ -31,6 +36,7 @@ import net.minecraft.client.render.VertexFormats;
 //$$ import static org.lwjgl.opengl.GL11.*;
 //#endif
 
+import java.util.ArrayDeque;
 import java.util.concurrent.Callable;
 
 /**
@@ -39,6 +45,32 @@ import java.util.concurrent.Callable;
 public class MCVer {
     public static MinecraftClient getMinecraft() {
         return MinecraftClient.getInstance();
+    }
+
+    private static final ArrayDeque<Boolean> scissorStateStack = new ArrayDeque<>();
+    private static boolean scissorState;
+
+    public static void pushScissorState() {
+        scissorStateStack.push(scissorState);
+    }
+
+    public static void popScissorState() {
+        setScissorState(scissorStateStack.pop());
+    }
+
+    public static void setScissorState(boolean enabled) {
+        if (scissorState != enabled) {
+            scissorState = enabled;
+            applyScissorState();
+        }
+    }
+
+    private static void applyScissorState() {
+        if (scissorState) {
+            GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        } else {
+            GL11.glDisable(GL11.GL_SCISSOR_TEST);
+        }
     }
 
     //#if MC>=11400
@@ -87,7 +119,11 @@ public class MCVer {
         //#endif
         //#endif
         //#if MC>=10809
+        //#if MC>=11700
+        //$$ vertexBuffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION);
+        //#else
         vertexBuffer.begin(GL11.GL_QUADS, VertexFormats.POSITION);
+        //#endif
         vertexBuffer.vertex(right, top, 0).next();
         vertexBuffer.vertex(left, top, 0).next();
         vertexBuffer.vertex(left, bottom, 0).next();
@@ -111,7 +147,11 @@ public class MCVer {
         //$$ Tessellator vertexBuffer = tessellator;
         //#endif
         //#if MC>=10809
+        //#if MC>=11700
+        //$$ vertexBuffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+        //#else
         vertexBuffer.begin(GL11.GL_QUADS, VertexFormats.POSITION_COLOR);
+        //#endif
         vertexBuffer.vertex(x, y + height, 0).color(bl.getRed(), bl.getGreen(), bl.getBlue(), bl.getAlpha()).next();
         vertexBuffer.vertex(x + width, y + height, 0).color(br.getRed(), br.getGreen(), br.getBlue(), br.getAlpha()).next();
         vertexBuffer.vertex(x + width, y, 0).color(tr.getRed(), tr.getGreen(), tr.getBlue(), tr.getAlpha()).next();

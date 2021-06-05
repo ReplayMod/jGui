@@ -4,7 +4,7 @@ import de.johni0702.minecraft.gui.utils.Event;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface InitScreenCallback {
     Event<InitScreenCallback> EVENT = Event.create((listeners) ->
@@ -15,7 +15,7 @@ public interface InitScreenCallback {
             }
     );
 
-    void initScreen(Screen screen, List<AbstractButtonWidget> buttons);
+    void initScreen(Screen screen, Collection<AbstractButtonWidget> buttons);
 
     interface Pre {
         Event<InitScreenCallback.Pre> EVENT = Event.create((listeners) ->

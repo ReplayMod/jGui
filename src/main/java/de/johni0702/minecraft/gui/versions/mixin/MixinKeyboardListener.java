@@ -4,12 +4,17 @@ package de.johni0702.minecraft.gui.versions.mixin;
 import de.johni0702.minecraft.gui.versions.callbacks.KeyboardCallback;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.ParentElement;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Group;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+//#if MC>=11700
+//$$ import net.minecraft.client.gui.screen.Screen;
+//#else
+import net.minecraft.client.gui.ParentElement;
+//#endif
 
 @Mixin(Keyboard.class)
 public class MixinKeyboardListener {
@@ -18,7 +23,11 @@ public class MixinKeyboardListener {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/ParentElement;keyPressed(III)Z"),
             cancellable = true
     )
+    //#if MC>=11700
+    //$$ private void keyPressed(int i, Screen screen, boolean[] bls, int keyCode, int scanCode, int modifiers, CallbackInfo ci) {
+    //#else
     private void keyPressed(int i, boolean[] bls, ParentElement element, int keyCode, int scanCode, int modifiers, CallbackInfo ci) {
+    //#endif
         if (KeyboardCallback.EVENT.invoker().keyPressed(keyCode, scanCode, modifiers)) {
             bls[0] = true;
             ci.cancel();
@@ -30,7 +39,11 @@ public class MixinKeyboardListener {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/ParentElement;keyReleased(III)Z"),
             cancellable = true
     )
+    //#if MC>=11700
+    //$$ private void keyReleased(int i, Screen screen, boolean[] bls, int keyCode, int scanCode, int modifiers, CallbackInfo ci) {
+    //#else
     private void keyReleased(int i, boolean[] bls, ParentElement element, int keyCode, int scanCode, int modifiers, CallbackInfo ci) {
+    //#endif
         if (KeyboardCallback.EVENT.invoker().keyReleased(keyCode, scanCode, modifiers)) {
             bls[0] = true;
             ci.cancel();
