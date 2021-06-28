@@ -20,7 +20,11 @@ import net.minecraft.client.gui.ParentElement;
 public class MixinKeyboardListener {
     @Inject(
             method = "method_1454",
+            //#if MC>=11700
+            //$$ at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;keyPressed(III)Z"),
+            //#else
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/ParentElement;keyPressed(III)Z"),
+            //#endif
             cancellable = true
     )
     //#if MC>=11700
@@ -36,7 +40,11 @@ public class MixinKeyboardListener {
 
     @Inject(
             method = "method_1454",
+            //#if MC>=11700
+            //$$ at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;keyReleased(III)Z"),
+            //#else
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/ParentElement;keyReleased(III)Z"),
+            //#endif
             cancellable = true
     )
     //#if MC>=11700
