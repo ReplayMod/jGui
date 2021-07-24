@@ -42,7 +42,6 @@ import org.lwjgl.opengl.GL11;
 //#if MC>=11700
 //$$ import com.mojang.blaze3d.platform.GlStateManager;
 //$$ import net.minecraft.client.render.GameRenderer;
-//$$ import org.lwjgl.opengl.GL13;
 //#else
 //#endif
 
@@ -121,7 +120,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     @Override
     public void bindTexture(Identifier location) {
         //#if MC>=11700
-        //$$ RenderSystem.setShaderTexture(GlStateManager._getActiveTexture() - GL13.GL_TEXTURE0, location);
+        //$$ RenderSystem.setShaderTexture(0, location);
         //#elseif MC>=11500
         MCVer.getMinecraft().getTextureManager().bindTexture(location);
         //#else
@@ -132,7 +131,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     @Override
     public void bindTexture(int glId) {
         //#if MC>=11700
-        //$$ RenderSystem.setShaderTexture(GlStateManager._getActiveTexture() - GL13.GL_TEXTURE0, glId);
+        //$$ RenderSystem.setShaderTexture(0, glId);
         //#elseif MC>=10800
         GlStateManager.bindTexture(glId);
         //#else
