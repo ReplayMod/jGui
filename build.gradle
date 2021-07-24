@@ -124,6 +124,7 @@ dependencies {
                 11601: '1.16.1',
                 11604: '1.16.4',
                 11700: '1.17',
+                11701: '1.17.1',
         ][mcVersion]
         mappings 'net.fabricmc:yarn:' + [
                 11404: '1.14.4+build.16',
@@ -131,6 +132,7 @@ dependencies {
                 11601: '1.16.1+build.17:v2',
                 11604: '1.16.4+build.6:v2',
                 11700: '1.17+build.13:v2',
+                11701: '1.17.1+build.29:v2',
         ][mcVersion]
         modImplementation 'net.fabricmc:fabric-loader:0.11.6'
     }
