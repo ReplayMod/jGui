@@ -2,6 +2,7 @@ package de.johni0702.minecraft.gui.container;
 
 import de.johni0702.minecraft.gui.function.Draggable;
 import de.johni0702.minecraft.gui.function.Scrollable;
+import de.johni0702.minecraft.gui.function.Tickable;
 import de.johni0702.minecraft.gui.function.Typeable;
 import de.johni0702.minecraft.gui.utils.EventRegistrations;
 import de.johni0702.minecraft.gui.utils.MouseUtils;
@@ -40,7 +41,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 
-public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, Scrollable {
+public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, Scrollable, Tickable {
 
     private static final Map<net.minecraft.client.gui.screen.Screen, VanillaGuiScreen> WRAPPERS =
             Collections.synchronizedMap(new WeakHashMap<>());
@@ -146,6 +147,16 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
         //$$ eventHandler.handled = false;
         //#endif
         return false;
+    }
+
+    @Override
+    public void tick() {
+        // TODO this is a workaround for ReplayMod#560 until we remove the inner mc screen
+        //      see also the note in ReplayMod's GuiBackgroundProcesses
+        // If this screen ever becomes the main screen, something has gone wrong.
+        if (getSuperMcGui() == getMinecraft().currentScreen) {
+            getMinecraft().openScreen(null);
+        }
     }
 
     // Used when wrapping an already existing mc.GuiScreen
