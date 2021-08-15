@@ -114,7 +114,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         y = scaledHeight - y - height;
 
         int f = (int) scaleFactor;
-        GL11.glScissor(x * f, y * f, width * f, height * f);
+        MCVer.setScissorBounds(x * f, y * f, width * f, height * f);
     }
 
     @Override

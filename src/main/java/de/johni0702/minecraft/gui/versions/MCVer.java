@@ -37,6 +37,7 @@ import net.minecraft.client.render.VertexFormats;
 //#endif
 
 import java.util.ArrayDeque;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 
 /**
@@ -47,27 +48,68 @@ public class MCVer {
         return MinecraftClient.getInstance();
     }
 
-    private static final ArrayDeque<Boolean> scissorStateStack = new ArrayDeque<>();
-    private static boolean scissorState;
+    private static class ScissorBounds {
+        private static final ScissorBounds DISABLED = new ScissorBounds(0, 0, Integer.MAX_VALUE, Integer.MAX_VALUE);
+        private final int x;
+        private final int y;
+        private final int width;
+        private final int height;
+
+        private ScissorBounds(int x, int y, int width, int height) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            ScissorBounds that = (ScissorBounds) o;
+            return x == that.x && y == that.y && width == that.width && height == that.height;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(x, y, width, height);
+        }
+    }
+    private static final ArrayDeque<ScissorBounds> scissorStateStack = new ArrayDeque<>();
+    private static ScissorBounds scissorState = ScissorBounds.DISABLED;
 
     public static void pushScissorState() {
         scissorStateStack.push(scissorState);
     }
 
     public static void popScissorState() {
-        setScissorState(scissorStateStack.pop());
+        setScissorBounds(scissorStateStack.pop());
     }
 
-    public static void setScissorState(boolean enabled) {
-        if (scissorState != enabled) {
-            scissorState = enabled;
-            applyScissorState();
+    public static void setScissorBounds(int x, int y, int width, int height) {
+        setScissorBounds(new ScissorBounds(x, y, width, height));
+    }
+
+    public static void setScissorDisabled() {
+        setScissorBounds(ScissorBounds.DISABLED);
+    }
+
+    private static void setScissorBounds(ScissorBounds newState) {
+        ScissorBounds oldState = MCVer.scissorState;
+        if (Objects.equals(oldState, newState)) {
+            return;
         }
-    }
 
-    private static void applyScissorState() {
-        if (scissorState) {
-            GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        scissorState = newState;
+
+        boolean isEnabled = newState != ScissorBounds.DISABLED;
+        boolean wasEnabled = oldState != ScissorBounds.DISABLED;
+
+        if (isEnabled) {
+            if (!wasEnabled) {
+                GL11.glEnable(GL11.GL_SCISSOR_TEST);
+            }
+            GL11.glScissor(scissorState.x, scissorState.y, scissorState.width, scissorState.height);
         } else {
             GL11.glDisable(GL11.GL_SCISSOR_TEST);
         }

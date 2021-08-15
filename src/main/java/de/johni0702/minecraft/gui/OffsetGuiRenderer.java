@@ -34,7 +34,6 @@ import net.minecraft.util.Identifier;
 
 import static de.johni0702.minecraft.gui.versions.MCVer.popScissorState;
 import static de.johni0702.minecraft.gui.versions.MCVer.pushScissorState;
-import static de.johni0702.minecraft.gui.versions.MCVer.setScissorState;
 
 public class OffsetGuiRenderer implements GuiRenderer {
 
@@ -126,7 +125,6 @@ public class OffsetGuiRenderer implements GuiRenderer {
 
     public void startUsing() {
         pushScissorState();
-        setScissorState(true);
         setDrawingArea(0, 0, size.getWidth(), size.getHeight());
     }
 
