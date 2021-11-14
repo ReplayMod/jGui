@@ -28,7 +28,7 @@ buildscript {
 
     dependencies {
         if (fabric) {
-            classpath 'fabric-loom:fabric-loom.gradle.plugin:0.8-SNAPSHOT'
+            classpath 'fabric-loom:fabric-loom.gradle.plugin:0.10-SNAPSHOT'
         } else if (mcVersion >= 11400) {
             classpath('net.minecraftforge.gradle:ForgeGradle:5.0.5') { // the FG people still haven't learned to not do breaking changes
                 exclude group: 'trove', module: 'trove' // preprocessor/idea requires more recent one
@@ -91,8 +91,8 @@ dependencies {
 }
 
 if (FABRIC) {
-    minecraft {
-        refmapName = 'mixins.jgui.refmap.json'
+    loom {
+        mixin.defaultRefmapName.set('mixins.jgui.refmap.json')
     }
 } else {
     minecraft {
