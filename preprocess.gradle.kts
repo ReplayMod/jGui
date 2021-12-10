@@ -6,7 +6,7 @@ plugins {
 
 project.extensions.create("preprocess", RootPreprocessExtension::class)
 configure<RootPreprocessExtension> {
-    val mc11800 = createNode("1.18", 11800, "yarn")
+    val mc11801 = createNode("1.18.1", 11801, "yarn")
     val mc11701 = createNode("1.17.1", 11701, "yarn")
     val mc11700 = createNode("1.17", 11700, "yarn")
     val mc11604 = createNode("1.16.4", 11604, "yarn")
@@ -20,7 +20,7 @@ configure<RootPreprocessExtension> {
     val mc10800 = createNode("1.8", 10800, "srg")
     val mc10710 = createNode("1.7.10", 10710, "srg")
 
-    mc11800.link(mc11701)
+    mc11801.link(mc11701)
     mc11701.link(mc11700)
     mc11700.link(mc11604, file("versions/mapping-fabric-1.17-1.16.4.txt"))
     mc11604.link(mc11601)
