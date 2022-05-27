@@ -46,7 +46,7 @@ import net.minecraft.util.crash.CrashReportSection;
 import net.minecraft.util.crash.CrashException;
 
 //#if MC>=11400
-import net.minecraft.text.LiteralText;
+import static de.johni0702.minecraft.gui.versions.MCVer.literalText;
 //#endif
 
 //#if MC>=11400
@@ -247,7 +247,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
 
         //#if MC>=11400
         UserInputGuiScreen() {
-            super(new LiteralText(""));
+            super(literalText(""));
         }
         //#endif
 

@@ -5,8 +5,14 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.text.Text;
 import net.minecraft.util.crash.CrashReportSection;
 import org.lwjgl.opengl.GL11;
+
+//#if MC>=11900
+//#else
+import net.minecraft.text.LiteralText;
+//#endif
 
 //#if MC>=11700
 //$$ import net.minecraft.client.render.VertexFormat;
@@ -255,6 +261,14 @@ public class MCVer {
         return getMinecraft().keyboard.getClipboard();
         //#else
         //$$ return GuiScreen.getClipboardString();
+        //#endif
+    }
+
+    public static Text literalText(String str) {
+        //#if MC>=11900
+        //$$ return Text.literal(str);
+        //#else
+        return new LiteralText(str);
         //#endif
     }
 

@@ -13,6 +13,7 @@ com.mojang.blaze3d.platform.GlStateManager disableAlphaTest() disableAlpha()
 com.mojang.blaze3d.platform.GlStateManager enableAlphaTest() enableAlpha()
 com.mojang.blaze3d.platform.GlStateManager blendFuncSeparate() tryBlendFuncSeparate()
 net.minecraft.util.SoundEvents net.minecraft.init.SoundEvents
+net.minecraft.util.text.StringTextComponent net.minecraft.util.text.TextComponentString
 net.minecraft.client.gui.screen.Screen net.minecraft.client.gui.GuiScreen
 net.minecraft.client.gui.screen.Screen hasControlDown() isCtrlKeyDown()
 net.minecraft.client.gui.screen.Screen hasShiftDown() isShiftKeyDown()

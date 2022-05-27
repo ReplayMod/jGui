@@ -39,8 +39,9 @@ import java.util.List;
 //#if MC>=11600
 import java.util.Optional;
 import java.util.stream.Collectors;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Style;
+
+import static de.johni0702.minecraft.gui.versions.MCVer.literalText;
 //#endif
 
 public abstract class AbstractGuiLabel<T extends AbstractGuiLabel<T>> extends AbstractGuiElement<T> implements IGuiLabel<T> {
@@ -60,7 +61,7 @@ public abstract class AbstractGuiLabel<T extends AbstractGuiLabel<T>> extends Ab
         super.draw(renderer, size, renderInfo);
         TextRenderer fontRenderer = MCVer.getFontRenderer();
         //#if MC>=11600
-        List<String> lines = fontRenderer.getTextHandler().wrapLines(new LiteralText(text), size.getWidth(), Style.EMPTY).stream()
+        List<String> lines = fontRenderer.getTextHandler().wrapLines(literalText(text), size.getWidth(), Style.EMPTY).stream()
                 .map(it -> it.visit(Optional::of)).filter(Optional::isPresent).map(Optional::get)
                 .collect(Collectors.toList());
         //#else
