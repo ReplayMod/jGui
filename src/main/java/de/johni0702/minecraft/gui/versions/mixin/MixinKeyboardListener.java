@@ -28,6 +28,9 @@ public class MixinKeyboardListener {
             cancellable = true
     )
     //#if MC>=11700
+    //#if MC>=11903
+    //$$ static
+    //#endif
     //$$ private void keyPressed(int i, Screen screen, boolean[] bls, int keyCode, int scanCode, int modifiers, CallbackInfo ci) {
     //#else
     private void keyPressed(int i, boolean[] bls, ParentElement element, int keyCode, int scanCode, int modifiers, CallbackInfo ci) {
@@ -48,6 +51,9 @@ public class MixinKeyboardListener {
             cancellable = true
     )
     //#if MC>=11700
+    //#if MC>=11903
+    //$$ static
+    //#endif
     //$$ private void keyReleased(int i, Screen screen, boolean[] bls, int keyCode, int scanCode, int modifiers, CallbackInfo ci) {
     //#else
     private void keyReleased(int i, boolean[] bls, ParentElement element, int keyCode, int scanCode, int modifiers, CallbackInfo ci) {

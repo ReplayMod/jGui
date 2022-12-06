@@ -307,7 +307,11 @@ public class MCVer {
         public static final int KEY_X = GLFW.GLFW_KEY_X;
 
         public static void enableRepeatEvents(boolean enabled) {
+            //#if MC>=11903
+            //$$ // These are now always enabled and we no longer need to manually toggle it when opening screens
+            //#else
             getMinecraft().keyboard.setRepeatEvents(enabled);
+            //#endif
         }
     }
     //#endif

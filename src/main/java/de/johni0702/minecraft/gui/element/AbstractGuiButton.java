@@ -61,7 +61,9 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
     protected static final Identifier BUTTON_SOUND = new Identifier("gui.button.press");
     protected static final Identifier WIDGETS_TEXTURE = new Identifier("textures/gui/widgets.png");
 
-    //#if MC>=10904
+    //#if MC>=11903
+    //$$ private SoundEvent sound = SoundEvents.UI_BUTTON_CLICK.value();
+    //#elseif MC>=10904
     private SoundEvent sound = SoundEvents.UI_BUTTON_CLICK;
     //#endif
 
@@ -149,7 +151,11 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
 
     public static void playClickSound(MinecraftClient mc) {
     //#if MC>=10904
+        //#if MC>=11903
+        //$$ playClickSound(mc, SoundEvents.UI_BUTTON_CLICK.value());
+        //#else
         playClickSound(mc, SoundEvents.UI_BUTTON_CLICK);
+        //#endif
     }
     public static void playClickSound(MinecraftClient mc, SoundEvent sound) {
     //#endif

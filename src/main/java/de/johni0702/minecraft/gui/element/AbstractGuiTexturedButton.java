@@ -52,7 +52,9 @@ import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedButton<T>> extends AbstractGuiClickable<T> implements Clickable, IGuiTexturedButton<T> {
     private Identifier texture;
 
-    //#if MC>=10904
+    //#if MC>=11903
+    //$$ private SoundEvent sound = SoundEvents.UI_BUTTON_CLICK.value();
+    //#elseif MC>=10904
     private SoundEvent sound = SoundEvents.UI_BUTTON_CLICK;
     //#endif
 

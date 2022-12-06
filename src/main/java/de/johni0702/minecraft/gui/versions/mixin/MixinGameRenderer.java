@@ -15,7 +15,9 @@ public class MixinGameRenderer {
             method = "render",
             at = @At(
                     value = "INVOKE",
-                    //#if MC>=11600
+                    //#if MC>=11903
+                    //$$ target = "Lnet/minecraft/client/gui/screen/Screen;renderWithTooltip(Lnet/minecraft/client/util/math/MatrixStack;IIF)V",
+                    //#elseif MC>=11600
                     target = "Lnet/minecraft/client/gui/screen/Screen;render(Lnet/minecraft/client/util/math/MatrixStack;IIF)V",
                     //#else
                     //$$ target = "Lnet/minecraft/client/gui/screen/Screen;render(IIF)V",
