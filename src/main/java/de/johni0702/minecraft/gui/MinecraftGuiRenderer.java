@@ -189,7 +189,9 @@ public class MinecraftGuiRenderer implements GuiRenderer {
 
     @Override
     public void drawRect(int x, int y, int width, int height, ReadableColor tl, ReadableColor tr, ReadableColor bl, ReadableColor br) {
+        //#if MC<11904
         disableTexture();
+        //#endif
         enableBlend();
         blendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         //#if MC>=11700
@@ -204,7 +206,9 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         shadeModel(GL_FLAT);
         enableAlphaTest();
         //#endif
+        //#if MC<11904
         enableTexture();
+        //#endif
     }
 
     @Override
@@ -298,7 +302,9 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         if (left >= right || top >= bottom) return;
 
         color(0, 0, 1);
+        //#if MC<11904
         disableTexture();
+        //#endif
         enableColorLogicOp();
         //#if MC>=11700
         //$$ logicOp(GlStateManager.LogicOp.OR_REVERSE);
@@ -309,7 +315,9 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         MCVer.drawRect(right, bottom, left, top);
 
         disableColorLogicOp();
+        //#if MC<11904
         enableTexture();
+        //#endif
         color(1, 1, 1);
     }
 }
