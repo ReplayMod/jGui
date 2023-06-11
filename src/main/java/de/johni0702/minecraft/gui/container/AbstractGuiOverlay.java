@@ -37,13 +37,19 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
+import de.johni0702.minecraft.gui.versions.ScreenExt;
 import de.johni0702.minecraft.gui.versions.callbacks.PreTickCallback;
 import de.johni0702.minecraft.gui.versions.callbacks.RenderHudCallback;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.crash.CrashReport;
 import net.minecraft.util.crash.CrashReportSection;
 import net.minecraft.util.crash.CrashException;
+
+//#if MC>=12000
+//$$ import net.minecraft.client.gui.DrawContext;
+//#else
+import net.minecraft.client.util.math.MatrixStack;
+//#endif
 
 //#if MC>=11400
 import static de.johni0702.minecraft.gui.versions.MCVer.literalText;
@@ -108,7 +114,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
      * @see #setAllowUserInput(boolean)
      */
     public boolean isAllowUserInput() {
-        return userInputGuiScreen.passEvents;
+        return ((ScreenExt) userInputGuiScreen).doesPassEvents();
     }
 
     /**
@@ -117,10 +123,9 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
      * GUI elements such as text fields.
      * Default for overlays is {@code true} whereas for normal GUI screens it is {@code false}.
      * @param allowUserInput {@code true} to allow user input, {@code false} to disallow it
-     * @see net.minecraft.client.gui.screen.Screen#passEvents
      */
     public void setAllowUserInput(boolean allowUserInput) {
-        userInputGuiScreen.passEvents = allowUserInput;
+        ((ScreenExt) userInputGuiScreen).setPassEvents(allowUserInput);
     }
 
     private void updateUserInputGui() {
@@ -205,7 +210,11 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         private EventHandler() {}
 
         { on(RenderHudCallback.EVENT, this::renderOverlay); }
+        //#if MC>=12000
+        //$$ private void renderOverlay(DrawContext stack, float partialTicks) {
+        //#else
         private void renderOverlay(MatrixStack stack, float partialTicks) {
+        //#endif
             updateUserInputGui();
             updateRenderer();
             int layers = getMaxLayer();
@@ -252,7 +261,7 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         //#endif
 
         {
-            this.passEvents = true;
+            ((ScreenExt) this).setPassEvents(true);
         }
 
         //#if MC>=11400

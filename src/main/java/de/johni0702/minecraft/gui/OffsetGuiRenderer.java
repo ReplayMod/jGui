@@ -35,6 +35,10 @@ import net.minecraft.util.Identifier;
 import static de.johni0702.minecraft.gui.versions.MCVer.popScissorState;
 import static de.johni0702.minecraft.gui.versions.MCVer.pushScissorState;
 
+//#if MC>=12000
+//$$ import net.minecraft.client.gui.DrawContext;
+//#endif
+
 public class OffsetGuiRenderer implements GuiRenderer {
 
     @NonNull
@@ -91,6 +95,13 @@ public class OffsetGuiRenderer implements GuiRenderer {
         ReadablePoint parentOffset = renderer.getOpenGlOffset();
         return new Point(parentOffset.getX() + position.getX(), parentOffset.getY() + position.getY());
     }
+
+    //#if MC>=12000
+    //$$ @Override
+    //$$ public DrawContext getContext() {
+    //$$     return renderer.getContext();
+    //$$ }
+    //#endif
 
     @Override
     public MatrixStack getMatrixStack() {

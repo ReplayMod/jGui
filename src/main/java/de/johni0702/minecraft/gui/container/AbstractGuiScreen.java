@@ -37,10 +37,15 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.crash.CrashReport;
 import net.minecraft.util.crash.CrashReportSection;
 import net.minecraft.util.crash.CrashException;
+
+//#if MC>=12000
+//$$ import net.minecraft.client.gui.DrawContext;
+//#else
+import net.minecraft.client.util.math.MatrixStack;
+//#endif
 
 //#if MC>=11400
 import de.johni0702.minecraft.gui.versions.MCVer.Keyboard;
@@ -103,7 +108,9 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                 case NONE:
                     break;
                 case DEFAULT:
-                    //#if MC>=11600
+                    //#if MC>=12000
+                    //$$ wrapped.renderBackground(renderer.getContext());
+                    //#elseif MC>=11600
                     wrapped.renderBackground(renderer.getMatrixStack());
                     //#else
                     //$$ wrapped.renderBackground();
@@ -114,7 +121,9 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                     renderer.drawRect(0, 0, size.getWidth(), size.getHeight(), top, top, bottom, bottom);
                     break;
                 case DIRT:
-                    //#if MC>=11904
+                    //#if MC>=12000
+                    //$$ wrapped.renderBackgroundTexture(renderer.getContext());
+                    //#elseif MC>=11904
                     //$$ wrapped.renderBackgroundTexture(renderer.getMatrixStack());
                     //#elseif MC>=11600
                     wrapped.renderBackgroundTexture(0);
@@ -224,7 +233,9 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         //#endif
 
         @Override
-        //#if MC>=11600
+        //#if MC>=12000
+        //$$ public void render(DrawContext stack, int mouseX, int mouseY, float partialTicks) {
+        //#elseif MC>=11600
         public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
         //#else
         //#if MC>=11400
