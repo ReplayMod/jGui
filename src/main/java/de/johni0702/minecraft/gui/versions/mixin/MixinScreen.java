@@ -19,7 +19,8 @@ import java.util.List;
 //$$ import net.minecraft.client.gui.Element;
 //#endif
 
-@Mixin(Screen.class)
+// Increased priority so we can consider existing third-party buttons when choosing the position for our button
+@Mixin(value = Screen.class, priority = 1100)
 public class MixinScreen {
 
     //#if MC>=11700
