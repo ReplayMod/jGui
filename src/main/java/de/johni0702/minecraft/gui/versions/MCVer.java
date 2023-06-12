@@ -6,6 +6,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.crash.CrashReportSection;
 import org.lwjgl.opengl.GL11;
 
@@ -15,6 +16,7 @@ import net.minecraft.text.LiteralText;
 //#endif
 
 //#if MC>=11700
+//$$ import com.mojang.blaze3d.systems.RenderSystem;
 //$$ import net.minecraft.client.render.VertexFormat;
 //#else
 //#endif
@@ -216,6 +218,16 @@ public class MCVer {
         //$$ vertexBuffer.addVertex(x, y, 0);
         //#endif
         tessellator.draw();
+    }
+
+    public static void bindTexture(Identifier identifier) {
+        //#if MC>=11700
+        //$$ RenderSystem.setShaderTexture(0, identifier);
+        //#elseif MC>=11500
+        getMinecraft().getTextureManager().bindTexture(identifier);
+        //#else
+        //$$ getMinecraft().getTextureManager().bindTexture(identifier);
+        //#endif
     }
 
     public static TextRenderer getFontRenderer() {
