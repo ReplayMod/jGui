@@ -2,12 +2,12 @@
 package de.johni0702.minecraft.gui.versions.mixin;
 
 import de.johni0702.minecraft.gui.versions.callbacks.InitScreenCallback;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -30,12 +30,34 @@ public class MixinScreen {
     //#endif
 
     @Inject(method = "init(Lnet/minecraft/client/MinecraftClient;II)V", at = @At("HEAD"))
-    private void preInit(MinecraftClient minecraftClient_1, int int_1, int int_2, CallbackInfo ci) {
+    private void preInit(CallbackInfo ci) {
+        firePreInit();
+    }
+
+    @Inject(method = "init(Lnet/minecraft/client/MinecraftClient;II)V", at = @At("TAIL"))
+    private void init(CallbackInfo ci) {
+        firePostInit();
+    }
+
+    //#if MC>=11904
+    //$$ @Inject(method = "resize", at = @At("HEAD"))
+    //$$ private void preResize(CallbackInfo ci) {
+    //$$     firePreInit();
+    //$$ }
+    //$$
+    //$$ @Inject(method = "resize", at = @At("TAIL"))
+    //$$ private void resize(CallbackInfo ci) {
+    //$$     firePostInit();
+    //$$ }
+    //#endif
+
+    @Unique
+    private void firePreInit() {
         InitScreenCallback.Pre.EVENT.invoker().preInitScreen((Screen) (Object) this);
     }
 
-    @Inject(method = "init(Lnet/minecraft/client/MinecraftClient;II)V", at = @At("RETURN"))
-    private void init(MinecraftClient minecraftClient_1, int int_1, int int_2, CallbackInfo ci) {
+    @Unique
+    private void firePostInit() {
         InitScreenCallback.EVENT.invoker().initScreen(
                 (Screen) (Object) this,
                 //#if MC>=11700
