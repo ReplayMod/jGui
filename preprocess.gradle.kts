@@ -6,7 +6,7 @@ plugins {
 
 project.extensions.create("preprocess", RootPreprocessExtension::class)
 configure<RootPreprocessExtension> {
-    val mc12000 = createNode("1.20", 12000, "yarn")
+    val mc12001 = createNode("1.20.1", 12001, "yarn")
     val mc11904 = createNode("1.19.4", 11904, "yarn")
     val mc11903 = createNode("1.19.3", 11903, "yarn")
     val mc11902 = createNode("1.19.2", 11902, "yarn")
@@ -26,7 +26,7 @@ configure<RootPreprocessExtension> {
     val mc10800 = createNode("1.8", 10800, "srg")
     val mc10710 = createNode("1.7.10", 10710, "srg")
 
-    mc12000.link(mc11904)
+    mc12001.link(mc11904)
     mc11904.link(mc11903)
     mc11903.link(mc11902)
     mc11902.link(mc11901)
