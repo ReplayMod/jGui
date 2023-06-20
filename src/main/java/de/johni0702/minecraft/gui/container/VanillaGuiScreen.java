@@ -201,6 +201,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
         { on(PostRenderScreenCallback.EVENT, this::onGuiRender); }
         //#if MC>=12000
         //$$ private void onGuiRender(DrawContext stack, float partialTicks) {
+        //$$     stack.draw(); // flush any buffered changes before we draw using legacy primitives
         //#else
         private void onGuiRender(MatrixStack stack, float partialTicks) {
         //#endif
