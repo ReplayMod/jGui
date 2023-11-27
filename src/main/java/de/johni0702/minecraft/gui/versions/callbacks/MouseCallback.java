@@ -37,9 +37,9 @@ public interface MouseCallback {
                 }
 
                 @Override
-                public boolean mouseScroll(double x, double y, double scroll) {
+                public boolean mouseScroll(double x, double y, double horizontal, double vertical) {
                     for (MouseCallback listener : listeners) {
-                        if (listener.mouseScroll(x, y, scroll)) {
+                        if (listener.mouseScroll(x, y, horizontal, vertical)) {
                             return true;
                         }
                     }
@@ -51,6 +51,6 @@ public interface MouseCallback {
     boolean mouseDown(double x, double y, int button);
     boolean mouseDrag(double x, double y, int button, double dx, double dy);
     boolean mouseUp(double x, double y, int button);
-    boolean mouseScroll(double x, double y, double scroll);
+    boolean mouseScroll(double x, double y, double horizontal, double vertical);
 }
 //#endif

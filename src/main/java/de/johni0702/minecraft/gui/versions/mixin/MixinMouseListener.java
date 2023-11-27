@@ -58,13 +58,31 @@ public abstract class MixinMouseListener {
 
     @Redirect(
             method = "onMouseScroll",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;mouseScrolled(DDD)Z")
+            at = @At(value = "INVOKE",
+                    //#if MC>=12002
+                    //$$ target = "Lnet/minecraft/client/gui/screen/Screen;mouseScrolled(DDDD)Z"
+                    //#else
+                    target = "Lnet/minecraft/client/gui/screen/Screen;mouseScrolled(DDD)Z"
+                    //#endif
+            )
     )
-    private boolean mouseScroll(Screen element, double x, double y, double scroll) {
-        if (MouseCallback.EVENT.invoker().mouseScroll(x, y, scroll)) {
+    private boolean mouseScroll(Screen element, double x, double y,
+                                //#if MC>=12002
+                                //$$ double horizontal,
+                                //#endif
+                                double vertical
+    ) {
+        //#if MC<12002
+        double horizontal = 0;
+        //#endif
+        if (MouseCallback.EVENT.invoker().mouseScroll(x, y, horizontal, vertical)) {
             return true;
         } else {
-            return element.mouseScrolled(x, y, scroll);
+            //#if MC>=12002
+            //$$ return element.mouseScrolled(x, y, horizontal, vertical);
+            //#else
+            return element.mouseScrolled(x, y, vertical);
+            //#endif
         }
     }
 }

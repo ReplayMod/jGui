@@ -19,11 +19,11 @@ import net.minecraft.client.util.math.MatrixStack;
 public class Mixin_RenderHudCallback {
     @Inject(
             method = "render",
-            at = @At(
-                    value = "FIELD",
-                    opcode = Opcodes.GETFIELD,
-                    target = "Lnet/minecraft/client/options/GameOptions;debugEnabled:Z"
-            )
+            //#if MC>=12002
+            //$$ at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/DebugHud;shouldShowDebugHud()Z")
+            //#else
+            at = @At(value = "FIELD", opcode = Opcodes.GETFIELD, target = "Lnet/minecraft/client/options/GameOptions;debugEnabled:Z")
+            //#endif
     )
     //#if MC>=12000
     //$$ private void renderOverlay(DrawContext stack, float partialTicks, CallbackInfo ci) {

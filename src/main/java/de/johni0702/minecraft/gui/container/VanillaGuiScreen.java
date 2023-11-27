@@ -241,8 +241,12 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
         }
 
         @Override
-        public boolean mouseScroll(double x, double y, double scroll) {
-            return getSuperMcGui().mouseScrolled(x, y, scroll);
+        public boolean mouseScroll(double x, double y, double horizontal, double vertical) {
+            return getSuperMcGui().mouseScrolled(x, y,
+                    //#if MC>=12002
+                    //$$ horizontal,
+                    //#endif
+                    vertical);
         }
 
         { on(KeyboardCallback.EVENT, this); }

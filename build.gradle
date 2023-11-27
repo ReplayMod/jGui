@@ -136,6 +136,7 @@ dependencies {
                 11903: '1.19.3-rc3',
                 11904: '1.19.4',
                 12001: '1.20.1',
+                12002: '1.20.2',
         ][mcVersion]
         mappings 'net.fabricmc:yarn:' + [
                 11404: '1.14.4+build.16',
@@ -151,6 +152,7 @@ dependencies {
                 11903: '1.19.3-rc3+build.1:v2',
                 11904: '1.19.4+build.1:v2',
                 12001: '1.20.1+build.2:v2',
+                12002: '1.20.2+build.4:v2',
         ][mcVersion]
         modImplementation 'net.fabricmc:fabric-loader:0.14.6'
     }

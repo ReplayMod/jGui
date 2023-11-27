@@ -59,7 +59,15 @@ import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 
 public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends AbstractGuiClickable<T> implements Clickable, IGuiButton<T> {
     protected static final Identifier BUTTON_SOUND = new Identifier("gui.button.press");
+    //#if MC>=12002
+    //$$ protected static final Identifier[] BUTTON_TEXTURES = new Identifier[] {
+    //$$         new Identifier("widget/button_disabled"),
+    //$$         new Identifier("widget/button"),
+    //$$         new Identifier("widget/button_highlighted"),
+    //$$ };
+    //#else
     protected static final Identifier WIDGETS_TEXTURE = new Identifier("textures/gui/widgets.png");
+    //#endif
 
     //#if MC>=11903
     //$$ private SoundEvent sound = SoundEvents.UI_BUTTON_CLICK.value();
@@ -110,11 +118,16 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
         int halfHeight = size.getHeight() / 2;
         int secondHalfHeight = size.getHeight() - halfHeight;
 
+        //#if MC>=12002
+        //$$ ReadablePoint offset = renderer.getOpenGlOffset();
+        //$$ renderer.getContext().drawGuiTexture(BUTTON_TEXTURES[texture], offset.getX(), offset.getY(), size.getWidth(), size.getHeight());
+        //#else
         renderer.bindTexture(WIDGETS_TEXTURE);
         renderer.drawTexturedRect(0, 0, 0, textureY, halfWidth, halfHeight);
         renderer.drawTexturedRect(0, halfHeight, 0, textureY + 20 - secondHalfHeight, halfWidth, secondHalfHeight);
         renderer.drawTexturedRect(halfWidth, 0, 200 - secondHalfWidth, textureY, secondHalfWidth, halfHeight);
         renderer.drawTexturedRect(halfWidth, halfHeight, 200 - secondHalfWidth, textureY + 20 - secondHalfHeight, secondHalfWidth, secondHalfHeight);
+        //#endif
 
         if (this.texture != null) {
             renderer.bindTexture(this.texture);
