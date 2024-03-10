@@ -73,6 +73,22 @@ public class Image implements AutoCloseable {
     }
 
     public static Image read(InputStream in) throws IOException {
+        // Minecraft as of 1.20.4 artificially limits itself to images with valid PNG header.
+        // Our replay thumbnails are JPG though, so we need to convert those.
+        //#if MC>=12004
+        //$$ byte[] bytes;
+        //$$ try (InputStream in_ = in) {
+        //$$     bytes = in.readAllBytes();
+        //$$ }
+        //$$ in = new ByteArrayInputStream(bytes);
+        //$$ if (bytes[0] != (byte) 0x89 || bytes[1] != 0x50 || bytes[2] != 0x4E || bytes[3] != 0x47) {
+        //$$     BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
+        //$$     ByteArrayOutputStream out = new ByteArrayOutputStream();
+        //$$     ImageIO.write(bufferedImage, "png", out);
+        //$$     in = new ByteArrayInputStream(out.toByteArray());
+        //$$ }
+        //#endif
+
         return new Image(NativeImage.read(in));
     }
 
