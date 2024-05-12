@@ -6,15 +6,12 @@ pluginManagement {
         google()
         maven("https://jitpack.io")
         maven("https://maven.fabricmc.net")
+        maven("https://maven.architectury.dev/")
+        maven("https://maven.minecraftforge.net")
+        maven("https://repo.essential.gg/repository/maven-public")
     }
-    resolutionStrategy {
-        eachPlugin {
-            when (requested.id.id) {
-                "com.replaymod.preprocess" -> {
-                    useModule("com.github.replaymod:preprocessor:${requested.version}")
-                }
-            }
-        }
+    plugins {
+        id("gg.essential.multi-version.root") version "0.6.0"
     }
 }
 
@@ -23,7 +20,7 @@ rootProject.buildFileName = "root.gradle.kts"
 
 listOf(
         // "1.7.10",
-        "1.8",
+        // "1.8",
         "1.8.9",
         "1.9.4",
         "1.12",
@@ -47,7 +44,7 @@ listOf(
     include(":$version")
     project(":$version").apply {
         projectDir = file("versions/$version")
-        buildFileName = "../../build.gradle"
+        buildFileName = "../../build.gradle.kts"
     }
 }
 

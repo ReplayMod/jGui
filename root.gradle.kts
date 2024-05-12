@@ -1,7 +1,7 @@
 plugins {
-    id("fabric-loom") version "0.11-SNAPSHOT" apply false
-    id("com.replaymod.preprocess") version "7746c47"
+    id("gg.essential.multi-version.root")
     id("com.github.hierynomus.license") version "0.15.0"
+    kotlin("jvm") version "1.9.24" apply false // workaround for EGT crashing without
 }
 
 group = "de.johni0702.minecraft"
@@ -61,4 +61,10 @@ preprocess {
     mc10904.link(mc10809, file("versions/1.9.4/mapping.txt"))
     mc10809.link(mc10800)
     mc10800.link(mc10710, file("versions/1.8/mapping.txt"))
+}
+
+subprojects {
+    val (_, minor) = name.split("-")[0].split(".")
+    val fabric = minor.toInt() >= 14 && !name.endsWith("-forge")
+    extra.set("loom.platform", if (fabric) "fabric" else "forge")
 }
