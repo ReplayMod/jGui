@@ -45,7 +45,11 @@ public abstract class MixinMouseListener {
         }
     }
 
+    //#if MC>=12005
+    //$$ @Inject(method = "method_55795", at = @At("HEAD"), cancellable = true)
+    //#else
     @Inject(method = "method_1602", at = @At("HEAD"), cancellable = true)
+    //#endif
     //#if MC>=11700
     //$$ private void mouseDrag(Screen screen, double x, double y, double dx, double dy, CallbackInfo ci) {
     //#else
