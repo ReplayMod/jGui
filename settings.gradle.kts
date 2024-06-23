@@ -11,7 +11,7 @@ pluginManagement {
         maven("https://repo.essential.gg/repository/maven-public")
     }
     plugins {
-        id("gg.essential.multi-version.root") version "0.6.0"
+        id("gg.essential.multi-version.root") version "0.6.1"
     }
 }
 

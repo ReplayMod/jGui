@@ -1,7 +1,6 @@
 plugins {
     id("gg.essential.multi-version.root")
     id("com.github.hierynomus.license") version "0.15.0"
-    kotlin("jvm") version "1.9.24" apply false // workaround for EGT crashing without
 }
 
 group = "de.johni0702.minecraft"
