@@ -9,6 +9,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+//#if MC>=12100
+//$$ import net.minecraft.client.render.RenderTickCounter;
+//#endif
+
 //#if MC>=12000
 //$$ import net.minecraft.client.gui.DrawContext;
 //#else
@@ -29,7 +33,10 @@ public class Mixin_RenderHudCallback {
             at = @At(value = "FIELD", opcode = Opcodes.GETFIELD, target = "Lnet/minecraft/client/options/GameOptions;debugEnabled:Z")
             //#endif
     )
-    //#if MC>=12000
+    //#if MC>=12100
+    //$$ private void renderOverlay(DrawContext stack, RenderTickCounter renderTickCounter, CallbackInfo ci) {
+    //$$     float partialTicks = renderTickCounter.getTickDelta(true);
+    //#elseif MC>=12000
     //$$ private void renderOverlay(DrawContext stack, float partialTicks, CallbackInfo ci) {
     //#elseif MC>=11600
     private void renderOverlay(MatrixStack stack, float partialTicks, CallbackInfo ci) {

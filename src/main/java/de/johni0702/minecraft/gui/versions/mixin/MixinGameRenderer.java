@@ -10,6 +10,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+//#if MC>=12100
+//$$ import net.minecraft.client.render.RenderTickCounter;
+//#endif
+
 //#if MC>=12000
 //$$ import net.minecraft.client.gui.DrawContext;
 //#else
@@ -48,7 +52,18 @@ public class MixinGameRenderer {
     //#endif
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = RENDER, shift = At.Shift.AFTER))
-    private void postRenderScreen(float partialTicks, long nanoTime, boolean renderWorld, CallbackInfo ci) {
+    private void postRenderScreen(
+            //#if MC>=12100
+            //$$ RenderTickCounter tickCounter,
+            //#else
+            float partialTicks, long nanoTime,
+            //#endif
+            boolean renderWorld,
+            CallbackInfo ci
+    ) {
+        //#if MC>=12100
+        //$$ float partialTicks = tickCounter.getTickDelta(true);
+        //#endif
         //#if MC<11600
         //$$ MatrixStack context = new MatrixStack();
         //#endif

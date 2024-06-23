@@ -36,9 +36,11 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
 
+import static de.johni0702.minecraft.gui.versions.MCVer.identifier;
+
 public abstract class AbstractGuiCheckbox<T extends AbstractGuiCheckbox<T>>
         extends AbstractGuiClickable<T> implements IGuiCheckbox<T> {
-    protected static final Identifier BUTTON_SOUND = new Identifier("gui.button.press");
+    protected static final Identifier BUTTON_SOUND = identifier("gui.button.press");
     protected static final ReadableColor BOX_BACKGROUND_COLOR = new Color(46, 46, 46);
 
     private String label;

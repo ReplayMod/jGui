@@ -37,13 +37,14 @@ import net.minecraft.client.resource.language.I18n;
 
 //#if MC>=12002
 //$$ import net.minecraft.util.Identifier;
+//$$ import static de.johni0702.minecraft.gui.versions.MCVer.identifier;
 //#endif
 
 // TODO: Currently assumes a height of 20
 public abstract class AbstractGuiSlider<T extends AbstractGuiSlider<T>> extends AbstractGuiElement<T> implements Clickable, Draggable, IGuiSlider<T> {
     //#if MC>=12002
-    //$$ protected static final Identifier TEXTURE = new Identifier("widget/slider");
-    //$$ protected static final Identifier HANDLE_TEXTURE = new Identifier("widget/slider_handle");
+    //$$ protected static final Identifier TEXTURE = identifier("widget/slider");
+    //$$ protected static final Identifier HANDLE_TEXTURE = identifier("widget/slider_handle");
     //#endif
 
     private Runnable onValueChanged;

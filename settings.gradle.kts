@@ -41,6 +41,7 @@ listOf(
         "1.20.2",
         "1.20.4",
         "1.20.6",
+        "1.21",
 ).forEach { version ->
     include(":$version")
     project(":$version").apply {

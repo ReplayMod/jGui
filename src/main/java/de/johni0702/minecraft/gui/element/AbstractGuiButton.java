@@ -58,15 +58,15 @@ import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 
 public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends AbstractGuiClickable<T> implements Clickable, IGuiButton<T> {
-    protected static final Identifier BUTTON_SOUND = new Identifier("gui.button.press");
+    protected static final Identifier BUTTON_SOUND = identifier("gui.button.press");
     //#if MC>=12002
     //$$ protected static final Identifier[] BUTTON_TEXTURES = new Identifier[] {
-    //$$         new Identifier("widget/button_disabled"),
-    //$$         new Identifier("widget/button"),
-    //$$         new Identifier("widget/button_highlighted"),
+    //$$         identifier("widget/button_disabled"),
+    //$$         identifier("widget/button"),
+    //$$         identifier("widget/button_highlighted"),
     //$$ };
     //#else
-    protected static final Identifier WIDGETS_TEXTURE = new Identifier("textures/gui/widgets.png");
+    protected static final Identifier WIDGETS_TEXTURE = identifier("textures/gui/widgets.png");
     //#endif
 
     //#if MC>=11903

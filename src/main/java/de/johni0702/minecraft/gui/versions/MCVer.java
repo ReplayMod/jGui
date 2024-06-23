@@ -10,6 +10,12 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.crash.CrashReportSection;
 import org.lwjgl.opengl.GL11;
 
+//#if MC>=12100
+//$$ import net.minecraft.client.render.RenderLayer;
+//$$ import net.minecraft.client.render.VertexConsumer;
+//$$ import net.minecraft.client.render.VertexConsumerProvider;
+//#endif
+
 //#if MC>=11900
 //#else
 import net.minecraft.text.LiteralText;
@@ -154,41 +160,19 @@ public class MCVer {
     }
 
     public static void drawRect(int right, int bottom, int left, int top) {
-        //#if MC>=10800
-        Tessellator tessellator = Tessellator.getInstance();
-        //#else
-        //$$ Tessellator tessellator = Tessellator.instance;
-        //#endif
-        //#if MC>=10904
-        BufferBuilder vertexBuffer = tessellator.getBuffer();
-        //#else
-        //#if MC>=10800
-        //$$ WorldRenderer vertexBuffer = tessellator.getWorldRenderer();
-        //#else
-        //$$ Tessellator vertexBuffer = tessellator;
-        //#endif
-        //#endif
-        //#if MC>=10809
-        //#if MC>=11700
-        //$$ vertexBuffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION);
-        //#else
-        vertexBuffer.begin(GL11.GL_QUADS, VertexFormats.POSITION);
-        //#endif
-        vertexBuffer.vertex(right, top, 0).next();
-        vertexBuffer.vertex(left, top, 0).next();
-        vertexBuffer.vertex(left, bottom, 0).next();
-        vertexBuffer.vertex(right, bottom, 0).next();
-        //#else
-        //$$ vertexBuffer.startDrawingQuads();
-        //$$ vertexBuffer.addVertex(right, top, 0);
-        //$$ vertexBuffer.addVertex(left, top, 0);
-        //$$ vertexBuffer.addVertex(left, bottom, 0);
-        //$$ vertexBuffer.addVertex(right, bottom, 0);
-        //#endif
-        tessellator.draw();
+        drawRect(left, top, right - left, bottom - top, ReadableColor.WHITE, ReadableColor.WHITE, ReadableColor.WHITE, ReadableColor.WHITE);
     }
 
     public static void drawRect(int x, int y, int width, int height, ReadableColor tl, ReadableColor tr, ReadableColor bl, ReadableColor br) {
+        //#if MC>=12100
+        //$$ VertexConsumerProvider.Immediate provider = getMinecraft().getBufferBuilders().getEntityVertexConsumers();
+        //$$ VertexConsumer vertexConsumer = provider.getBuffer(RenderLayer.getGui());
+        //$$ vertexConsumer.vertex(x, y + height, 0).color(bl.getRed(), bl.getGreen(), bl.getBlue(), bl.getAlpha());
+        //$$ vertexConsumer.vertex(x + width, y + height, 0).color(br.getRed(), br.getGreen(), br.getBlue(), br.getAlpha());
+        //$$ vertexConsumer.vertex(x + width, y, 0).color(tr.getRed(), tr.getGreen(), tr.getBlue(), tr.getAlpha());
+        //$$ vertexConsumer.vertex(x, y, 0).color(tl.getRed(), tl.getGreen(), tl.getBlue(), tl.getAlpha());
+        //$$ provider.draw();
+        //#else
         //#if MC>=10800
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder vertexBuffer = tessellator.getBuffer();
@@ -218,6 +202,7 @@ public class MCVer {
         //$$ vertexBuffer.addVertex(x, y, 0);
         //#endif
         tessellator.draw();
+        //#endif
     }
 
     public static void bindTexture(Identifier identifier) {
@@ -281,6 +266,22 @@ public class MCVer {
         //$$ return Text.literal(str);
         //#else
         return new LiteralText(str);
+        //#endif
+    }
+
+    public static Identifier identifier(String id) {
+        //#if MC>=12100
+        //$$ return Identifier.of(id);
+        //#else
+        return new Identifier(id);
+        //#endif
+    }
+
+    public static Identifier identifier(String namespace, String path) {
+        //#if MC>=12100
+        //$$ return Identifier.of(namespace, path);
+        //#else
+        return new Identifier(namespace, path);
         //#endif
     }
 
