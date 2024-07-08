@@ -18,6 +18,8 @@ license {
 }
 
 preprocess {
+    strictExtraMappings.set(true)
+
     val mc12100 = createNode("1.21", 12100, "yarn")
     val mc12006 = createNode("1.20.6", 12006, "yarn")
     val mc12004 = createNode("1.20.4", 12004, "yarn")
