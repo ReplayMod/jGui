@@ -39,6 +39,10 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.GL11;
 
+//#if MC>=12102
+//$$ import net.minecraft.client.gl.ShaderProgramKeys;
+//#endif
+
 //#if MC>=12000
 //$$ import net.minecraft.client.render.BufferBuilder;
 //$$ import net.minecraft.client.render.BufferRenderer;
@@ -92,6 +96,9 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     //$$ public MinecraftGuiRenderer(DrawContext context) {
     //$$     this.context = context;
     //$$     this.matrixStack = context.getMatrices();
+        //#if MC>=12102
+        //$$ context.draw();
+        //#endif
     //$$ }
     //#else
     public MinecraftGuiRenderer(MatrixStack matrixStack) {
@@ -184,7 +191,11 @@ public class MinecraftGuiRenderer implements GuiRenderer {
 
     //#if MC>=12000
     //$$ private void drawTexturedRect(int x1, int x2, int y1, int y2, float u1, float u2, float v1, float v2) {
-    //$$     RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        //#if MC>=12102
+        //$$ RenderSystem.setShader(ShaderProgramKeys.POSITION_TEX);
+        //#else
+        //$$ RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        //#endif
     //$$     Matrix4f matrix = matrixStack.peek().getPositionMatrix();
     //$$     Tessellator tessellator = Tessellator.getInstance();
         //#if MC>=12100
@@ -212,6 +223,9 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     public void drawRect(int x, int y, int width, int height, int color) {
         //#if MC>=12000
         //$$ context.fill(x, y, x + width, y + height, color);
+        //#if MC>=12102
+        //$$ context.draw();
+        //#endif
         //#else
         DrawableHelper.fill(
                 //#if MC>=11600
@@ -240,7 +254,9 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         //#endif
         enableBlend();
         blendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-        //#if MC>=11700
+        //#if MC>=12102
+        //$$ setShader(ShaderProgramKeys.POSITION_COLOR);
+        //#elseif MC>=11700
         //$$ setShader(GameRenderer::getPositionColorShader);
         //#else
         disableAlphaTest();
@@ -282,7 +298,11 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         TextRenderer fontRenderer = MCVer.getFontRenderer();
         try {
             //#if MC>=12000
-            //$$ return context.drawText(fontRenderer, text, x, y, color, shadow);
+            //$$ int nx = context.drawText(fontRenderer, text, x, y, color, shadow);
+            //#if MC>=12102
+            //$$ context.draw();
+            //#endif
+            //$$ return nx;
             //#else
             if (shadow) {
                 return fontRenderer.drawWithShadow(
