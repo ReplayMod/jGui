@@ -129,6 +129,10 @@ public class Image implements AutoCloseable {
     }
 
     public NativeImageBackedTexture toTexture() {
+        //#if MC>=12105
+        //$$ return new NativeImageBackedTexture(null, inner);
+        //#else
         return new NativeImageBackedTexture(inner);
+        //#endif
     }
 }

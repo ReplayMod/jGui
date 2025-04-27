@@ -112,9 +112,11 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
             color = 0xffffa0;
         }
 
+        //#if MC<12105
         enableBlend();
         blendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        //#endif
 
         int textureY = 46 + texture * 20;
         int halfWidth = size.getWidth() / 2;

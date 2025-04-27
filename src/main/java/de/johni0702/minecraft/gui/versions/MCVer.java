@@ -1,20 +1,11 @@
 package de.johni0702.minecraft.gui.versions;
 
-import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.crash.CrashReportSection;
 import org.lwjgl.opengl.GL11;
-
-//#if MC>=12100
-//$$ import net.minecraft.client.render.RenderLayer;
-//$$ import net.minecraft.client.render.VertexConsumer;
-//$$ import net.minecraft.client.render.VertexConsumerProvider;
-//#endif
 
 //#if MC>=11900
 //#else
@@ -23,7 +14,6 @@ import net.minecraft.text.LiteralText;
 
 //#if MC>=11700
 //$$ import com.mojang.blaze3d.systems.RenderSystem;
-//$$ import net.minecraft.client.render.VertexFormat;
 //#else
 //#endif
 
@@ -159,54 +149,10 @@ public class MCVer {
         //#endif
     }
 
-    public static void drawRect(int right, int bottom, int left, int top) {
-        drawRect(left, top, right - left, bottom - top, ReadableColor.WHITE, ReadableColor.WHITE, ReadableColor.WHITE, ReadableColor.WHITE);
-    }
-
-    public static void drawRect(int x, int y, int width, int height, ReadableColor tl, ReadableColor tr, ReadableColor bl, ReadableColor br) {
-        //#if MC>=12100
-        //$$ VertexConsumerProvider.Immediate provider = getMinecraft().getBufferBuilders().getEntityVertexConsumers();
-        //$$ VertexConsumer vertexConsumer = provider.getBuffer(RenderLayer.getGui());
-        //$$ vertexConsumer.vertex(x, y + height, 0).color(bl.getRed(), bl.getGreen(), bl.getBlue(), bl.getAlpha());
-        //$$ vertexConsumer.vertex(x + width, y + height, 0).color(br.getRed(), br.getGreen(), br.getBlue(), br.getAlpha());
-        //$$ vertexConsumer.vertex(x + width, y, 0).color(tr.getRed(), tr.getGreen(), tr.getBlue(), tr.getAlpha());
-        //$$ vertexConsumer.vertex(x, y, 0).color(tl.getRed(), tl.getGreen(), tl.getBlue(), tl.getAlpha());
-        //$$ provider.draw();
-        //#else
-        //#if MC>=10800
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder vertexBuffer = tessellator.getBuffer();
-        //#else
-        //$$ Tessellator tessellator = Tessellator.instance;
-        //$$ Tessellator vertexBuffer = tessellator;
-        //#endif
-        //#if MC>=10809
-        //#if MC>=11700
-        //$$ vertexBuffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        //#else
-        vertexBuffer.begin(GL11.GL_QUADS, VertexFormats.POSITION_COLOR);
-        //#endif
-        vertexBuffer.vertex(x, y + height, 0).color(bl.getRed(), bl.getGreen(), bl.getBlue(), bl.getAlpha()).next();
-        vertexBuffer.vertex(x + width, y + height, 0).color(br.getRed(), br.getGreen(), br.getBlue(), br.getAlpha()).next();
-        vertexBuffer.vertex(x + width, y, 0).color(tr.getRed(), tr.getGreen(), tr.getBlue(), tr.getAlpha()).next();
-        vertexBuffer.vertex(x, y, 0).color(tl.getRed(), tl.getGreen(), tl.getBlue(), tl.getAlpha()).next();
-        //#else
-        //$$ vertexBuffer.startDrawingQuads();
-        //$$ vertexBuffer.setColorRGBA(bl.getRed(), bl.getGreen(), bl.getBlue(), bl.getAlpha());
-        //$$ vertexBuffer.addVertex(x, y + height, 0);
-        //$$ vertexBuffer.setColorRGBA(br.getRed(), br.getGreen(), br.getBlue(), br.getAlpha());
-        //$$ vertexBuffer.addVertex(x + width, y + height, 0);
-        //$$ vertexBuffer.setColorRGBA(tr.getRed(), tr.getGreen(), tr.getBlue(), tr.getAlpha());
-        //$$ vertexBuffer.addVertex(x + width, y, 0);
-        //$$ vertexBuffer.setColorRGBA(tl.getRed(), tl.getGreen(), tl.getBlue(), tl.getAlpha());
-        //$$ vertexBuffer.addVertex(x, y, 0);
-        //#endif
-        tessellator.draw();
-        //#endif
-    }
-
     public static void bindTexture(Identifier identifier) {
-        //#if MC>=11700
+        //#if MC>=12105
+        //$$ RenderSystem.setShaderTexture(0, getMinecraft().getTextureManager().getTexture(identifier).getGlTexture());
+        //#elseif MC>=11700
         //$$ RenderSystem.setShaderTexture(0, identifier);
         //#elseif MC>=11500
         getMinecraft().getTextureManager().bindTexture(identifier);

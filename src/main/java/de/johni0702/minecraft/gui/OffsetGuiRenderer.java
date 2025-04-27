@@ -35,6 +35,10 @@ import net.minecraft.util.Identifier;
 import static de.johni0702.minecraft.gui.versions.MCVer.popScissorState;
 import static de.johni0702.minecraft.gui.versions.MCVer.pushScissorState;
 
+//#if MC>=12105
+//$$ import com.mojang.blaze3d.textures.GpuTexture;
+//#endif
+
 //#if MC>=12000
 //$$ import net.minecraft.client.gui.DrawContext;
 //#endif
@@ -152,6 +156,13 @@ public class OffsetGuiRenderer implements GuiRenderer {
     public void bindTexture(int glId) {
         renderer.bindTexture(glId);
     }
+
+    //#if MC>=12105
+    //$$ @Override
+    //$$ public void bindTexture(GpuTexture texture) {
+    //$$     renderer.bindTexture(texture);
+    //$$ }
+    //#endif
 
     @Override
     public void drawTexturedRect(int x, int y, int u, int v, int width, int height) {

@@ -112,9 +112,11 @@ public abstract class AbstractGuiTexturedButton<T extends AbstractGuiTexturedBut
             texture = textureNormal;
         }
 
+        //#if MC<12105
         enableBlend();
         blendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        //#endif
 
         renderer.drawTexturedRect(0, 0, texture.getX(), texture.getY(), size.getWidth(), size.getHeight(),
                 textureSize.getWidth(), textureSize.getHeight(),

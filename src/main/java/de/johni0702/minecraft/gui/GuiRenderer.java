@@ -30,6 +30,10 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
+//#if MC>=12105
+//$$ import com.mojang.blaze3d.textures.GpuTexture;
+//#endif
+
 //#if MC>=12000
 //$$ import net.minecraft.client.gui.DrawContext;
 //#endif
@@ -51,6 +55,10 @@ public interface GuiRenderer {
     void bindTexture(Identifier location);
 
     void bindTexture(int glId);
+
+    //#if MC>=12105
+    //$$ void bindTexture(GpuTexture texture);
+    //#endif
 
     void drawTexturedRect(int x, int y, int u, int v, int width, int height);
 
