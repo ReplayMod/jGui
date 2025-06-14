@@ -46,7 +46,9 @@ public interface GuiRenderer {
     //$$ DrawContext getContext();
     //#endif
 
+    //#if MC<12106
     MatrixStack getMatrixStack();
+    //#endif
 
     ReadableDimension getSize();
 

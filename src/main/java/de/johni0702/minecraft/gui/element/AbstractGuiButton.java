@@ -38,6 +38,10 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
 
+//#if MC>=12106
+//$$ import net.minecraft.client.gl.RenderPipelines;
+//#endif
+
 //#if MC>=12102
 //$$ import net.minecraft.client.render.RenderLayer;
 //#endif
@@ -124,7 +128,10 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
         int halfHeight = size.getHeight() / 2;
         int secondHalfHeight = size.getHeight() - halfHeight;
 
-        //#if MC>=12102
+        //#if MC>=12106
+        //$$ ReadablePoint offset = renderer.getOpenGlOffset();
+        //$$ renderer.getContext().drawGuiTexture(RenderPipelines.GUI_TEXTURED, BUTTON_TEXTURES[texture], offset.getX(), offset.getY(), size.getWidth(), size.getHeight());
+        //#elseif MC>=12102
         //$$ ReadablePoint offset = renderer.getOpenGlOffset();
         //$$ renderer.getContext().drawGuiTexture(RenderLayer::getGuiTextured, BUTTON_TEXTURES[texture], offset.getX(), offset.getY(), size.getWidth(), size.getHeight());
         //$$ renderer.getContext().draw();

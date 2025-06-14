@@ -22,12 +22,14 @@ import net.minecraft.client.util.math.MatrixStack;
 @Mixin(InGameHud.class)
 public class Mixin_RenderHudCallback {
     @Inject(
-            //#if MC>=12005
+            //#if MC>=12005 && MC<12106
             //$$ method = "method_55807",
             //#else
             method = "render",
             //#endif
-            //#if MC>=12002
+            //#if MC>=12106
+            //$$ at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderDebugHud(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/client/render/RenderTickCounter;)V")
+            //#elseif MC>=12002
             //$$ at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/DebugHud;shouldShowDebugHud()Z")
             //#else
             at = @At(value = "FIELD", opcode = Opcodes.GETFIELD, target = "Lnet/minecraft/client/options/GameOptions;debugEnabled:Z")

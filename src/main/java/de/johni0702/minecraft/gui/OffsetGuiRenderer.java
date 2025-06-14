@@ -107,10 +107,12 @@ public class OffsetGuiRenderer implements GuiRenderer {
     //$$ }
     //#endif
 
+    //#if MC<12106
     @Override
     public MatrixStack getMatrixStack() {
         return renderer.getMatrixStack();
     }
+    //#endif
 
     @Override
     public ReadableDimension getSize() {

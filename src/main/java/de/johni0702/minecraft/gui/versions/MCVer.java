@@ -149,6 +149,7 @@ public class MCVer {
         //#endif
     }
 
+    //#if MC<12105
     public static void bindTexture(Identifier identifier) {
         //#if MC>=12105
         //$$ RenderSystem.setShaderTexture(0, getMinecraft().getTextureManager().getTexture(identifier).getGlTexture());
@@ -160,6 +161,7 @@ public class MCVer {
         //$$ getMinecraft().getTextureManager().bindTexture(identifier);
         //#endif
     }
+    //#endif
 
     public static TextRenderer getFontRenderer() {
         return getMinecraft().textRenderer;

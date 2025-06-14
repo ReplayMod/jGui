@@ -36,6 +36,10 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.resource.language.I18n;
 
+//#if MC>=12106
+//$$ import net.minecraft.client.gl.RenderPipelines;
+//#endif
+
 //#if MC>=12102
 //$$ import net.minecraft.client.render.RenderLayer;
 //#endif
@@ -134,7 +138,9 @@ public abstract class AbstractGuiSlider<T extends AbstractGuiSlider<T>> extends 
         //#endif
 
         // Draw background
-        //#if MC>=12102
+        //#if MC>=12106
+        //$$ renderer.getContext().drawGuiTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, offset.getX(), offset.getY(), width, height);
+        //#elseif MC>=12102
         //$$ renderer.getContext().drawGuiTexture(RenderLayer::getGuiTextured, TEXTURE, offset.getX(), offset.getY(), width, height);
         //$$ renderer.getContext().draw();
         //#elseif MC>=12002
@@ -146,7 +152,9 @@ public abstract class AbstractGuiSlider<T extends AbstractGuiSlider<T>> extends 
 
         // Draw slider
         int sliderX = (width - 8) * value / steps;
-        //#if MC>=12102
+        //#if MC>=12106
+        //$$ renderer.getContext().drawGuiTexture(RenderPipelines.GUI_TEXTURED, HANDLE_TEXTURE, offset.getX() + sliderX, offset.getY(), 8, 20);
+        //#elseif MC>=12102
         //$$ renderer.getContext().drawGuiTexture(RenderLayer::getGuiTextured, HANDLE_TEXTURE, offset.getX() + sliderX, offset.getY(), 8, 20);
         //$$ renderer.getContext().draw();
         //#elseif MC>=12002

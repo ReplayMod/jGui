@@ -42,6 +42,11 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.GL11;
 
+//#if MC>=12106
+//$$ import net.minecraft.client.texture.AbstractTexture;
+//$$ import org.joml.Matrix3x2fStack;
+//#endif
+
 //#if MC>=12105
 //$$ import com.mojang.blaze3d.buffers.GpuBuffer;
 //$$ import com.mojang.blaze3d.systems.RenderPass;
@@ -107,7 +112,11 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     private final DrawableHelper gui = new DrawableHelper(){};
     //#endif
 
+    //#if MC>=12106
+    //$$ private final Matrix3x2fStack matrixStack;
+    //#else
     private final MatrixStack matrixStack;
+    //#endif
 
     @NonNull
     //#if MC>=11400
@@ -124,7 +133,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     //$$ public MinecraftGuiRenderer(DrawContext context) {
     //$$     this.context = context;
     //$$     this.matrixStack = context.getMatrices();
-        //#if MC>=12102
+        //#if MC>=12102 && MC<12106
         //$$ context.draw();
         //#endif
     //$$ }
@@ -146,10 +155,12 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     //$$ }
     //#endif
 
+    //#if MC<12106
     @Override
     public MatrixStack getMatrixStack() {
         return matrixStack;
     }
+    //#endif
 
     @Override
     public ReadableDimension getSize() {
@@ -201,7 +212,11 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     public void bindTexture(int glId) {
         boundTexture = null;
         //#if MC>=12105
+        //#if MC>=12106
+        //$$ boundTextureGpu = new GlTexture(GlTexture.USAGE_TEXTURE_BINDING, null, TextureFormat.RGBA8, 0, 0, 0, 1, glId) {
+        //#else
         //$$ boundTextureGpu = new GlTexture(null, TextureFormat.RGBA8, 0, 0, 0, glId) {
+        //#endif
         //$$     {
         //$$         this.needsReinit = false;
         //$$     }
@@ -256,6 +271,24 @@ public class MinecraftGuiRenderer implements GuiRenderer {
 
     //#if MC>=12000
     //$$ private void drawTexturedRect(int x1, int x2, int y1, int y2, float u1, float u2, float v1, float v2) {
+        //#if MC>=12106
+        //$$ Identifier identifier;
+        //$$ if (boundTexture != null) {
+        //$$     identifier = boundTexture;
+        //$$ } else {
+        //$$     identifier = Identifier.of("jgui", "__tmp_texture__");
+        //$$     mc.getTextureManager().registerTexture(identifier, new AbstractTexture() {
+        //$$         { glTextureView = RenderSystem.getDevice().createTextureView(boundTextureGpu); }
+        //$$         @Override public void close() {} // ignore later `destroyTexture` call
+        //$$     });
+        //$$ }
+        //$$
+        //$$ context.drawTexturedQuad(identifier, x1, y1, x2, y2, u1, u2, v1, v2);
+        //$$
+        //$$ if (boundTexture == null) {
+        //$$     mc.getTextureManager().destroyTexture(identifier);
+        //$$ }
+        //#else
         //#if MC<12105
         //#if MC>=12102
         //$$ RenderSystem.setShader(ShaderProgramKeys.POSITION_TEX);
@@ -308,6 +341,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         //$$ bufferBuilder.vertex(matrix, x2, y1, 0).texture(u2, v1).next();
         //$$ BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
         //#endif
+        //#endif
     //$$ }
     //#endif
 
@@ -315,7 +349,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     public void drawRect(int x, int y, int width, int height, int color) {
         //#if MC>=12000
         //$$ context.fill(x, y, x + width, y + height, color);
-        //#if MC>=12102
+        //#if MC>=12102 && MC<12106
         //$$ context.draw();
         //#endif
         //#else
@@ -343,6 +377,10 @@ public class MinecraftGuiRenderer implements GuiRenderer {
 
     @Override
     public void drawRect(int x, int y, int width, int height, ReadableColor tl, ReadableColor tr, ReadableColor bl, ReadableColor br) {
+    //#if MC>=12106
+    //$$     context.fillGradient(x, y, x + width, y + height, color(tl), color(bl));
+    //$$ }
+    //#else
         drawRect(x, y, width, height, tl, tr, bl, br, false);
     }
 
@@ -411,6 +449,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         enableTexture();
         //#endif
     }
+    //#endif
 
     @Override
     public int drawString(int x, int y, int color, String text) {
@@ -436,7 +475,10 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     public int drawString(int x, int y, int color, String text, boolean shadow) {
         TextRenderer fontRenderer = MCVer.getFontRenderer();
         try {
-            //#if MC>=12000
+            //#if MC>=12106
+            //$$ context.drawText(fontRenderer, text, x, y, color | 0xff000000, shadow);
+            //$$ return x + fontRenderer.getWidth(text);
+            //#elseif MC>=12000
             //$$ int nx = context.drawText(fontRenderer, text, x, y, color, shadow);
             //#if MC>=12102
             //$$ context.draw();
@@ -491,7 +533,8 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     }
 
     private void color(float r, float g, float b) {
-        //#if MC>=11700
+        //#if MC>=12106
+        //#elseif MC>=11700
         //$$ RenderSystem.setShaderColor(r, g, b, 1);
         //#else
         //#if MC>=10800
@@ -510,6 +553,9 @@ public class MinecraftGuiRenderer implements GuiRenderer {
     public void invertColors(int right, int bottom, int left, int top) {
         if (left >= right || top >= bottom) return;
 
+        //#if MC>=12106
+        //$$ context.fill(RenderPipelines.GUI_TEXT_HIGHLIGHT, left, top, right, bottom, 0xff0000ff);
+        //#else
         color(0, 0, 1);
         //#if MC<11904
         disableTexture();
@@ -532,5 +578,6 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         enableTexture();
         //#endif
         color(1, 1, 1);
+        //#endif
     }
 }
