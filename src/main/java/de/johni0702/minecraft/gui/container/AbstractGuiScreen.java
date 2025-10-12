@@ -331,8 +331,8 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
 
         @Override
         //#if MC>=11400
-        public boolean mouseClicked(double mouseXD, double mouseYD, int mouseButton) {
-            int mouseX = (int) Math.round(mouseXD), mouseY = (int) Math.round(mouseYD);
+        public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+            Click click = new Click(mouseX, mouseY, mouseButton);
             return
         //#else
         //$$ protected void mouseClicked(int mouseX, int mouseY, int mouseButton)
@@ -340,31 +340,33 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                 //$$ throws IOException
                 //#endif
         //$$ {
+        //$$     Click click = new Click(mouseX, mouseY, mouseButton);
         //#endif
-            invokeHandlers(Clickable.class, e -> e.mouseClick(new Point(mouseX, mouseY), mouseButton));
+            invokeHandlers(Clickable.class, e -> e.mouseClick(click));
         }
 
         @Override
         //#if MC>=11400
-        public boolean mouseReleased(double mouseXD, double mouseYD, int mouseButton) {
-            int mouseX = (int) Math.round(mouseXD), mouseY = (int) Math.round(mouseYD);
+        public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
+            Click click = new Click(mouseX, mouseY, mouseButton);
             return
         //#else
         //$$ protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
+        //$$     Click click = new Click(mouseX, mouseY, mouseButton);
         //#endif
-            invokeHandlers(Draggable.class, e -> e.mouseRelease(new Point(mouseX, mouseY), mouseButton));
+            invokeHandlers(Draggable.class, e -> e.mouseRelease(click));
         }
 
         @Override
         //#if MC>=11400
-        public boolean mouseDragged(double mouseXD, double mouseYD, int mouseButton, double deltaX, double deltaY) {
-            int mouseX = (int) Math.round(mouseXD), mouseY = (int) Math.round(mouseYD);
-            long timeSinceLastClick = 0;
+        public boolean mouseDragged(double mouseX, double mouseY, int mouseButton, double deltaX, double deltaY) {
+            Click click = new Click(mouseX, mouseY, mouseButton);
             return
         //#else
         //$$ protected void mouseClickMove(int mouseX, int mouseY, int mouseButton, long timeSinceLastClick) {
+        //$$     Click click = new Click(mouseX, mouseY, mouseButton);
         //#endif
-            invokeHandlers(Draggable.class, e -> e.mouseDrag(new Point(mouseX, mouseY), mouseButton, timeSinceLastClick));
+            invokeHandlers(Draggable.class, e -> e.mouseDrag(click));
         }
 
         @Override

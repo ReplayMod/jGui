@@ -26,6 +26,7 @@ package de.johni0702.minecraft.gui.container;
 
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
+import de.johni0702.minecraft.gui.function.Click;
 import de.johni0702.minecraft.gui.function.Draggable;
 import de.johni0702.minecraft.gui.layout.CustomLayout;
 import de.johni0702.minecraft.gui.layout.VerticalLayout;
@@ -119,8 +120,8 @@ public abstract class AbstractGuiVerticalList<T extends AbstractGuiVerticalList<
     }
 
     @Override
-    public boolean mouseClick(ReadablePoint position, int button) {
-        position = convert(position);
+    public boolean mouseClick(Click click) {
+        ReadablePoint position = convert(click);
         if (isOnThis(position)) {
             if (isOnSliderBar(position)) {
                 draggingSlider = true;
@@ -133,8 +134,8 @@ public abstract class AbstractGuiVerticalList<T extends AbstractGuiVerticalList<
     }
 
     @Override
-    public boolean mouseDrag(ReadablePoint position, int button, long timeSinceLastCall) {
-        position = convert(position);
+    public boolean mouseDrag(Click click) {
+        ReadablePoint position = convert(click);
         if (lastMousePos != null) {
             int dPixel = lastMousePos.getY() - position.getY();
             if (draggingSlider) {
@@ -151,7 +152,7 @@ public abstract class AbstractGuiVerticalList<T extends AbstractGuiVerticalList<
     }
 
     @Override
-    public boolean mouseRelease(ReadablePoint position, int button) {
+    public boolean mouseRelease(Click click) {
         if (lastMousePos != null) {
             lastMousePos = null;
             draggingSlider = false;

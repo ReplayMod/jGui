@@ -29,6 +29,7 @@ import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.element.AbstractGuiElement;
 import de.johni0702.minecraft.gui.element.GuiTooltip;
+import de.johni0702.minecraft.gui.function.Click;
 import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.utils.Colors;
 import de.johni0702.minecraft.gui.utils.Utils;
@@ -274,8 +275,8 @@ public abstract class AbstractGuiTimeline<T extends AbstractGuiTimeline<T>> exte
     }
 
     @Override
-    public boolean mouseClick(ReadablePoint position, int button) {
-        int time = getTimeAt(position.getX(), position.getY());
+    public boolean mouseClick(Click click) {
+        int time = getTimeAt(click.x, click.y);
         if (time != -1) {
             onClick(time);
             return true;

@@ -31,6 +31,7 @@ import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.container.GuiPanel;
 import de.johni0702.minecraft.gui.element.GuiElement;
 import de.johni0702.minecraft.gui.element.GuiLabel;
+import de.johni0702.minecraft.gui.function.Click;
 import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.function.Closeable;
 import de.johni0702.minecraft.gui.function.KeyHandler;
@@ -44,8 +45,6 @@ import de.johni0702.minecraft.gui.utils.Consumer;
 import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
-import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
-import net.minecraft.client.gui.screen.Screen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -248,12 +247,12 @@ public abstract class AbstractGuiResourceLoadingList
         }
 
         @Override
-        public boolean mouseClick(ReadablePoint position, int button) {
-            Point point = new Point(position);
+        public boolean mouseClick(Click click) {
+            Point point = new Point(click);
             getContainer().convertFor(this, point);
             if (point.getX() > 0 && point.getX() < getLastSize().getWidth()
                     && point.getY() > 0 && point.getY() < getLastSize().getHeight()) {
-                if (Screen.hasControlDown()) {
+                if (click.hasCtrl()) {
                     if (selected.contains(this)) {
                         selected.remove(this);
                     } else {

@@ -27,6 +27,7 @@ package de.johni0702.minecraft.gui.container;
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.element.IGuiClickable;
+import de.johni0702.minecraft.gui.function.Click;
 import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
@@ -44,8 +45,8 @@ public abstract class AbstractGuiClickableContainer<T extends AbstractGuiClickab
     }
 
     @Override
-    public boolean mouseClick(ReadablePoint position, int button) {
-        Point pos = new Point(position);
+    public boolean mouseClick(Click click) {
+        Point pos = new Point(click);
         if (getContainer() != null) {
             getContainer().convertFor(this, pos);
         }

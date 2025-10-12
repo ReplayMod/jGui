@@ -2,6 +2,7 @@ package de.johni0702.minecraft.gui.versions.mixin;
 
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
+import de.johni0702.minecraft.gui.function.Click;
 import de.johni0702.minecraft.gui.versions.callbacks.MouseCallback;
 import net.minecraft.client.Mouse;
 import net.minecraft.client.gui.screen.Screen;
@@ -27,7 +28,7 @@ public abstract class MixinMouseListener {
             @Local(ordinal = 0) double x,
             @Local(ordinal = 1) double y
     ) {
-        if (MouseCallback.EVENT.invoker().mouseDown(x, y, button)) {
+        if (MouseCallback.EVENT.invoker().mouseDown(new Click(x, y, button))) {
             ci.cancel();
         }
     }
@@ -43,7 +44,7 @@ public abstract class MixinMouseListener {
             @Local(ordinal = 0) double x,
             @Local(ordinal = 1) double y
     ) {
-        if (MouseCallback.EVENT.invoker().mouseUp(x, y, button)) {
+        if (MouseCallback.EVENT.invoker().mouseUp(new Click(x, y, button))) {
             ci.cancel();
         }
     }
@@ -60,7 +61,7 @@ public abstract class MixinMouseListener {
             @Local(ordinal = 4) double dx,
             @Local(ordinal = 5) double dy
     ) {
-        if (MouseCallback.EVENT.invoker().mouseDrag(x, y, getActiveButton(), dx, dy)) {
+        if (MouseCallback.EVENT.invoker().mouseDrag(new Click(x, y, getActiveButton()), dx, dy)) {
             ci.cancel();
         }
     }

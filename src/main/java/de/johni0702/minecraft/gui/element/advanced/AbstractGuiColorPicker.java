@@ -31,6 +31,7 @@ import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.element.AbstractComposedGuiElement;
 import de.johni0702.minecraft.gui.element.AbstractGuiElement;
 import de.johni0702.minecraft.gui.element.GuiElement;
+import de.johni0702.minecraft.gui.function.Click;
 import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.function.Draggable;
 import de.johni0702.minecraft.gui.utils.Consumer;
@@ -154,8 +155,8 @@ public abstract class AbstractGuiColorPicker<T extends AbstractGuiColorPicker<T>
     }
 
     @Override
-    public boolean mouseClick(ReadablePoint position, int button) {
-        Point pos = new Point(position);
+    public boolean mouseClick(Click click) {
+        Point pos = new Point(click);
         if (getContainer() != null) {
             getContainer().convertFor(this, pos);
         }
@@ -213,9 +214,9 @@ public abstract class AbstractGuiColorPicker<T extends AbstractGuiColorPicker<T>
         }
 
         @Override
-        public boolean mouseClick(ReadablePoint position, int button) {
+        public boolean mouseClick(Click click) {
             if (isEnabled()) {
-                Point pos = new Point(position);
+                Point pos = new Point(click);
                 AbstractGuiColorPicker parent = AbstractGuiColorPicker.this;
                 if (parent.getContainer() != null) {
                     parent.getContainer().convertFor(parent, pos, 1);
@@ -234,12 +235,12 @@ public abstract class AbstractGuiColorPicker<T extends AbstractGuiColorPicker<T>
         }
 
         @Override
-        public boolean mouseDrag(ReadablePoint position, int button, long timeSinceLastCall) {
-            return dragging && mouseClick(position, button);
+        public boolean mouseDrag(Click click) {
+            return dragging && mouseClick(click);
         }
 
         @Override
-        public boolean mouseRelease(ReadablePoint position, int button) {
+        public boolean mouseRelease(Click click) {
             if (dragging) {
                 dragging = false;
                 return true;

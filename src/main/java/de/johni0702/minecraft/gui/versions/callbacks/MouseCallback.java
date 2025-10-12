@@ -1,15 +1,16 @@
 //#if FABRIC>=1
 package de.johni0702.minecraft.gui.versions.callbacks;
 
+import de.johni0702.minecraft.gui.function.Click;
 import de.johni0702.minecraft.gui.utils.Event;
 
 public interface MouseCallback {
     Event<MouseCallback> EVENT = Event.create((listeners) ->
             new MouseCallback() {
                 @Override
-                public boolean mouseDown(double x, double y, int button) {
+                public boolean mouseDown(Click click) {
                     for (MouseCallback listener : listeners) {
-                        if (listener.mouseDown(x, y, button)) {
+                        if (listener.mouseDown(click)) {
                             return true;
                         }
                     }
@@ -17,9 +18,9 @@ public interface MouseCallback {
                 }
 
                 @Override
-                public boolean mouseDrag(double x, double y, int button, double dx, double dy) {
+                public boolean mouseDrag(Click click, double dx, double dy) {
                     for (MouseCallback listener : listeners) {
-                        if (listener.mouseDrag(x, y, button, dx, dy)) {
+                        if (listener.mouseDrag(click, dx, dy)) {
                             return true;
                         }
                     }
@@ -27,9 +28,9 @@ public interface MouseCallback {
                 }
 
                 @Override
-                public boolean mouseUp(double x, double y, int button) {
+                public boolean mouseUp(Click click) {
                     for (MouseCallback listener : listeners) {
-                        if (listener.mouseUp(x, y, button)) {
+                        if (listener.mouseUp(click)) {
                             return true;
                         }
                     }
@@ -48,9 +49,9 @@ public interface MouseCallback {
             }
     );
 
-    boolean mouseDown(double x, double y, int button);
-    boolean mouseDrag(double x, double y, int button, double dx, double dy);
-    boolean mouseUp(double x, double y, int button);
+    boolean mouseDown(Click click);
+    boolean mouseDrag(Click click, double dx, double dy);
+    boolean mouseUp(Click click);
     boolean mouseScroll(double x, double y, double horizontal, double vertical);
 }
 //#endif

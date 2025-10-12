@@ -2,6 +2,7 @@ package de.johni0702.minecraft.gui.container;
 
 import de.johni0702.minecraft.gui.function.CharHandler;
 import de.johni0702.minecraft.gui.function.CharInput;
+import de.johni0702.minecraft.gui.function.Click;
 import de.johni0702.minecraft.gui.function.Draggable;
 import de.johni0702.minecraft.gui.function.KeyHandler;
 import de.johni0702.minecraft.gui.function.KeyInput;
@@ -113,7 +114,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, KeyHandler
     }
 
     @Override
-    public boolean mouseClick(ReadablePoint position, int button) {
+    public boolean mouseClick(Click click) {
         //#if MC>=11400
         //#else
         //$$ eventHandler.mouseHandled = false;
@@ -122,7 +123,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, KeyHandler
     }
 
     @Override
-    public boolean mouseDrag(ReadablePoint position, int button, long timeSinceLastCall) {
+    public boolean mouseDrag(Click click) {
         //#if MC>=11400
         //#else
         //$$ eventHandler.mouseHandled = false;
@@ -131,7 +132,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, KeyHandler
     }
 
     @Override
-    public boolean mouseRelease(ReadablePoint position, int button) {
+    public boolean mouseRelease(Click click) {
         //#if MC>=11400
         //#else
         //$$ eventHandler.mouseHandled = false;
@@ -240,18 +241,18 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, KeyHandler
         { on(MouseCallback.EVENT, this); }
 
         @Override
-        public boolean mouseDown(double x, double y, int button) {
-            return getSuperMcGui().mouseClicked(x, y, button);
+        public boolean mouseDown(Click click) {
+            return getSuperMcGui().mouseClicked(click.x, click.y, click.button);
         }
 
         @Override
-        public boolean mouseDrag(double x, double y, int button, double dx, double dy) {
-            return getSuperMcGui().mouseDragged(x, y, button, dx, dy);
+        public boolean mouseDrag(Click click, double dx, double dy) {
+            return getSuperMcGui().mouseDragged(click.x, click.y, click.button, dx, dy);
         }
 
         @Override
-        public boolean mouseUp(double x, double y, int button) {
-            return getSuperMcGui().mouseReleased(x, y, button);
+        public boolean mouseUp(Click click) {
+            return getSuperMcGui().mouseReleased(click.x, click.y, click.button);
         }
 
         @Override

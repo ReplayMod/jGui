@@ -30,6 +30,7 @@ import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.element.AbstractGuiElement;
 import de.johni0702.minecraft.gui.function.CharHandler;
 import de.johni0702.minecraft.gui.function.CharInput;
+import de.johni0702.minecraft.gui.function.Click;
 import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.function.Focusable;
 import de.johni0702.minecraft.gui.function.KeyHandler;
@@ -368,13 +369,14 @@ public abstract class AbstractGuiTextArea<T extends AbstractGuiTextArea<T>>
     }
 
     @Override
-    public boolean mouseClick(ReadablePoint position, int button) {
+    public boolean mouseClick(Click click) {
+        ReadablePoint position = click;
         if (getContainer() != null) {
             getContainer().convertFor(this, (Point) (position = new Point(position)));
         }
         boolean hovering = isMouseHovering(position);
 
-        if (hovering && isFocused() && button == 0) {
+        if (hovering && isFocused() && click.button == 0) {
             updateCurrentOffset();
             int mouseX = position.getX() - BORDER;
             int mouseY = position.getY() - BORDER;

@@ -1,6 +1,7 @@
 //#if FABRIC>=1
 package de.johni0702.minecraft.gui.versions.mixin;
 
+import de.johni0702.minecraft.gui.function.Click;
 import de.johni0702.minecraft.gui.versions.callbacks.MouseCallback;
 import net.minecraft.client.Mouse;
 import net.minecraft.client.gui.screen.Screen;
@@ -27,7 +28,7 @@ public abstract class MixinMouseListener {
     //#else
     private void mouseDown(boolean[] result, double x, double y, int button, CallbackInfo ci) {
     //#endif
-        if (MouseCallback.EVENT.invoker().mouseDown(x, y, button)) {
+        if (MouseCallback.EVENT.invoker().mouseDown(new Click(x, y, button))) {
             result[0] = true;
             ci.cancel();
         }
@@ -39,7 +40,7 @@ public abstract class MixinMouseListener {
     //#else
     private void mouseUp(boolean[] result, double x, double y, int button, CallbackInfo ci) {
     //#endif
-        if (MouseCallback.EVENT.invoker().mouseUp(x, y, button)) {
+        if (MouseCallback.EVENT.invoker().mouseUp(new Click(x, y, button))) {
             result[0] = true;
             ci.cancel();
         }
@@ -55,7 +56,7 @@ public abstract class MixinMouseListener {
     //#else
     private void mouseDrag(Element element, double x, double y, double dx, double dy, CallbackInfo ci) {
     //#endif
-        if (MouseCallback.EVENT.invoker().mouseDrag(x, y, getActiveButton(), dx, dy)) {
+        if (MouseCallback.EVENT.invoker().mouseDrag(new Click(x, y, getActiveButton()), dx, dy)) {
             ci.cancel();
         }
     }

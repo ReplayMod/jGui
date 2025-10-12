@@ -33,6 +33,7 @@ import de.johni0702.minecraft.gui.element.AbstractComposedGuiElement;
 import de.johni0702.minecraft.gui.element.AbstractGuiClickable;
 import de.johni0702.minecraft.gui.element.GuiElement;
 import de.johni0702.minecraft.gui.element.IGuiClickable;
+import de.johni0702.minecraft.gui.function.Click;
 import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.layout.VerticalLayout;
 import de.johni0702.minecraft.gui.utils.Consumer;
@@ -211,8 +212,8 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
     }
 
     @Override
-    public boolean mouseClick(ReadablePoint position, int button) {
-        Point pos = new Point(position);
+    public boolean mouseClick(Click click) {
+        Point pos = new Point(click);
         if (getContainer() != null) {
             getContainer().convertFor(this, pos);
         }
@@ -283,8 +284,8 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
         }
 
         @Override
-        public boolean mouseClick(ReadablePoint position, int button) {
-            boolean result = super.mouseClick(position, button);
+        public boolean mouseClick(Click click) {
+            boolean result = super.mouseClick(click);
             setOpened(false);
             return result;
         }

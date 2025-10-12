@@ -27,6 +27,7 @@ package de.johni0702.minecraft.gui.element;
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
+import de.johni0702.minecraft.gui.function.Click;
 import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.function.Draggable;
 import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
@@ -78,8 +79,8 @@ public abstract class AbstractGuiSlider<T extends AbstractGuiSlider<T>> extends 
     }
 
     @Override
-    public boolean mouseClick(ReadablePoint position, int button) {
-        Point pos = new Point(position);
+    public boolean mouseClick(Click click) {
+        Point pos = new Point(click);
         if (getContainer() != null) {
             getContainer().convertFor(this, pos);
         }
@@ -93,9 +94,9 @@ public abstract class AbstractGuiSlider<T extends AbstractGuiSlider<T>> extends 
     }
 
     @Override
-    public boolean mouseDrag(ReadablePoint position, int button, long timeSinceLastCall) {
+    public boolean mouseDrag(Click click) {
         if (dragging) {
-            Point pos = new Point(position);
+            Point pos = new Point(click);
             if (getContainer() != null) {
                 getContainer().convertFor(this, pos);
             }
@@ -105,10 +106,10 @@ public abstract class AbstractGuiSlider<T extends AbstractGuiSlider<T>> extends 
     }
 
     @Override
-    public boolean mouseRelease(ReadablePoint position, int button) {
+    public boolean mouseRelease(Click click) {
         if (dragging) {
             dragging = false;
-            Point pos = new Point(position);
+            Point pos = new Point(click);
             if (getContainer() != null) {
                 getContainer().convertFor(this, pos);
             }

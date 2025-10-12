@@ -1,7 +1,7 @@
 /*
  * This file is part of jGui API, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2016 johni0702 <https://github.com/johni0702>
+ * Copyright (c) 2025 johni0702 <https://github.com/johni0702>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,7 +24,43 @@
  */
 package de.johni0702.minecraft.gui.function;
 
-public interface Draggable extends Clickable {
-    boolean mouseDrag(Click click);
-    boolean mouseRelease(Click click);
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
+import de.johni0702.minecraft.gui.utils.lwjgl.WritablePoint;
+
+public class Click implements InputWithModifiers, ReadablePoint {
+    public int x;
+    public int y;
+    public int button;
+    public int modifiers;
+
+    public Click(int x, int y, int button, int modifiers) {
+        this.x = x;
+        this.y = y;
+        this.button = button;
+        this.modifiers = modifiers;
+    }
+
+    public Click(double x, double y, int button) {
+        this((int) Math.round(x), (int) Math.round(y), button, InputWithModifiers.currentModifiers());
+    }
+
+    @Override
+    public int modifiers() {
+        return modifiers;
+    }
+
+    @Override
+    public int getX() {
+        return x;
+    }
+
+    @Override
+    public int getY() {
+        return y;
+    }
+
+    @Override
+    public void getLocation(WritablePoint writablePoint) {
+        writablePoint.setLocation(x, y);
+    }
 }
