@@ -34,6 +34,7 @@ import de.johni0702.minecraft.gui.element.GuiButton;
 import de.johni0702.minecraft.gui.element.GuiElement;
 import de.johni0702.minecraft.gui.element.GuiTextField;
 import de.johni0702.minecraft.gui.element.advanced.GuiDropdownMenu;
+import de.johni0702.minecraft.gui.function.Click;
 import de.johni0702.minecraft.gui.function.KeyHandler;
 import de.johni0702.minecraft.gui.function.KeyInput;
 import de.johni0702.minecraft.gui.layout.CustomLayout;
@@ -81,7 +82,7 @@ public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> i
         @Override
         public void run() {
             if (acceptButton.isEnabled()) {
-                acceptButton.onClick();
+                acceptButton.onClick(new Click(-1, -1, 0, 0));
             }
         }
     }).onTextChanged(new Consumer<String>() {
@@ -328,7 +329,7 @@ public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> i
     @Override
     public boolean handleKey(KeyInput keyInput) {
         if (keyInput.isEscape()) {
-            cancelButton.onClick();
+            cancelButton.onClick(new Click(-1, -1, 0, keyInput.modifiers));
             return true;
         }
         return false;

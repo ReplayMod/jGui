@@ -29,6 +29,7 @@ import de.johni0702.minecraft.gui.container.GuiPanel;
 import de.johni0702.minecraft.gui.element.GuiButton;
 import de.johni0702.minecraft.gui.element.GuiElement;
 import de.johni0702.minecraft.gui.element.GuiLabel;
+import de.johni0702.minecraft.gui.function.Click;
 import de.johni0702.minecraft.gui.function.KeyHandler;
 import de.johni0702.minecraft.gui.function.KeyInput;
 import de.johni0702.minecraft.gui.layout.VerticalLayout;
@@ -95,7 +96,7 @@ public class GuiInfoPopup extends AbstractGuiPopup<GuiInfoPopup> implements KeyH
     @Override
     public boolean handleKey(KeyInput keyInput) {
         if (keyInput.isEscape()) {
-            closeButton.onClick();
+            closeButton.onClick(new Click(-1, -1, 0, keyInput.modifiers));
             return true;
         }
         return false;

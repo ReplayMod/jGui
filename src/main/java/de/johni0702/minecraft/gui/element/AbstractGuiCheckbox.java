@@ -27,6 +27,7 @@ package de.johni0702.minecraft.gui.element;
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
+import de.johni0702.minecraft.gui.function.Click;
 import de.johni0702.minecraft.gui.utils.lwjgl.Color;
 import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
@@ -88,10 +89,10 @@ public abstract class AbstractGuiCheckbox<T extends AbstractGuiCheckbox<T>>
     }
 
     @Override
-    public void onClick() {
+    public void onClick(Click click) {
         AbstractGuiButton.playClickSound(getMinecraft());
         setChecked(!isChecked());
-        super.onClick();
+        super.onClick(click);
     }
 
     @Override

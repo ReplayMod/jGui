@@ -27,6 +27,7 @@ package de.johni0702.minecraft.gui.element;
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
+import de.johni0702.minecraft.gui.function.Click;
 import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.Point;
@@ -174,9 +175,9 @@ public abstract class AbstractGuiButton<T extends AbstractGuiButton<T>> extends 
     }
 
     @Override
-    public void onClick() {
+    public void onClick(Click click) {
         playClickSound(getMinecraft());
-        super.onClick();
+        super.onClick(click);
     }
 
     public static void playClickSound(MinecraftClient mc) {

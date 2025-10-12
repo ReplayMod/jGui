@@ -28,6 +28,7 @@ import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.container.GuiPanel;
 import de.johni0702.minecraft.gui.element.GuiButton;
 import de.johni0702.minecraft.gui.element.GuiElement;
+import de.johni0702.minecraft.gui.function.Click;
 import de.johni0702.minecraft.gui.function.KeyHandler;
 import de.johni0702.minecraft.gui.function.KeyInput;
 import de.johni0702.minecraft.gui.layout.HorizontalLayout;
@@ -128,7 +129,7 @@ public class GuiYesNoPopup extends AbstractGuiPopup<GuiYesNoPopup> implements Ke
     @Override
     public boolean handleKey(KeyInput keyInput) {
         if (keyInput.isEscape()) {
-            noButton.onClick();
+            noButton.onClick(new Click(-1, -1, 0, keyInput.modifiers));
             return true;
         }
         return false;

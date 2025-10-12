@@ -291,7 +291,7 @@ public abstract class AbstractGuiDropdownMenu<V, T extends AbstractGuiDropdownMe
         }
 
         @Override
-        protected void onClick() {
+        protected void onClick(Click click) {
             setSelected(value);
         }
     }

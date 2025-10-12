@@ -29,12 +29,13 @@ import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
 import de.johni0702.minecraft.gui.function.Click;
 import de.johni0702.minecraft.gui.function.Clickable;
+import de.johni0702.minecraft.gui.utils.Consumer;
 import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 
 public abstract class AbstractGuiClickable<T extends AbstractGuiClickable<T>> extends AbstractGuiElement<T> implements Clickable, IGuiClickable<T> {
-    private Runnable onClick;
+    private Consumer<Click> onClick;
 
     public AbstractGuiClickable() {
     }
@@ -51,7 +52,7 @@ public abstract class AbstractGuiClickable<T extends AbstractGuiClickable<T>> ex
         }
 
         if (isMouseHovering(pos) && isEnabled()) {
-            onClick();
+            onClick(click);
             return true;
         }
         return false;
@@ -67,20 +68,20 @@ public abstract class AbstractGuiClickable<T extends AbstractGuiClickable<T>> ex
         super.draw(renderer, size, renderInfo);
     }
 
-    protected void onClick() {
+    protected void onClick(Click click) {
         if (onClick != null) {
-            onClick.run();
+            onClick.consume(click);
         }
     }
 
     @Override
-    public T onClick(Runnable onClick) {
+    public T onClick(Consumer<Click> onClick) {
         this.onClick = onClick;
         return getThis();
     }
 
     @Override
-    public Runnable getOnClick() {
+    public Consumer<Click> getOnClick() {
         return onClick;
     }
 }

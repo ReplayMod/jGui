@@ -24,7 +24,13 @@
  */
 package de.johni0702.minecraft.gui.element;
 
+import de.johni0702.minecraft.gui.function.Click;
+import de.johni0702.minecraft.gui.utils.Consumer;
+
 public interface IGuiClickable<T extends IGuiClickable<T>> extends GuiElement<T> {
-    T onClick(Runnable onClick);
-    Runnable getOnClick();
+    default T onClick(Runnable onClick) {
+        return onClick(click -> onClick.run());
+    }
+    T onClick(Consumer<Click> onClick);
+    Consumer<Click> getOnClick();
 }
