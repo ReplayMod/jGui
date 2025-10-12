@@ -292,6 +292,10 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
         //#else
         //$$ public void onKeyboardInput(KeyboardInputEvent event) throws IOException {
         //#endif
+        //$$     // Skip key-up events, we currently have no mechanism to properly handle them
+        //$$     if (!org.lwjgl.input.Keyboard.getEventKeyState()) {
+        //$$         return;
+        //$$     }
         //$$     handled = true;
         //$$     getSuperMcGui().handleKeyboardInput();
         //$$     if (handled) {
