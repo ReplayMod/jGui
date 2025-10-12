@@ -27,7 +27,9 @@ public class Mixin_RenderHudCallback {
             //#else
             method = "render",
             //#endif
-            //#if MC>=12106
+            //#if MC>=12109
+            //$$ at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderDemoTimer(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/client/render/RenderTickCounter;)V")
+            //#elseif MC>=12106
             //$$ at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderDebugHud(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/client/render/RenderTickCounter;)V")
             //#elseif MC>=12002
             //$$ at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/DebugHud;shouldShowDebugHud()Z")

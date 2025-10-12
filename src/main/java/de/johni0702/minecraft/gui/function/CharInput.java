@@ -52,6 +52,15 @@ public class CharInput implements InputWithModifiers {
     }
     //#endif
 
+    //#if MC>=12109
+    //$$ public CharInput(net.minecraft.client.input.CharInput mcCharInput) {
+    //$$     this(mcCharInput.codepoint(), mcCharInput.modifiers());
+    //$$ }
+    //$$ public net.minecraft.client.input.CharInput toMC() {
+    //$$     return new net.minecraft.client.input.CharInput(codepoint, modifiers);
+    //$$ }
+    //#endif
+
     //#if MC<11300
     //$$ public CharInput(char character) {
     //$$     this(character, InputWithModifiers.currentModifiers());

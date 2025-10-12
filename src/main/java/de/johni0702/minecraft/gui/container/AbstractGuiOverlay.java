@@ -266,19 +266,37 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
 
         //#if MC>=11400
         @Override
+        //#if MC>=12109
+        //$$ public boolean keyPressed(net.minecraft.client.input.KeyInput mcKeyInput) {
+        //$$     KeyInput keyInput = new KeyInput(mcKeyInput);
+        //#else
         public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
             KeyInput keyInput = new KeyInput(keyCode, scanCode, modifiers);
+        //#endif
             if (!invokeHandlers(KeyHandler.class, e -> e.handleKey(keyInput))) {
+                //#if MC>=12109
+                //$$ return super.keyPressed(mcKeyInput);
+                //#else
                 return super.keyPressed(keyCode, scanCode, modifiers);
+                //#endif
             }
             return true;
         }
 
         @Override
+        //#if MC>=12109
+        //$$ public boolean charTyped(net.minecraft.client.input.CharInput mcCharInput) {
+        //$$     CharInput charInput = new CharInput(mcCharInput);
+        //#else
         public boolean charTyped(char keyChar, int modifiers) {
             CharInput charInput = new CharInput(keyChar, modifiers);
+        //#endif
             if (!invokeHandlers(CharHandler.class, e -> e.handleChar(charInput))) {
+                //#if MC>=12109
+                //$$ return super.charTyped(mcCharInput);
+                //#else
                 return super.charTyped(keyChar, modifiers);
+                //#endif
             }
             return true;
         }
@@ -298,7 +316,11 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         //#endif
 
         @Override
-        //#if MC>=11400
+        //#if MC>=12109
+        //$$ public boolean mouseClicked(net.minecraft.client.gui.Click mcClick, boolean doubled) {
+        //$$     Click click = new Click(mcClick);
+        //$$     return
+        //#elseif MC>=11400
         public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
             Click click = new Click(mouseX, mouseY, mouseButton);
             return
@@ -314,7 +336,11 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         }
 
         @Override
-        //#if MC>=11400
+        //#if MC>=12109
+        //$$ public boolean mouseReleased(net.minecraft.client.gui.Click mcClick) {
+        //$$     Click click = new Click(mcClick);
+        //$$     return
+        //#elseif MC>=11400
         public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
             Click click = new Click(mouseX, mouseY, mouseButton);
             return
@@ -326,7 +352,11 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         }
 
         @Override
-        //#if MC>=11400
+        //#if MC>=12109
+        //$$ public boolean mouseDragged(net.minecraft.client.gui.Click mcClick, double deltaX, double deltaY) {
+        //$$     Click click = new Click(mcClick);
+        //$$     return
+        //#elseif MC>=11400
         public boolean mouseDragged(double mouseX, double mouseY, int mouseButton, double deltaX, double deltaY) {
             Click click = new Click(mouseX, mouseY, mouseButton);
             return

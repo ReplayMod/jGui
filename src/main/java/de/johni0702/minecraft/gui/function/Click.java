@@ -40,9 +40,24 @@ public class Click implements InputWithModifiers, ReadablePoint {
         this.modifiers = modifiers;
     }
 
+    //#if MC>=12109
+    //$$ public Click(double x, double y, int button, int modifiers) {
+    //$$     this((int) Math.round(x), (int) Math.round(y), button, modifiers);
+    //$$ }
+    //#else
     public Click(double x, double y, int button) {
         this((int) Math.round(x), (int) Math.round(y), button, InputWithModifiers.currentModifiers());
     }
+    //#endif
+
+    //#if MC>=12109
+    //$$ public Click(net.minecraft.client.gui.Click click) {
+    //$$     this(click.x(), click.y(), click.button(), click.modifiers());
+    //$$ }
+    //$$ public net.minecraft.client.gui.Click toMC() {
+    //$$     return new net.minecraft.client.gui.Click(x, y, new net.minecraft.client.input.MouseInput(button, modifiers));
+    //$$ }
+    //#endif
 
     @Override
     public int modifiers() {

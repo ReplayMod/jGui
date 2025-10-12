@@ -242,17 +242,29 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, KeyHandler
 
         @Override
         public boolean mouseDown(Click click) {
+            //#if MC>=12109
+            //$$ return getSuperMcGui().mouseClicked(click.toMC(), false);
+            //#else
             return getSuperMcGui().mouseClicked(click.x, click.y, click.button);
+            //#endif
         }
 
         @Override
         public boolean mouseDrag(Click click, double dx, double dy) {
+            //#if MC>=12109
+            //$$ return getSuperMcGui().mouseDragged(click.toMC(), dx, dy);
+            //#else
             return getSuperMcGui().mouseDragged(click.x, click.y, click.button, dx, dy);
+            //#endif
         }
 
         @Override
         public boolean mouseUp(Click click) {
+            //#if MC>=12109
+            //$$ return getSuperMcGui().mouseReleased(click.toMC());
+            //#else
             return getSuperMcGui().mouseReleased(click.x, click.y, click.button);
+            //#endif
         }
 
         @Override
@@ -268,17 +280,29 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, KeyHandler
 
         @Override
         public boolean keyPressed(KeyInput keyInput) {
+            //#if MC>=12109
+            //$$ return getSuperMcGui().keyPressed(keyInput.toMC());
+            //#else
             return getSuperMcGui().keyPressed(keyInput.key, keyInput.scancode, keyInput.modifiers);
+            //#endif
         }
 
         @Override
         public boolean keyReleased(KeyInput keyInput) {
+            //#if MC>=12109
+            //$$ return getSuperMcGui().keyReleased(keyInput.toMC());
+            //#else
             return getSuperMcGui().keyReleased(keyInput.key, keyInput.scancode, keyInput.modifiers);
+            //#endif
         }
 
         @Override
         public boolean charTyped(CharInput charInput) {
+            //#if MC>=12109
+            //$$ return getSuperMcGui().charTyped(charInput.toMC());
+            //#else
             return getSuperMcGui().charTyped(charInput.character, charInput.modifiers);
+            //#endif
         }
         //#elseif MC<=11202
         //$$ private boolean mouseHandled;

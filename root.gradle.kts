@@ -20,6 +20,7 @@ license {
 preprocess {
     strictExtraMappings.set(true)
 
+    val mc12110 = createNode("1.21.10", 12110, "yarn")
     val mc12107 = createNode("1.21.7", 12107, "yarn")
     val mc12105 = createNode("1.21.5", 12105, "yarn")
     val mc12104 = createNode("1.21.4", 12104, "yarn")
@@ -48,6 +49,7 @@ preprocess {
     val mc10800 = createNode("1.8", 10800, "srg")
     val mc10710 = createNode("1.7.10", 10710, "srg")
 
+    mc12110.link(mc12107)
     mc12107.link(mc12105)
     mc12105.link(mc12104, file("versions/mapping-fabric-1.21.5-1.21.4.txt"))
     mc12104.link(mc12102)
