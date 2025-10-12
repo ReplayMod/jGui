@@ -33,9 +33,10 @@ import de.johni0702.minecraft.gui.element.GuiElement;
 import de.johni0702.minecraft.gui.element.GuiLabel;
 import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.function.Closeable;
+import de.johni0702.minecraft.gui.function.KeyHandler;
+import de.johni0702.minecraft.gui.function.KeyInput;
 import de.johni0702.minecraft.gui.function.Loadable;
 import de.johni0702.minecraft.gui.function.Tickable;
-import de.johni0702.minecraft.gui.function.Typeable;
 import de.johni0702.minecraft.gui.layout.CustomLayout;
 import de.johni0702.minecraft.gui.layout.VerticalLayout;
 import de.johni0702.minecraft.gui.utils.Colors;
@@ -44,7 +45,6 @@ import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.Point;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
-import de.johni0702.minecraft.gui.versions.MCVer;
 import net.minecraft.client.gui.screen.Screen;
 
 import java.util.ArrayList;
@@ -63,7 +63,7 @@ import de.johni0702.minecraft.gui.versions.MCVer.Keyboard;
 
 public abstract class AbstractGuiResourceLoadingList
         <T extends AbstractGuiResourceLoadingList<T, U>, U extends GuiElement<U> & Comparable<U>>
-        extends AbstractGuiVerticalList<T> implements Tickable, Loadable, Closeable, Typeable {
+        extends AbstractGuiVerticalList<T> implements Tickable, Loadable, Closeable, KeyHandler {
     private static final String[] LOADING_TEXT = {"Ooo", "oOo", "ooO", "oOo"};
     private final GuiLabel loadingElement = new GuiLabel();
     private final GuiPanel resourcesPanel = new GuiPanel(getListPanel()).setLayout(new VerticalLayout());
@@ -188,8 +188,8 @@ public abstract class AbstractGuiResourceLoadingList
     }
 
     @Override
-    public boolean typeKey(ReadablePoint mousePosition, int keyCode, char keyChar, boolean ctrlDown, boolean shiftDown) {
-        if (Screen.hasControlDown() && keyCode == Keyboard.KEY_A) {
+    public boolean handleKey(KeyInput keyInput) {
+        if (keyInput.hasCtrl() && keyInput.key == Keyboard.KEY_A) {
             List<Element> all = new ArrayList<>();
             for (GuiElement<?> child : getListPanel().getChildren()) {
                 if (child instanceof AbstractGuiResourceLoadingList.Element) {

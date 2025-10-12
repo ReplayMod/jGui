@@ -1,7 +1,7 @@
 /*
  * This file is part of jGui API, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2016 johni0702 <https://github.com/johni0702>
+ * Copyright (c) 2025 johni0702 <https://github.com/johni0702>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,8 +24,6 @@
  */
 package de.johni0702.minecraft.gui.function;
 
-import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
-
-public interface Typeable {
-    boolean typeKey(ReadablePoint mousePosition, int keyCode, char keyChar, boolean ctrlDown, boolean shiftDown);
+public interface KeyHandler {
+    boolean handleKey(KeyInput keyInput);
 }

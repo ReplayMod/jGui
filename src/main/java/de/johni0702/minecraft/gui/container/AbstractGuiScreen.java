@@ -290,10 +290,8 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         //#if MC>=11400
         @Override
         public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-            Point mouse = MouseUtils.getMousePos();
-            boolean ctrlDown = hasControlDown();
-            boolean shiftDown = hasShiftDown();
-            if (!invokeHandlers(Typeable.class, e -> e.typeKey(mouse, keyCode, '\0', ctrlDown, shiftDown))) {
+            KeyInput keyInput = new KeyInput(keyCode, scanCode, modifiers);
+            if (!invokeHandlers(KeyHandler.class, e -> e.handleKey(keyInput))) {
                 if (suppressVanillaKeys) {
                     return false;
                 }
@@ -303,15 +301,13 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
         }
 
         @Override
-        public boolean charTyped(char keyChar, int scanCode) {
-            Point mouse = MouseUtils.getMousePos();
-            boolean ctrlDown = hasControlDown();
-            boolean shiftDown = hasShiftDown();
-            if (!invokeHandlers(Typeable.class, e -> e.typeKey(mouse, 0, keyChar, ctrlDown, shiftDown))) {
+        public boolean charTyped(char keyChar, int modifiers) {
+            CharInput charInput = new CharInput(keyChar, modifiers);
+            if (!invokeHandlers(CharHandler.class, e -> e.handleChar(charInput))) {
                 if (suppressVanillaKeys) {
                     return false;
                 }
-                return super.charTyped(keyChar, scanCode);
+                return super.charTyped(keyChar, modifiers);
             }
             return true;
         }
@@ -322,10 +318,9 @@ public abstract class AbstractGuiScreen<T extends AbstractGuiScreen<T>> extends 
                 //$$ throws IOException
                 //#endif
         //$$ {
-        //$$     Point mouse = MouseUtils.getMousePos();
-        //$$     boolean ctrlDown = isCtrlKeyDown();
-        //$$     boolean shiftDown = isShiftKeyDown();
-        //$$     if (!invokeHandlers(Typeable.class, e -> e.typeKey(mouse, keyCode, typedChar, ctrlDown, shiftDown))) {
+        //$$     boolean keyHandled = keyCode != 0 && invokeHandlers(KeyHandler.class, e -> e.handleKey(new KeyInput(keyCode)));
+        //$$     boolean charHandled = typedChar != '\0' && invokeHandlers(CharHandler.class, e -> e.handleChar(new CharInput(typedChar)));
+        //$$     if (!keyHandled && !charHandled) {
         //$$         if (suppressVanillaKeys) {
         //$$             return;
         //$$         }

@@ -34,7 +34,8 @@ import de.johni0702.minecraft.gui.element.GuiButton;
 import de.johni0702.minecraft.gui.element.GuiElement;
 import de.johni0702.minecraft.gui.element.GuiTextField;
 import de.johni0702.minecraft.gui.element.advanced.GuiDropdownMenu;
-import de.johni0702.minecraft.gui.function.Typeable;
+import de.johni0702.minecraft.gui.function.KeyHandler;
+import de.johni0702.minecraft.gui.function.KeyInput;
 import de.johni0702.minecraft.gui.layout.CustomLayout;
 import de.johni0702.minecraft.gui.layout.HorizontalLayout;
 import de.johni0702.minecraft.gui.layout.VerticalLayout;
@@ -42,22 +43,14 @@ import de.johni0702.minecraft.gui.utils.Colors;
 import de.johni0702.minecraft.gui.utils.Consumer;
 import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
-import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.InvalidPathException;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
-//#if MC>=11400
-import de.johni0702.minecraft.gui.versions.MCVer.Keyboard;
-//#else
-//$$ import org.lwjgl.input.Keyboard;
-//#endif
-
-public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> implements Typeable {
+public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> implements KeyHandler {
     public static GuiFileChooserPopup openSaveGui(GuiContainer container, String buttonLabel, String...fileExtensions) {
         GuiFileChooserPopup popup = new GuiFileChooserPopup(container, fileExtensions, false).setBackgroundColor(Colors.DARK_TRANSPARENT);
         popup.acceptButton.setI18nLabel(buttonLabel);
@@ -333,8 +326,8 @@ public class GuiFileChooserPopup extends AbstractGuiPopup<GuiFileChooserPopup> i
     }
 
     @Override
-    public boolean typeKey(ReadablePoint mousePosition, int keyCode, char keyChar, boolean ctrlDown, boolean shiftDown) {
-        if (keyCode == Keyboard.KEY_ESCAPE) {
+    public boolean handleKey(KeyInput keyInput) {
+        if (keyInput.isEscape()) {
             cancelButton.onClick();
             return true;
         }

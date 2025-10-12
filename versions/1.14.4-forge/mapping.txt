@@ -11,6 +11,7 @@ com.mojang.blaze3d.platform.GlStateManager blendFuncSeparate() tryBlendFuncSepar
 net.minecraft.client.gui.screen.Screen net.minecraft.client.gui.GuiScreen
 net.minecraft.client.gui.screen.Screen hasControlDown() isCtrlKeyDown()
 net.minecraft.client.gui.screen.Screen hasShiftDown() isShiftKeyDown()
+net.minecraft.client.gui.screen.Screen hasAltDown() isAltKeyDown()
 net.minecraft.client.gui.screen.Screen init(Lnet/minecraft/client/Minecraft;II)V setWorldAndResolution()
 net.minecraft.client.gui.screen.Screen renderBackground()V drawDefaultBackground()
 net.minecraft.client.gui.screen.Screen renderDirtBackground() drawBackground()

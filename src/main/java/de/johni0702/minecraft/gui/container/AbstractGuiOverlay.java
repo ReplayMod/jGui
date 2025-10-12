@@ -267,10 +267,8 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
         //#if MC>=11400
         @Override
         public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-            Point mousePos = MouseUtils.getMousePos();
-            boolean controlDown = hasControlDown();
-            boolean shiftDown = hasShiftDown();
-            if (!invokeHandlers(Typeable.class, e -> e.typeKey(mousePos, keyCode, '\0', controlDown, shiftDown))) {
+            KeyInput keyInput = new KeyInput(keyCode, scanCode, modifiers);
+            if (!invokeHandlers(KeyHandler.class, e -> e.handleKey(keyInput))) {
                 return super.keyPressed(keyCode, scanCode, modifiers);
             }
             return true;
@@ -278,10 +276,8 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
 
         @Override
         public boolean charTyped(char keyChar, int modifiers) {
-            Point mousePos = MouseUtils.getMousePos();
-            boolean controlDown = hasControlDown();
-            boolean shiftDown = hasShiftDown();
-            if (!invokeHandlers(Typeable.class, e -> e.typeKey(mousePos, 0, keyChar, controlDown, shiftDown))) {
+            CharInput charInput = new CharInput(keyChar, modifiers);
+            if (!invokeHandlers(CharHandler.class, e -> e.handleChar(charInput))) {
                 return super.charTyped(keyChar, modifiers);
             }
             return true;
@@ -293,10 +289,8 @@ public abstract class AbstractGuiOverlay<T extends AbstractGuiOverlay<T>> extend
                 //$$ throws IOException
                 //#endif
         //$$ {
-        //$$     Point mousePos = MouseUtils.getMousePos();
-        //$$     boolean controlDown = isCtrlKeyDown();
-        //$$     boolean shiftDown = isShiftKeyDown();
-        //$$     invokeHandlers(Typeable.class, e -> e.typeKey(mousePos, keyCode, typedChar, controlDown, shiftDown));
+        //$$     if (keyCode != 0) invokeHandlers(KeyHandler.class, e -> e.handleKey(new KeyInput(keyCode)));
+        //$$     if (typedChar != '\0') invokeHandlers(CharHandler.class, e -> e.handleChar(new CharInput(typedChar)));
         //$$     if (closeable) {
         //$$         super.keyTyped(typedChar, keyCode);
         //$$     }

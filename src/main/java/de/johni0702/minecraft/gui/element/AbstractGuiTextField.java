@@ -29,10 +29,13 @@ import com.google.common.base.Strings;
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
 import de.johni0702.minecraft.gui.container.GuiContainer;
+import de.johni0702.minecraft.gui.function.CharHandler;
+import de.johni0702.minecraft.gui.function.CharInput;
 import de.johni0702.minecraft.gui.function.Clickable;
 import de.johni0702.minecraft.gui.function.Focusable;
+import de.johni0702.minecraft.gui.function.KeyHandler;
+import de.johni0702.minecraft.gui.function.KeyInput;
 import de.johni0702.minecraft.gui.function.Tickable;
-import de.johni0702.minecraft.gui.function.Typeable;
 import de.johni0702.minecraft.gui.utils.Consumer;
 import de.johni0702.minecraft.gui.utils.lwjgl.Color;
 import de.johni0702.minecraft.gui.utils.lwjgl.Dimension;
@@ -42,15 +45,10 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.versions.MCVer;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resource.language.I18n;
 
-//#if MC>=12006
-//$$ import net.minecraft.util.StringHelper;
-//#elseif MC>=11400
-import net.minecraft.SharedConstants;
+//#if MC>=11400
 //#else
-//$$ import net.minecraft.util.ChatAllowedCharacters;
 //$$ import org.lwjgl.input.Keyboard;
 //#endif
 
@@ -58,7 +56,7 @@ import static de.johni0702.minecraft.gui.utils.Utils.clamp;
 import static de.johni0702.minecraft.gui.versions.MCVer.*;
 
 public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
-        extends AbstractGuiElement<T> implements Clickable, Tickable, Typeable, IGuiTextField<T> {
+        extends AbstractGuiElement<T> implements Clickable, Tickable, KeyHandler, CharHandler, IGuiTextField<T> {
     private static final ReadableColor BORDER_COLOR = new Color(160, 160, 160);
     private static final ReadableColor CURSOR_COLOR = new Color(240, 240, 240);
     private static final int BORDER = 4;
@@ -180,13 +178,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
 
     @Override
     public T writeChar(char c) {
-        //#if MC>=12006
-        //$$ if (!StringHelper.isValidChar(c)) {
-        //#elseif MC>=11400
-        if (!SharedConstants.isValidChar(c)) {
-        //#else
-        //$$ if (!ChatAllowedCharacters.isAllowedCharacter(c)) {
-        //#endif
+        if (!CharInput.isValidChar(c)) {
             return getThis();
         }
 
@@ -399,13 +391,15 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
     }
 
     @Override
-    public boolean typeKey(ReadablePoint mousePosition, int keyCode, char keyChar, boolean ctrlDown, boolean shiftDown) {
+    public boolean handleKey(KeyInput keyInput) {
         if (!this.focused) {
             return false;
         }
 
+        int keyCode = keyInput.key;
+
         if (keyCode == Keyboard.KEY_TAB) {
-            Focusable other = shiftDown ? previous : next;
+            Focusable other = keyInput.hasShift() ? previous : next;
             if (other != null) {
                 setFocused(false);
                 other.setFocused(true);
@@ -426,7 +420,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
 
         String textBefore = text;
         try {
-            if (Screen.hasControlDown()) {
+            if (keyInput.hasCtrl()) {
                 switch (keyCode) {
                     case Keyboard.KEY_A: // Select all
                         cursorPos = 0;
@@ -448,8 +442,8 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
                 }
             }
 
-            boolean words = Screen.hasControlDown();
-            boolean select = Screen.hasShiftDown();
+            boolean words = keyInput.hasCtrl();
+            boolean select = keyInput.hasShift();
             switch (keyCode) {
                 case Keyboard.KEY_HOME:
                     cursorPos = 0;
@@ -498,18 +492,37 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
                     }
                     return true;
                 default:
-                    if (isEnabled()) {
-                        if (keyChar == '\r') {
-                            keyChar = '\n';
-                        }
-                        writeChar(keyChar);
-                    }
                     return true;
             }
 
             if (!select) {
                 selectionPos = cursorPos;
             }
+            return true;
+        } finally {
+            if (!textBefore.equals(text)) {
+                onTextChanged(textBefore);
+            }
+        }
+    }
+
+    @Override
+    public boolean handleChar(CharInput charInput) {
+        if (!this.focused) {
+            return false;
+        }
+
+        if (!isEnabled() || !charInput.isValidChar()) {
+            return true;
+        }
+
+        String textBefore = text;
+        try {
+            String inputText = charInput.asString();
+            if (inputText.equals("\r")) {
+                inputText = "\n";
+            }
+            writeText(inputText);
             return true;
         } finally {
             if (!textBefore.equals(text)) {

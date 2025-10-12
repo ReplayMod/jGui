@@ -1,9 +1,12 @@
 package de.johni0702.minecraft.gui.container;
 
+import de.johni0702.minecraft.gui.function.CharHandler;
+import de.johni0702.minecraft.gui.function.CharInput;
 import de.johni0702.minecraft.gui.function.Draggable;
+import de.johni0702.minecraft.gui.function.KeyHandler;
+import de.johni0702.minecraft.gui.function.KeyInput;
 import de.johni0702.minecraft.gui.function.Scrollable;
 import de.johni0702.minecraft.gui.function.Tickable;
-import de.johni0702.minecraft.gui.function.Typeable;
 import de.johni0702.minecraft.gui.utils.EventRegistrations;
 import de.johni0702.minecraft.gui.utils.MouseUtils;
 import de.johni0702.minecraft.gui.utils.lwjgl.Point;
@@ -46,7 +49,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 
-public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, Scrollable, Tickable {
+public class VanillaGuiScreen extends GuiScreen implements Draggable, KeyHandler, CharHandler, Scrollable, Tickable {
 
     private static final Map<net.minecraft.client.gui.screen.Screen, VanillaGuiScreen> WRAPPERS =
             Collections.synchronizedMap(new WeakHashMap<>());
@@ -113,7 +116,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
     public boolean mouseClick(ReadablePoint position, int button) {
         //#if MC>=11400
         //#else
-        //$$ eventHandler.handled = false;
+        //$$ eventHandler.mouseHandled = false;
         //#endif
         return false;
     }
@@ -122,7 +125,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
     public boolean mouseDrag(ReadablePoint position, int button, long timeSinceLastCall) {
         //#if MC>=11400
         //#else
-        //$$ eventHandler.handled = false;
+        //$$ eventHandler.mouseHandled = false;
         //#endif
         return false;
     }
@@ -131,7 +134,7 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
     public boolean mouseRelease(ReadablePoint position, int button) {
         //#if MC>=11400
         //#else
-        //$$ eventHandler.handled = false;
+        //$$ eventHandler.mouseHandled = false;
         //#endif
         return false;
     }
@@ -140,16 +143,25 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
     public boolean scroll(ReadablePoint mousePosition, int dWheel) {
         //#if MC>=11400
         //#else
-        //$$ eventHandler.handled = false;
+        //$$ eventHandler.mouseHandled = false;
         //#endif
         return false;
     }
 
     @Override
-    public boolean typeKey(ReadablePoint mousePosition, int keyCode, char keyChar, boolean ctrlDown, boolean shiftDown) {
+    public boolean handleKey(KeyInput keyInput) {
         //#if MC>=11400
         //#else
-        //$$ eventHandler.handled = false;
+        //$$ eventHandler.keyHandled = false;
+        //#endif
+        return false;
+    }
+
+    @Override
+    public boolean handleChar(CharInput charInput) {
+        //#if MC>=11400
+        //#else
+        //$$ eventHandler.charHandled = false;
         //#endif
         return false;
     }
@@ -254,21 +266,23 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
         { on(KeyboardCallback.EVENT, this); }
 
         @Override
-        public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-            return getSuperMcGui().keyPressed(keyCode, scanCode, modifiers);
+        public boolean keyPressed(KeyInput keyInput) {
+            return getSuperMcGui().keyPressed(keyInput.key, keyInput.scancode, keyInput.modifiers);
         }
 
         @Override
-        public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
-            return getSuperMcGui().keyReleased(keyCode, scanCode, modifiers);
+        public boolean keyReleased(KeyInput keyInput) {
+            return getSuperMcGui().keyReleased(keyInput.key, keyInput.scancode, keyInput.modifiers);
         }
 
         @Override
-        public boolean charTyped(char keyChar, int scanCode) {
-            return getSuperMcGui().charTyped(keyChar, scanCode);
+        public boolean charTyped(CharInput charInput) {
+            return getSuperMcGui().charTyped(charInput.character, charInput.modifiers);
         }
         //#elseif MC<=11202
-        //$$ private boolean handled;
+        //$$ private boolean mouseHandled;
+        //$$ private boolean keyHandled;
+        //$$ private boolean charHandled;
         //$$
         //$$ // Mouse/Keyboard events aren't supported in 1.7.10
         //$$ // so this requires a mixin in any mod making use of it
@@ -279,9 +293,9 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
         //#else
         //$$ public void onMouseInput(MouseInputEvent event) throws IOException {
         //#endif
-        //$$     handled = true;
+        //$$     mouseHandled = true;
         //$$     getSuperMcGui().handleMouseInput();
-        //$$     if (handled) {
+        //$$     if (mouseHandled) {
         //$$         event.setCanceled(true);
         //$$     }
         //$$ }
@@ -296,9 +310,10 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, Typeable, 
         //$$     if (!org.lwjgl.input.Keyboard.getEventKeyState()) {
         //$$         return;
         //$$     }
-        //$$     handled = true;
+        //$$     keyHandled = org.lwjgl.input.Keyboard.getEventKey() != 0;
+        //$$     charHandled = org.lwjgl.input.Keyboard.getEventCharacter() != '\0';
         //$$     getSuperMcGui().handleKeyboardInput();
-        //$$     if (handled) {
+        //$$     if (keyHandled || charHandled) {
         //$$         event.setCanceled(true);
         //$$     }
         //$$ }
