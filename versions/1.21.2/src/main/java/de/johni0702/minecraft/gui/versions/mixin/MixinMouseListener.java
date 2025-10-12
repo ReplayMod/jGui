@@ -53,7 +53,7 @@ public abstract class MixinMouseListener {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;mouseDragged(DDIDD)Z"),
             cancellable = true
     )
-    private void mouseUp(
+    private void mouseDrag(
             CallbackInfo ci,
             @Local(ordinal = 2) double x,
             @Local(ordinal = 3) double y,
