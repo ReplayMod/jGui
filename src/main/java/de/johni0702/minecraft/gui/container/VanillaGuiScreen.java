@@ -90,7 +90,11 @@ public class VanillaGuiScreen extends GuiScreen implements Draggable, KeyHandler
 
             eventHandler.register();
 
+            //#if MC>=12111
+            //$$ getSuperMcGui().init(mcScreen.width, mcScreen.height);
+            //#else
             getSuperMcGui().init(MCVer.getMinecraft(), mcScreen.width, mcScreen.height);
+            //#endif
         }
     }
 

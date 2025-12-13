@@ -218,7 +218,10 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         //$$ boundTextureGpu = new GlTexture(null, TextureFormat.RGBA8, 0, 0, 0, glId) {
         //#endif
         //$$     {
+        //#if MC>=12111
+        //#else
         //$$         this.needsReinit = false;
+        //#endif
         //$$     }
         //$$ };
         //#else

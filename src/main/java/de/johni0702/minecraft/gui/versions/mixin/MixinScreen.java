@@ -30,12 +30,20 @@ public class MixinScreen {
     protected @Final List<AbstractButtonWidget> buttons;
     //#endif
 
+    //#if MC>=12111
+    //$$ @Inject(method = "init(II)V", at = @At("HEAD"))
+    //#else
     @Inject(method = "init(Lnet/minecraft/client/MinecraftClient;II)V", at = @At("HEAD"))
+    //#endif
     private void preInit(CallbackInfo ci) {
         firePreInit();
     }
 
+    //#if MC>=12111
+    //$$ @Inject(method = "init(II)V", at = @At("TAIL"))
+    //#else
     @Inject(method = "init(Lnet/minecraft/client/MinecraftClient;II)V", at = @At("TAIL"))
+    //#endif
     private void init(CallbackInfo ci) {
         firePostInit();
     }
