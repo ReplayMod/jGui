@@ -8,6 +8,7 @@ plugins {
 }
 
 loom {
+    mixin.useLegacyMixinAp = true
     mixin.defaultRefmapName.set("mixins.jgui.refmap.json")
     noRunConfigs()
 }
