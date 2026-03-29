@@ -1,0 +1,14 @@
+net.minecraft.client.gui.Gui extractDemoOverlay() renderDemoTimer()
+net.minecraft.client.gui.Gui extractRenderState() render()
+net.minecraft.client.gui.GuiGraphicsExtractor net.minecraft.client.gui.DrawContext
+net.minecraft.client.gui.GuiGraphicsExtractor blit() drawTexturedQuad()
+net.minecraft.client.gui.GuiGraphicsExtractor blitSprite() drawGuiTexture()
+net.minecraft.client.gui.GuiGraphicsExtractor pose() getMatrices()
+net.minecraft.client.gui.GuiGraphicsExtractor text() drawText()
+net.minecraft.client.gui.components.Renderable extractRenderState() render()
+net.minecraft.client.gui.screens.Screen extractRenderStateWithTooltipAndSubtitles() renderWithTooltip()
+net.minecraft.client.gui.screens.Screen extractBackground() renderBackground()
+net.minecraft.client.gui.screens.Screen extractPanorama() renderPanoramaBackground()
+net.minecraft.client.gui.screens.Screen extractBlurredBackground() applyBlur()
+net.minecraft.client.gui.screens.Screen extractMenuBackground() renderDarkening()
+

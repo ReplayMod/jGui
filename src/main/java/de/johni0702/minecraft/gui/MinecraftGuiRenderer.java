@@ -281,7 +281,7 @@ public class MinecraftGuiRenderer implements GuiRenderer {
         //$$ } else {
         //$$     identifier = Identifier.of("jgui", "__tmp_texture__");
         //$$     mc.getTextureManager().registerTexture(identifier, new AbstractTexture() {
-        //$$         { glTextureView = RenderSystem.getDevice().createTextureView(boundTextureGpu); }
+        //$$         { this.glTextureView = RenderSystem.getDevice().createTextureView(boundTextureGpu); }
         //$$         @Override public void close() {} // ignore later `destroyTexture` call
         //$$     });
         //$$ }

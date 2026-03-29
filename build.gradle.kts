@@ -8,9 +8,12 @@ plugins {
 }
 
 loom {
-    mixin.useLegacyMixinAp = true
-    mixin.defaultRefmapName.set("mixins.jgui.refmap.json")
     noRunConfigs()
+}
+
+if (!platform.isUnobfuscated) {
+    loom.mixin.useLegacyMixinAp = true
+    loom.mixin.defaultRefmapName.set("mixins.jgui.refmap.json")
 }
 
 java.withSourcesJar()

@@ -22,6 +22,12 @@ import net.minecraft.client.util.math.MatrixStack;
 
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
+    //#if MC >= 26.1
+    //$$ private static final String EXTRACT_GUI = "extractGui";
+    //#else
+    private static final String EXTRACT_GUI = "render";
+    //#endif
+
     //#if MC>=12000
     //$$ private static final String RENDER = "Lnet/minecraft/client/gui/screen/Screen;renderWithTooltip(Lnet/minecraft/client/gui/DrawContext;IIF)V";
     //#elseif MC>=11903
@@ -40,7 +46,7 @@ public class MixinGameRenderer {
     private MatrixStack context;
     //#endif
 
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = RENDER))
+    @ModifyArg(method = EXTRACT_GUI, at = @At(value = "INVOKE", target = RENDER))
     //#if MC>=12000
     //$$ private DrawContext captureContext(DrawContext context) {
     //#else
@@ -51,7 +57,7 @@ public class MixinGameRenderer {
     }
     //#endif
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = RENDER, shift = At.Shift.AFTER))
+    @Inject(method = EXTRACT_GUI, at = @At(value = "INVOKE", target = RENDER, shift = At.Shift.AFTER))
     private void postRenderScreen(
             //#if MC>=12100
             //$$ RenderTickCounter tickCounter,
@@ -59,6 +65,9 @@ public class MixinGameRenderer {
             float partialTicks, long nanoTime,
             //#endif
             boolean renderWorld,
+            //#if MC >= 26.1
+            //$$ boolean resourcesLoaded,
+            //#endif
             CallbackInfo ci
     ) {
         //#if MC>=12100

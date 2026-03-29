@@ -32,7 +32,7 @@ import net.minecraft.SharedConstants;
 //$$ import net.minecraft.util.ChatAllowedCharacters;
 //#endif
 
-public class CharInput implements InputWithModifiers {
+public class CharInput {
     //#if MC>=12109
     //$$ public final int codepoint;
     //#else
@@ -54,10 +54,18 @@ public class CharInput implements InputWithModifiers {
 
     //#if MC>=12109
     //$$ public CharInput(net.minecraft.client.input.CharInput mcCharInput) {
+    //#if MC >= 26.1
+    //$$     this(mcCharInput.codepoint(), 0);
+    //#else
     //$$     this(mcCharInput.codepoint(), mcCharInput.modifiers());
+    //#endif
     //$$ }
     //$$ public net.minecraft.client.input.CharInput toMC() {
-    //$$     return new net.minecraft.client.input.CharInput(codepoint, modifiers);
+    //$$     return new net.minecraft.client.input.CharInput(codepoint
+    //#if MC < 26.1
+    //$$         , modifiers
+    //#endif
+    //$$     );
     //$$ }
     //#endif
 
@@ -66,11 +74,6 @@ public class CharInput implements InputWithModifiers {
     //$$     this(character, InputWithModifiers.currentModifiers());
     //$$ }
     //#endif
-
-    @Override
-    public int modifiers() {
-        return modifiers;
-    }
 
     public boolean isValidChar() {
         //#if MC>=12109
