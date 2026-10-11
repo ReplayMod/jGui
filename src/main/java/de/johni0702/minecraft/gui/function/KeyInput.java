@@ -41,7 +41,14 @@ public class KeyInput implements InputWithModifiers {
         this.modifiers = modifiers;
     }
 
-    //#if MC>=12109
+    //#if MC >= 26.3
+    //$$ public KeyInput(net.minecraft.client.input.KeyEvent mc) {
+    //$$     this(mc.keycode(), mc.key(), mc.modifiers());
+    //$$ }
+    //$$ public net.minecraft.client.input.KeyEvent toMC() {
+    //$$     return new net.minecraft.client.input.KeyEvent(scancode, key, modifiers);
+    //$$ }
+    //#elseif MC >= 1.21.9
     //$$ public KeyInput(net.minecraft.client.input.KeyInput mc) {
     //$$     this(mc.key(), mc.scancode(), mc.modifiers());
     //$$ }

@@ -28,6 +28,14 @@ import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import de.johni0702.minecraft.gui.utils.lwjgl.WritablePoint;
 
 public class Click implements InputWithModifiers, ReadablePoint {
+    //#if MC >= 26.3
+    //$$ public static final int LEFT = 1;
+    //$$ public static final int RIGHT = 3;
+    //#else
+    public static final int LEFT = 0;
+    public static final int RIGHT = 1;
+    //#endif
+
     public int x;
     public int y;
     public int button;

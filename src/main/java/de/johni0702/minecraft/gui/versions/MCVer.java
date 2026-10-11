@@ -25,7 +25,11 @@ import net.minecraft.text.LiteralText;
 
 //#if MC>=11400
 import net.minecraft.client.util.Window;
+//#if MC >= 26.3
+//$$ import org.lwjgl.sdl.SDLKeycode;
+//#else
 import org.lwjgl.glfw.GLFW;
+//#endif
 //#else
 //$$ import net.minecraft.client.gui.GuiScreen;
 //$$ import net.minecraft.client.gui.ScaledResolution;
@@ -253,6 +257,23 @@ public class MCVer {
 
     //#if MC>=11400
     public static abstract class Keyboard {
+        //#if MC >= 26.3
+        //$$ public static final int KEY_ESCAPE = SDLKeycode.SDLK_ESCAPE;
+        //$$ public static final int KEY_HOME = SDLKeycode.SDLK_HOME;
+        //$$ public static final int KEY_END = SDLKeycode.SDLK_END;
+        //$$ public static final int KEY_UP = SDLKeycode.SDLK_UP;
+        //$$ public static final int KEY_DOWN = SDLKeycode.SDLK_DOWN;
+        //$$ public static final int KEY_LEFT = SDLKeycode.SDLK_LEFT;
+        //$$ public static final int KEY_RIGHT = SDLKeycode.SDLK_RIGHT;
+        //$$ public static final int KEY_BACK = SDLKeycode.SDLK_BACKSPACE;
+        //$$ public static final int KEY_DELETE = SDLKeycode.SDLK_DELETE;
+        //$$ public static final int KEY_RETURN = SDLKeycode.SDLK_RETURN;
+        //$$ public static final int KEY_TAB = SDLKeycode.SDLK_TAB;
+        //$$ public static final int KEY_A = SDLKeycode.SDLK_A;
+        //$$ public static final int KEY_C = SDLKeycode.SDLK_C;
+        //$$ public static final int KEY_V = SDLKeycode.SDLK_V;
+        //$$ public static final int KEY_X = SDLKeycode.SDLK_X;
+        //#else
         public static final int KEY_ESCAPE = GLFW.GLFW_KEY_ESCAPE;
         public static final int KEY_HOME = GLFW.GLFW_KEY_HOME;
         public static final int KEY_END = GLFW.GLFW_KEY_END;
@@ -268,6 +289,7 @@ public class MCVer {
         public static final int KEY_C = GLFW.GLFW_KEY_C;
         public static final int KEY_V = GLFW.GLFW_KEY_V;
         public static final int KEY_X = GLFW.GLFW_KEY_X;
+        //#endif
 
         public static void enableRepeatEvents(boolean enabled) {
             //#if MC>=11903

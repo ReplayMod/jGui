@@ -1,0 +1,5 @@
+com.mojang.renderpearl.api.buffers.GpuBuffer com.mojang.blaze3d.buffers.GpuBuffer
+com.mojang.renderpearl.api.commands.RenderPass com.mojang.blaze3d.systems.RenderPass
+com.mojang.renderpearl.api.pipeline.RenderPipeline com.mojang.blaze3d.pipeline.RenderPipeline
+com.mojang.renderpearl.api.textures.GpuTexture com.mojang.blaze3d.textures.GpuTexture
+com.mojang.renderpearl.api.vertex.VertexFormat com.mojang.blaze3d.vertex.VertexFormat

@@ -7,7 +7,9 @@ import net.minecraft.util.Util;
 import net.minecraft.client.gui.screen.Screen;
 //#endif
 
-//#if MC>=11300
+//#if MC >= 26.3
+//$$ import org.lwjgl.sdl.SDLKeycode;
+//#elseif MC >= 1.13
 import org.lwjgl.glfw.GLFW;
 //#endif
 
@@ -24,7 +26,11 @@ public interface InputWithModifiers {
         return (modifiers() & _ALT_MOD) != 0;
     }
 
-    //#if MC>=11300
+    //#if MC >= 26.3
+    //$$ int _CTRL_MOD = Util.getPlatform() == Util.OS.OSX ? SDLKeycode.SDL_KMOD_GUI : SDLKeycode.SDL_KMOD_CTRL;
+    //$$ int _SHIFT_MOD = SDLKeycode.SDL_KMOD_SHIFT;
+    //$$ int _ALT_MOD = SDLKeycode.SDL_KMOD_ALT;
+    //#elseif MC >= 1.13
     int _CTRL_MOD = Util.getOperatingSystem() == Util.OperatingSystem.OSX ? GLFW.GLFW_MOD_SUPER : GLFW.GLFW_MOD_CONTROL;
     int _SHIFT_MOD = GLFW.GLFW_MOD_SHIFT;
     int _ALT_MOD = GLFW.GLFW_MOD_ALT;

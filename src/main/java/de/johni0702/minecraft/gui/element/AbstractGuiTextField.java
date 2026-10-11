@@ -65,6 +65,9 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
     // Focus
     private boolean focused;
     private Focusable next, previous;
+    //#if MC >= 26.3
+    //$$ private boolean textInputStarted;
+    //#endif
 
     // Content
     private int maxLength = 32;
@@ -301,7 +304,7 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         }
         boolean hovering = isMouseHovering(position);
 
-        if (hovering && isFocused() && click.button == 0) {
+        if (hovering && isFocused() && click.button == Click.LEFT) {
             updateCurrentOffset();
             int mouseX = position.getX() - BORDER;
             TextRenderer fontRenderer = MCVer.getFontRenderer();
@@ -326,6 +329,12 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
         if (isFocused && !this.focused) {
             this.blinkCursorTick = 0; // Restart blinking to indicate successful focus
         }
+        //#if MC >= 26.3
+        //$$ if (!isFocused && textInputStarted) {
+        //$$     textInputStarted = false;
+        //$$     getMinecraft().textInputManager().stopTextInput(this);
+        //$$ }
+        //#endif
         if (this.focused != isFocused) {
             this.focused = isFocused;
             onFocusChanged(this.focused);
@@ -380,14 +389,26 @@ public abstract class AbstractGuiTextField<T extends AbstractGuiTextField<T>>
             renderer.invertColors(right, height - 2, left, 2);
 
             // Draw cursor
-            if (blinkCursorTick / 6 % 2 == 0 && focused) {
+            if (focused) {
                 String beforeCursor = renderText.substring(0, cursorPos - currentOffset);
                 int posX = BORDER + fontRenderer.getWidth(beforeCursor);
-                if (cursorPos == text.length()) {
-                    renderer.drawString(posX, posY, CURSOR_COLOR, "_", true);
-                } else {
-                    renderer.drawRect(posX, posY - 1, 1, 1 + fontRenderer.fontHeight, CURSOR_COLOR);
+                if (blinkCursorTick / 6 % 2 == 0) {
+                    if (cursorPos == text.length()) {
+                        renderer.drawString(posX, posY, CURSOR_COLOR, "_", true);
+                    } else {
+                        renderer.drawRect(posX, posY - 1, 1, 1 + fontRenderer.fontHeight, CURSOR_COLOR);
+                    }
                 }
+
+                //#if MC >= 26.3
+                //$$ if (!textInputStarted) {
+                //$$     textInputStarted = true;
+                //$$     getMinecraft().textInputManager().startTextInput(this);
+                //$$ }
+                //$$ int x = renderer.getOpenGlOffset().getX() + posX;
+                //$$ int y = renderer.getOpenGlOffset().getY() + posY;
+                //$$ getMinecraft().textInputManager().setTextInputArea(x, y, x + 1, y + fontRenderer.lineHeight);
+                //#endif
             }
         }
     }
